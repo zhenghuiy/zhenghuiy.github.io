@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>简记git与svn | Zhenghui&#39;s World</title>
+  <meta name="author" content="Zhenghui Yan">
+  
+  <meta name="description" content="svn与git是目前比较主流的版本控制系统，在这里简单记录一下它们之间的异同。
+##一，从架构来说，SVN是集中式，git是分布式。
+集中式的优点是代码高度统一，缺点也很明显就是非常依赖于中央服务器。如果服务器宕机或者本地无法联网，那么你将无法提交更新、还原、对比等，也就无法协同工作。同时SVN上的提交也并非是每次都成功，如果有一个人在你提交的时候先提交，那么就会提示你先更新再提交。SVN原理上只关心文件内容的具体差异，每次记录有哪些文件做了更新并且更新了哪些内容。
+而分布式的git会在本地克隆一个自己的版本库，在无法联网的时候，依然能够提交文件，查看历史版本记录等。Git中每个版本库都是平等的。与SVN不同，Git只关心文件数据的整体是否发生变化，Git并不保存文件内容前后变化的差异数据，更像是把变化的文件作快照后记录在一个微型的文件系统中（为提高性能，没有变化的文件不会再次保存）。
+##二，版本库与工作区的差异
+SVN的版本库与工作区是分离的。工作区在你本地检出的那个目录，它是一份版本库在某个历史状态下的快照。SVN的工作区中每个目录下都包含一个名为.svn的控制目录（隐藏目录）。
+git的版本库与工作区在同一个目录下，工作区的根目录有一个.git的子目录。git的工作区必须要有.git目录，它是用来保存元数据和对象数据库的地方，并且Git的工作区下只有一个.git目录，此外再无任何控制目录，如果删除它，则破环了整个历史，版本库也永远失去了。（可以在工作区之外克隆一个版本库，并且经常把提交push到里面，这样就实现了数据备份。）">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="简记git与svn"/>
+  <meta property="og:site_name" content="Zhenghui&#39;s World"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Zhenghui&#39;s World" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//libs.baidu.com/jquery/1.8.0/jquery.min.js"></script>
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<div class="alignleft">
+  <h1><a href="/">Zhenghui&#39;s World</a></h1>
+  <h2><a href="/">Write the code, change the world</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+      <li><a href="/history">我的编年史</a></li>
+    
+	<li> <a href="/atom.xml">RSS</a> </li>
+<li> <a title="把这个链接拖到你的Chrome收藏夹工具栏中" href='javascript:(function() {
+	function c() {
+		var e = document.createElement("link");
+		e.setAttribute("type", "text/css");
+		e.setAttribute("rel", "stylesheet");
+		e.setAttribute("href", f);
+		e.setAttribute("class", l);
+		document.body.appendChild(e)
+	}
+ 
+	function h() {
+		var e = document.getElementsByClassName(l);
+		for (var t = 0; t < e.length; t++) {
+			document.body.removeChild(e[t])
+		}
+	}
+ 
+	function p() {
+		var e = document.createElement("div");
+		e.setAttribute("class", a);
+		document.body.appendChild(e);
+		setTimeout(function() {
+			document.body.removeChild(e)
+		}, 100)
+	}
+ 
+	function d(e) {
+		return {
+			height : e.offsetHeight,
+			width : e.offsetWidth
+		}
+	}
+ 
+	function v(i) {
+		var s = d(i);
+		return s.height > e && s.height < n && s.width > t && s.width < r
+	}
+ 
+	function m(e) {
+		var t = e;
+		var n = 0;
+		while (!!t) {
+			n += t.offsetTop;
+			t = t.offsetParent
+		}
+		return n
+	}
+ 
+	function g() {
+		var e = document.documentElement;
+		if (!!window.innerWidth) {
+			return window.innerHeight
+		} else if (e && !isNaN(e.clientHeight)) {
+			return e.clientHeight
+		}
+		return 0
+	}
+ 
+	function y() {
+		if (window.pageYOffset) {
+			return window.pageYOffset
+		}
+		return Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+	}
+ 
+	function E(e) {
+		var t = m(e);
+		return t >= w && t <= b + w
+	}
+ 
+	function S() {
+		var e = document.createElement("audio");
+		e.setAttribute("class", l);
+		e.src = i;
+		e.loop = false;
+		e.addEventListener("canplay", function() {
+			setTimeout(function() {
+				x(k)
+			}, 500);
+			setTimeout(function() {
+				N();
+				p();
+				for (var e = 0; e < O.length; e++) {
+					T(O[e])
+				}
+			}, 15500)
+		}, true);
+		e.addEventListener("ended", function() {
+			N();
+			h()
+		}, true);
+		e.innerHTML = " <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>";
+		document.body.appendChild(e);
+		e.play()
+	}
+ 
+	function x(e) {
+		e.className += " " + s + " " + o
+	}
+ 
+	function T(e) {
+		e.className += " " + s + " " + u[Math.floor(Math.random() * u.length)]
+	}
+ 
+	function N() {
+		var e = document.getElementsByClassName(s);
+		var t = new RegExp("\\b" + s + "\\b");
+		for (var n = 0; n < e.length; ) {
+			e[n].className = e[n].className.replace(t, "")
+		}
+	}
+ 
+	var e = 30;
+	var t = 30;
+	var n = 350;
+	var r = 350;
+	var i = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3";
+	var s = "mw-harlem_shake_me";
+	var o = "im_first";
+	var u = ["im_drunk", "im_baked", "im_trippin", "im_blown"];
+	var a = "mw-strobe_light";
+	var f = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css";
+	var l = "mw_added_css";
+	var b = g();
+	var w = y();
+	var C = document.getElementsByTagName("*");
+	var k = null;
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			if (E(A)) {
+				k = A;
+				break
+			}
+		}
+	}
+	if (A === null) {
+		console.warn("Could not find a node of the right size. Please try a different page.");
+		return
+	}
+	c();
+	S();
+	var O = [];
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			O.push(A)
+		}
+	}
+})()    '>High一下</a> </li>
+
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-07-21T02:55:17.000Z"><a href="/2014/07/21/简记git与svn/">Jul 21 2014</a></time>
+      
+      
+  
+    <h1 class="title">简记git与svn</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>svn与git是目前比较主流的版本控制系统，在这里简单记录一下它们之间的异同。</p>
+<p>##一，从架构来说，SVN是集中式，git是分布式。</p>
+<p>集中式的优点是代码高度统一，缺点也很明显就是非常依赖于中央服务器。如果服务器宕机或者本地无法联网，那么你将无法提交更新、还原、对比等，也就无法协同工作。同时SVN上的提交也并非是每次都成功，如果有一个人在你提交的时候先提交，那么就会提示你先更新再提交。SVN原理上只关心文件内容的具体差异，每次记录有哪些文件做了更新并且更新了哪些内容。</p>
+<p>而分布式的git会在本地克隆一个自己的版本库，在无法联网的时候，依然能够提交文件，查看历史版本记录等。Git中每个版本库都是平等的。与SVN不同，Git只关心文件数据的整体是否发生变化，Git并不保存文件内容前后变化的差异数据，更像是把变化的文件作快照后记录在一个微型的文件系统中（为提高性能，没有变化的文件不会再次保存）。</p>
+<p>##二，版本库与工作区的差异</p>
+<p>SVN的版本库与工作区是分离的。工作区在你本地检出的那个目录，它是一份版本库在某个历史状态下的快照。SVN的工作区中每个目录下都包含一个名为.svn的控制目录（隐藏目录）。</p>
+<p>git的版本库与工作区在同一个目录下，工作区的根目录有一个.git的子目录。git的工作区必须要有.git目录，它是用来保存元数据和对象数据库的地方，并且Git的工作区下只有一个.git目录，此外再无任何控制目录，如果删除它，则破环了整个历史，版本库也永远失去了。（可以在工作区之外克隆一个版本库，并且经常把提交push到里面，这样就实现了数据备份。）</p>
+<a id="more"></a>
+<p>##三，SVN采用全局版本号，且是连续的。Git是通过对文件的内容或目录的结构计算出一个哈希值，是40为的十六进制字符串，它是全球唯一的。</p>
+<p>##四，SVN可以部分检出，而git只能全部检出。</p>
+<p>##五，SVN的更新可以使工作区和版本库保持一致，git上通过git fetch（fetch将远程数据库的object拷贝到本地）和git pull（pull相当于fetch+merge）来完成远程更新任务。</p>
+<p>##六，提交与分支<br>SVN里的分支就是一个子目录，和普通的路径没有什么本质的区别。而git的分支仅是一个文件，所以你可以在同一个工作目录下快速的在几个分支间切换。git的分支是完全隔离的。SVN的提交是单线索的，它的提交链只有一条。Git的提交是多线索，提交链可以有多条。</p>
+<p>在svn中，你无法去撤销提交，只能在后续的提交中修正。SVN有一个特性是它的信息从不丢失，即使删除了，也可以在早期版本中找到。</p>
+<p>Git的代码库属于个人，允许任意修改。Git通过git reset -hard可以永远丢弃最新的一个或几个提交。</p>
+<p>##总结：</p>
+<p>SVN逻辑明确，符合一般人思维习惯；易于管理，集中式服务器更能保证安全性；代码一致性非常高；适合开发人数不多的项目。缺点是，服务器压力太大，数据库容量暴增；如果不能连接到服务器上基本不可以工作。</p>
+<p>Git适合分布式开发，强调个体；公共服务器压力和数据量都不会太大；离线工作；任意两个开发者之间很容易解决问题。缺点是，学习周期较长，代码保密性差。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/工具/">工具</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/git-svn/">git, svn</a>
+  </div>
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    <a href="/2014/07/22/在github上参与开源项目/" class="alignleft prev" >上一页</a>
+    
+    
+    <a href="/2014/06/16/Android中保持Service的存活/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+
+
+<section id="comment">
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2014/07/21/简记git与svn/" data-title="简记git与svn" data-url="http://zhenghuiy.github.io/2014/07/21/简记git与svn/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start  -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"zhenghuiy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:zhenghuiy.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Android/">Android</a><small>6</small></li>
+  
+    <li><a href="/categories/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/categories/在路上/">在路上</a><small>1</small></li>
+  
+    <li><a href="/categories/工具/">工具</a><small>2</small></li>
+  
+    <li><a href="/categories/感悟/">感悟</a><small>1</small></li>
+  
+    <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
+  
+    <li><a href="/categories/记事/">记事</a><small>4</small></li>
+  
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2371914483&verifier=c4ac827b&dpc=1"></iframe>
+
+  <div class="widget tag">
+<h3 class="title">Friends</h3>
+<ul class="entry">
+<li><a href="http://blog.saymagic.cn/index.html" title="saymagic">saymagic</a></li>
+</ul>
+</div>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><section>
+Theme of <a href="https://github.com/zippera/lightum">Lightum</a>, Improved from <a href="https://github.com/hexojs/hexo-theme-light">Light</a>, by <a href="/">zippera</a> 
+</section>
+<div class="clearfix"></div>
+</footer>
+  <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
+
+
+<a href="https://github.com/zhenghuiy" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png" alt="Fork me on GitHub"></a>
