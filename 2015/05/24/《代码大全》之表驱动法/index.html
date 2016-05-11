@@ -9,8 +9,7 @@
   <meta name="author" content="Zhenghui Yan">
   
   <meta name="description" content="表驱动法是一种编程模式——从表里查找信息而不是使用逻辑语句（if 和 case）。事实上，凡是能通过逻辑语句来选择的事务，都可以通过查表来选择。对简单的情况而言，使用逻辑语句更为容易和直白。但随着逻辑链的越来越复杂，查表法也就愈发显得更具吸引力。
-##表驱动法使用总则
-例子一：    使用复杂的逻辑对字符分类
+表驱动法使用总则例子一：    使用复杂的逻辑对字符分类
 if(((&amp;apos;a&amp;apos; &amp;lt;= inputChar) &amp;amp;&amp;amp; (inputChar &amp;lt;= &amp;apos;z&amp;apos;)) || 
 ((&amp;apos;A&amp;apos; &amp;lt;= inputChar) &amp;amp;&amp;amp; (inputChar &amp;lt;= &amp;apos;Z‘）））{
     charType = CharacterType.Letter;
@@ -235,7 +234,7 @@ charType = charTypeTable[ inputChar ];
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-05-24T09:34:39.000Z"><a href="/2015/05/24/《代码大全》之表驱动法/">May 24 2015</a></time>
+        <time datetime="2015-05-24T09:34:00.000Z"><a href="/2015/05/24/《代码大全》之表驱动法/">May 24 2015</a></time>
       
       
   
@@ -246,8 +245,7 @@ charType = charTypeTable[ inputChar ];
     <div class="entry">
       
         <p>表驱动法是一种编程模式——从表里查找信息而不是使用逻辑语句（if 和 case）。事实上，凡是能通过逻辑语句来选择的事务，都可以通过查表来选择。<strong>对简单的情况而言，使用逻辑语句更为容易和直白。但随着逻辑链的越来越复杂，查表法也就愈发显得更具吸引力。</strong></p>
-<p>##表驱动法使用总则</p>
-<p>例子一：<br>    使用复杂的逻辑对字符分类</p>
+<h2 id="表驱动法使用总则"><a href="#表驱动法使用总则" class="headerlink" title="表驱动法使用总则"></a>表驱动法使用总则</h2><p>例子一：<br>    使用复杂的逻辑对字符分类</p>
 <pre><code>if(((&apos;a&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;z&apos;)) || 
 ((&apos;A&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;Z‘）））{
     charType = CharacterType.Letter;
