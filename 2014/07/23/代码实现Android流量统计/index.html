@@ -8,13 +8,11 @@
   <title>代码实现Android流量统计 | Zhenghui&#39;s World</title>
   <meta name="author" content="Zhenghui Yan">
   
-  <meta name="description" content="##概述
-尽管现在WIFI的覆盖范围越来越广，但是设备（在这里设备指手机或平板）流量的使用仍然是用户很关注的一个点。因此，在APP中加入流量统计模块对于提升用户体验（让用户可以知晓使用了多少流量，可以使用户使用APP时更加放心）有很大帮助。
+  <meta name="description" content="概述尽管现在WIFI的覆盖范围越来越广，但是设备（在这里设备指手机或平板）流量的使用仍然是用户很关注的一个点。因此，在APP中加入流量统计模块对于提升用户体验（让用户可以知晓使用了多少流量，可以使用户使用APP时更加放心）有很大帮助。
 Android使用的是Linux内核，在Linux系统里，所有信息都是以文件的形式存在的，因此在Android中，所有应用的流量信息都将被保存在操作系统的文件中。
 对于Android2.2之前，流量信息存储在proc/net/dev（或者 proc/self/net/dev）文件下，我们解析文件即可得到流量信息。
 在Android2.2（API Level 8）之后，系统提供了TrafficStats类，我们可以通过该类来获取流量信息。需要注意一点的是，有些设备不支持流量统计，具体表现是，当调用TrafficStats的方法时将返回TrafficStats.UNSUPPORTED，这种情况下，我们需要自己去解析/sys/class/net/  下的log文件。
-##方法
-以下是TrafficStats类的一些主要方法（摘录自android 官方API文档）：
+方法以下是TrafficStats类的一些主要方法（摘录自android 官方API文档）：
 static long getMobileRxBytes()
 Return number of bytes received across mobile networks since device boot.
 
@@ -271,13 +269,11 @@ Return number of packets transmitted by the given UID since device boot.">
     </header>
     <div class="entry">
       
-        <p>##概述</p>
-<p>尽管现在WIFI的覆盖范围越来越广，但是设备（在这里设备指手机或平板）流量的使用仍然是用户很关注的一个点。因此，在APP中加入流量统计模块对于提升用户体验（让用户可以知晓使用了多少流量，可以使用户使用APP时更加放心）有很大帮助。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>尽管现在WIFI的覆盖范围越来越广，但是设备（在这里设备指手机或平板）流量的使用仍然是用户很关注的一个点。因此，在APP中加入流量统计模块对于提升用户体验（让用户可以知晓使用了多少流量，可以使用户使用APP时更加放心）有很大帮助。</p>
 <p>Android使用的是Linux内核，在Linux系统里，所有信息都是以文件的形式存在的，因此在Android中，所有应用的流量信息都将被保存在操作系统的文件中。</p>
 <p>对于Android2.2之前，流量信息存储在proc/net/dev（或者 proc/self/net/dev）文件下，我们解析文件即可得到流量信息。</p>
 <p>在Android2.2（API Level 8）之后，系统提供了TrafficStats类，我们可以通过该类来获取流量信息。需要注意一点的是，有些设备不支持流量统计，具体表现是，当调用TrafficStats的方法时将返回TrafficStats.UNSUPPORTED，这种情况下，我们需要自己去解析/sys/class/net/  下的log文件。</p>
-<p>##方法</p>
-<p>以下是TrafficStats类的一些主要方法（摘录自<a href="http://developer.android.com/reference/android/net/TrafficStats.html" target="_blank" rel="external">android 官方API文档</a>）：</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>以下是TrafficStats类的一些主要方法（摘录自<a href="http://developer.android.com/reference/android/net/TrafficStats.html" target="_blank" rel="external">android 官方API文档</a>）：</p>
 <pre><code>static long getMobileRxBytes()
 Return number of bytes received across mobile networks since device boot.
 
@@ -314,16 +310,15 @@ This method was deprecated in API level 18. Starting in JELLY_BEAN_MR2, transpor
 static long getUidTxPackets(int uid)
 Return number of packets transmitted by the given UID since device boot.
 </code></pre><a id="more"></a>    
-<p>##流程</p>
-<p>流量统计可以分为两个方面，一个是手机整体流量统计和单个app的流量统计。</p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p>流量统计可以分为两个方面，一个是手机整体流量统计和单个app的流量统计。</p>
 <p>下面总结一下统计的流程。</p>
-<p>###手机整体流量：<br>1， 系统中存储的流量信息在关机之后会重置，因此我们应该使用一个<code>BroadcastReceiver</code>去接收关机广播，在每次关机的时候存储流量信息；</p>
+<h3 id="手机整体流量："><a href="#手机整体流量：" class="headerlink" title="手机整体流量："></a>手机整体流量：</h3><p>1， 系统中存储的流量信息在关机之后会重置，因此我们应该使用一个<code>BroadcastReceiver</code>去接收关机广播，在每次关机的时候存储流量信息；</p>
 <p>2， 在获取数据前判断该设备是否支持TrafficStats，即方法返回值是否等于<code>TrafficStats.UNSUPPORTED</code>，如果不支持，则将下面的各个方法通过解析<code>/sys/class/net/</code> 下的log文件自己去实现。</p>
 <p>3， 当前通过2G/3G接收到总字节数为：<code>TrafficStats.getMobileRxBytes()</code>+之前的存储</p>
 <p>4， 当前通过2G/3G发出总字节数为：<code>TrafficStats.getMobileTxBytes()</code>+之前的存储</p>
 <p>5， 当前通过WIFI接收到总字节数为：<br>使用一个<code>BroadcastReceiver</code>监听WIFI状态变化，WIFI断开连接时<code>TrafficStats.getTotalRxBytes()</code> – WIFI连接时<code>TrafficStats.getTotalRxBytes()</code><br>= 本次WIFI接收流量。再加上之前的存储，等于总的流量。</p>
 <p>6， 当前通过WIFI发出的总字节数为：<br>使用一个<code>BroadcastReceiver</code>监听WIFI状态变化，WIFI断开连接时<code>TrafficStats.getTotalTxBytes()</code> – WIFI连接时<code>TrafficStats.getTotalTxBytes()</code><br>= 本次WIFI接收流量。再加上之前的存储，等于总的流量。</p>
-<p>###单个APP的流量：<br>1，系统中存储的流量信息在关机之后会重置，因此我们应该使用一个<code>BroadcastReceiver</code>去接收关机广播，在每次关机的时候存储流量信息；</p>
+<h3 id="单个APP的流量："><a href="#单个APP的流量：" class="headerlink" title="单个APP的流量："></a>单个APP的流量：</h3><p>1，系统中存储的流量信息在关机之后会重置，因此我们应该使用一个<code>BroadcastReceiver</code>去接收关机广播，在每次关机的时候存储流量信息；</p>
 <p>2，在获取数据前判断该设备是否支持TrafficStats，即方法返回值是否等于<code>TrafficStats.UNSUPPORTED</code>，如果不支持，则将下面的各个方法通过解析<code>/sys/class/net/</code>下的log文件自己去实现。</p>
 <p>3，获取APP的UID：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PackageManager pm = getPackageManager();</span><br><span class="line">ApplicationInfo ai = pm.getApplicationInfo(PACKAGE_NAME, PackageManager.GET_ACTIVITIES);</span><br><span class="line">Log.d(&quot;UID IS:&quot; + ai.uid);</span><br></pre></td></tr></table></figure></p>
 <p>4, 该UID的APP通过WIFI接收到总字节数为：<br>使用一个<code>BroadcastReceiver</code>监听WIFI状态变化，WIFI断开连接时<code>TrafficStats.getUidRxBytes(int uid)</code> – WIFI开始连接时<code>TrafficStats.getUidRxBytes(int uid)</code>= 本次WIFI接收流量。再加上之前的存储，等于总的流量。</p>
@@ -432,7 +427,7 @@ var duoshuoQuery = {short_name:"zhenghuiy"};
   
     <li><a href="/categories/记事/">记事</a><small>4</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>1</small></li>
   
   </ul>
 </div>

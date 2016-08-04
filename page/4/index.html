@@ -219,69 +219,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-06-16T02:44:31.000Z"><a href="/2014/06/16/Android中保持Service的存活/">Jun 16 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/06/16/Android中保持Service的存活/">Android中保持Service的存活</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>如何让Service keep alive是一个很常见的问题。</p>
-<p>在APP开发过程中，需要Service持续提供服务的应用场景太多了，比如闹钟需要作出及时提醒，那么比如得有一个Service不断去比较当前时间和设置时间；QQ要能流畅的聊天，必然也需要及时接收消息等。</p>
-<p>但是Android并没有保证Service有这样功能，毕竟一个系统面对的是用户，必然以对用户友好为先。</p>
-<p>关于如何让Service keep alive，我在上篇博客给出的解决方案是：方案一，让服务器端发一个推送，检查Service是否还存活；方案二，将Service独立出来，运行在另一个进程中。</p>
-<p>这两个方案有些地方需要说明和改进，然后还会有其他方案补充进来。</p>
-<p>###方案一：利用推送来确保Service存活。</p>
-<p>方案一的做法有点“偷懒”。因为相当于把这个难题转移给推送服务提供者来处理，或者说，只需要依靠推送，就不需要自己去考虑存活问题。</p>
-<p>推送一直是移动客户端开发的热门话题（实际上也是传统软件开发的热门话题）。</p>
-<p>一般情况下，C/S结构（B/S是特殊的C/S结构）中的业务流程是这样的：客户端主动向服务器端发出请求，服务器端响应请求，建立二者之间的连接。通过建立的链接，双方可以发送/接收数据。最后客户端和服务器端断开连接。也就是说，客户端是主动方，是请求连接的发起者；服务器端保持对某个端口的监听（0-1023是系统端口号，比如80端口被指派给HTTP），而被动地等待客户端的连接请求。</p>
-<p>那么推送指的是，服务器端在没有收到请求的情况下主动向客户端发送信息，比如服务器端收到一封邮件后主动发往邮件的客户端。</p>
-<p>推送是如何实现的呢？首先，服务器端的功能还是不变，监听某个端口等待请求。然后我们可以看到，服务器端能主动发送信息的唯一时间段就是在建立了服务器端到客户端的连接之后、二者断开连接之前。因此，推送的实现就是基于保持服务器端和客户端的连接一直存在，方式可以是持续连接或者轮询。</p>
-<p>回到Service这个问题上来，推送服务的提供者必然会保证推送技术的稳定性，依靠推送，可以唤醒我们的APP，那么保证Service的存活也就不在话下。</p>
-<p>###方案二：将Service运行在另一个进程中。</p>
-<p>将Service放在另一个进程中，可以避免APP所在的进程因资源紧张或者被用户手动结束的时候，Service也被结束。</p>
-<p>这个做法的另一个优点是，可以让Service独立出来，为同一个公司的不同APP提供相同的服务。比如当大部分APP都需要同一个信息的时候，为每个APP都写一个Service显然不好，这时完全可以写一个独立进程中的Service，为所有APP提供信息。</p>
-<p>当然，这个方案有个缺点是，当某些手机助手无脑式结束掉全部的非系统进程时，Service无法存活。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/06/16/Android中保持Service的存活/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2014-05-27T02:18:53.000Z"><a href="/2014/05/27/Android-4-X界面开发那点事/">May 27 2014</a></time>
       
       
@@ -292,10 +229,8 @@
     </header>
     <div class="entry">
       
-        <p>###前言：</p>
-<p>为什么要使用dp/dip?导航栏的宽度/高度应该设为多少dp合适？一般情况下应该使每个控件的高度显示为多少？本文就是要回答这些问题。</p>
-<p>##一，Android中的各种单位</p>
-<p>在android开发过程中，我们无法忽略的一个问题就是设备适配问题。从我们刚开始学android的时候，各类教程上就不厌其烦的说，“android碎片化严重，适配很麻烦”、“控件的长度用dip作单位，字体用sp”等等。我们有必要去详细了解一下这些东西，在开发过程中才能游刃有余。</p>
+        <h3 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h3><p>为什么要使用dp/dip?导航栏的宽度/高度应该设为多少dp合适？一般情况下应该使每个控件的高度显示为多少？本文就是要回答这些问题。</p>
+<h2 id="一，Android中的各种单位"><a href="#一，Android中的各种单位" class="headerlink" title="一，Android中的各种单位"></a>一，Android中的各种单位</h2><p>在android开发过程中，我们无法忽略的一个问题就是设备适配问题。从我们刚开始学android的时候，各类教程上就不厌其烦的说，“android碎片化严重，适配很麻烦”、“控件的长度用dip作单位，字体用sp”等等。我们有必要去详细了解一下这些东西，在开发过程中才能游刃有余。</p>
 <p>下面是android中的常见单位：  </p>
 <ul>
 <li>px（像素）可以理解为一个小颜色块，是设备显示时的单位；</li>
@@ -359,8 +294,8 @@
 <p>然后面试的时候在描述该做法时就被问到一个问题，如果Service被系统或者其他应用kill了怎么办？我当时的回答是，在onDestroy中去处理。面试官说，onDestroy并不会被调用。</p>
 <p>面试的详情暂且不表，在后期会专门写面经。现在讨论这个问题，Service被kill后生命周期是怎样的。</p>
 <p>OK，用代码说话。</p>
-<p>###1,新建一个项目，项目中有一个Activity,一个Service。在Activity的button的监听处理中去开启这个Service<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zhenghuiy.killedservicelifecycletest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.view.Menu;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.view.View.OnClickListener;</span><br><span class="line"><span class="keyword">import</span> android.widget.Button;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> <span class="keyword">implements</span> <span class="title">OnClickListener</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Button startServiceBtn;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        initViews();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initViews</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        startServiceBtn = (Button)findViewById(R.id.startService);</span><br><span class="line">        startServiceBtn.setOnClickListener(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(view.getId() == R.id.startService)&#123;</span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">        intent.setClass(<span class="keyword">this</span>, MyService.class);</span><br><span class="line">        <span class="keyword">this</span>.startService(intent);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>###2,重写Service的大部分函数，具体看注释<br>
+<h3 id="1-新建一个项目，项目中有一个Activity-一个Service。在Activity的button的监听处理中去开启这个Service"><a href="#1-新建一个项目，项目中有一个Activity-一个Service。在Activity的button的监听处理中去开启这个Service" class="headerlink" title="1,新建一个项目，项目中有一个Activity,一个Service。在Activity的button的监听处理中去开启这个Service"></a>1,新建一个项目，项目中有一个Activity,一个Service。在Activity的button的监听处理中去开启这个Service</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zhenghuiy.killedservicelifecycletest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.view.Menu;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.view.View.OnClickListener;</span><br><span class="line"><span class="keyword">import</span> android.widget.Button;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> <span class="keyword">implements</span> <span class="title">OnClickListener</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Button startServiceBtn;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        initViews();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initViews</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        startServiceBtn = (Button)findViewById(R.id.startService);</span><br><span class="line">        startServiceBtn.setOnClickListener(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(view.getId() == R.id.startService)&#123;</span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">        intent.setClass(<span class="keyword">this</span>, MyService.class);</span><br><span class="line">        <span class="keyword">this</span>.startService(intent);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-重写Service的大部分函数，具体看注释"><a href="#2-重写Service的大部分函数，具体看注释" class="headerlink" title="2,重写Service的大部分函数，具体看注释"></a>2,重写Service的大部分函数，具体看注释</h3>
       
     </div>
     <footer>
@@ -408,8 +343,7 @@
     </header>
     <div class="entry">
       
-        <p>##前言：</p>
-<p>我搭建这个博客的初衷是自己写一些原创类型的博客，我非常不愿意去转一些网上大量存在的文章来造成信息冗余。但是，这篇文章我不得不保存下来，并十分愿意跟读者分享（如果有人在看的话），因为它代表了一位面试官的态度。</p>
+        <h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>我搭建这个博客的初衷是自己写一些原创类型的博客，我非常不愿意去转一些网上大量存在的文章来造成信息冗余。但是，这篇文章我不得不保存下来，并十分愿意跟读者分享（如果有人在看的话），因为它代表了一位面试官的态度。</p>
 <p>文章如下：</p>
 <p>我憋了很长时间想写点关于去Google面试的秘籍。不过我总是推迟，因为写出来的东西会让你抓狂。很可能是这样。如果按统计规律来定义“你”的话，这文章很可能让你不爽。</p>
 <p>为啥呢？因为啊……好吧，对此我写首小诗回答：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">哎妈呀，俺咋听不懂涅</span><br><span class="line">这个史蒂夫讲的都啥啊</span><br><span class="line">要是俺老板也脚得他对</span><br><span class="line">俺的工作就得玩儿完啦</span><br><span class="line">哎妈呀，哎妈呀.....</span><br></pre></td></tr></table></figure></p>
@@ -476,12 +410,10 @@
       
         <p>今天在逛网站的时候，偶然看到一个号称“最火Android模拟神器”的Genymotion，它的特点简而言之就是秒开、方便、可与Eclipse相连——看介绍简直就是Android开发者的救星啊。</p>
 <p>心动不如行动，马上动手搞起。在这里记录下安装与使用的全过程，介绍类的语言大家去网上找找，我这里只简单描述，力求以最短的时间上手使用。</p>
-<p>##一，下载Genymotion</p>
-<p><a href="https://www.genymotion.com/">进入官网</a>，简单的注册一下。</p>
+<h2 id="一，下载Genymotion"><a href="#一，下载Genymotion" class="headerlink" title="一，下载Genymotion"></a>一，下载Genymotion</h2><p><a href="https://www.genymotion.com/">进入官网</a>，简单的注册一下。</p>
 <p>在注册成功后网站会自动引导你进入下载页面（为网站的设计点赞，一点不拖泥带水！），我已经注册过，所以进入官网后点击下图中的按钮。进入下载页面。<br><img src="http://zhenghuiy-blog.qiniudn.com/1-1024x519.png" alt=""></p>
 <p>进入下载页面后，有多个版本可供选择，大家选择自己对应的版本。注意一点是，Genymotion需要有Oracle VirtualBox的环境。因此，如果你恰好使用的是windows操作系统，那么恭喜你，选择图中标注的版本下载即可，该版本包含了Oracle VirtualBox。如果你使用的是其他操作系统，那么你应该选择其他版本，并且得先在电脑中安装Oracle VirtualBox（版本越高越好）。<br><img src="http://zhenghuiy-blog.qiniudn.com/2-1024x541.png" alt="">   </p>
-<p>##二，安装Genymotion</p>
-<p>软件安装过程不多表述，与一般的软件安装过程一致（我个人习惯是将安装目录从C盘改为D盘，不知道大家是否一样）。</p>
+<h2 id="二，安装Genymotion"><a href="#二，安装Genymotion" class="headerlink" title="二，安装Genymotion"></a>二，安装Genymotion</h2><p>软件安装过程不多表述，与一般的软件安装过程一致（我个人习惯是将安装目录从C盘改为D盘，不知道大家是否一样）。</p>
 <p>安装完毕后默认运行。</p>
 <p>进去后第一个界面是这样的，自动弹出增加一个模拟器（再次为用户体验点赞！这只是小细节，没啥技术难度，但是这样设计的好处无疑是非常方便新用户上手。）</p>
 <p><img src="http://zhenghuiy-blog.qiniudn.com/3.png" alt=""></p>
@@ -539,7 +471,7 @@
   
     <li><a href="/categories/记事/">记事</a><small>4</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>1</small></li>
   
   </ul>
 </div>

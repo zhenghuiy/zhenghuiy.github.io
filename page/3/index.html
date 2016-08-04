@@ -219,67 +219,6 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-07-25T06:33:21.000Z"><a href="/2014/07/25/[翻译]大牛告诉你一天时间能学些什么/">Jul 25 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/07/25/[翻译]大牛告诉你一天时间能学些什么/">[翻译]大牛告诉你一天时间能学些什么</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>为了学好一门编程语言，我们日复一日地看书、练习并参与实际的项目。就像马拉松，你坚持得越久，就收获得越多。在这样一个长期而乏味的时期内,你总是能有一些简短的时间——比如一天，去学点什么。学习到的这些技术将会给你带来巨大的满足感。</p>
-<p>一个目前在谷歌工作的大牛，Jacob Jensen，给出了以下清单，清单上列出了一些你能在一天之内学会的技术。</p>
-<ul>
-<li><p>阅读你最喜欢的语言的手册。在过去，因为不知道python中有Counter计数器，我为此花费了许多时间。同时还得忍受因为使用字典充当计数器而不断出现的bug。有很多诸如此类的教训。</p>
-</li>
-<li><p>申请一个stackOverFlow帐号并学会使用这个网站。如果你是一个母语为英语的程序员，却不知道stactOverFlow是一个很好的资源，那你就真的错了。</p>
-</li>
-<li><p>独立实现一个简单的机器学习算法。并有一个完整的系统。就是说你读取一个简单的csv格式输入，把它划分成训练集和测试集，运行一个使用了可调整或者探索的超参数的简单算法，并且获得一份简单的相关统计输出。</p>
-</li>
-<li><p>学习怎样在Excel中画一个线形图。</p>
-</li>
-<li><p>学习怎样不使用Excel去画一个线性图。</p>
-</li>
-</ul>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/07/25/[翻译]大牛告诉你一天时间能学些什么/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
         <time datetime="2014-07-23T04:16:15.000Z"><a href="/2014/07/23/代码实现Android流量统计/">Jul 23 2014</a></time>
       
       
@@ -290,13 +229,11 @@
     </header>
     <div class="entry">
       
-        <p>##概述</p>
-<p>尽管现在WIFI的覆盖范围越来越广，但是设备（在这里设备指手机或平板）流量的使用仍然是用户很关注的一个点。因此，在APP中加入流量统计模块对于提升用户体验（让用户可以知晓使用了多少流量，可以使用户使用APP时更加放心）有很大帮助。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>尽管现在WIFI的覆盖范围越来越广，但是设备（在这里设备指手机或平板）流量的使用仍然是用户很关注的一个点。因此，在APP中加入流量统计模块对于提升用户体验（让用户可以知晓使用了多少流量，可以使用户使用APP时更加放心）有很大帮助。</p>
 <p>Android使用的是Linux内核，在Linux系统里，所有信息都是以文件的形式存在的，因此在Android中，所有应用的流量信息都将被保存在操作系统的文件中。</p>
 <p>对于Android2.2之前，流量信息存储在proc/net/dev（或者 proc/self/net/dev）文件下，我们解析文件即可得到流量信息。</p>
 <p>在Android2.2（API Level 8）之后，系统提供了TrafficStats类，我们可以通过该类来获取流量信息。需要注意一点的是，有些设备不支持流量统计，具体表现是，当调用TrafficStats的方法时将返回TrafficStats.UNSUPPORTED，这种情况下，我们需要自己去解析/sys/class/net/  下的log文件。</p>
-<p>##方法</p>
-<p>以下是TrafficStats类的一些主要方法（摘录自<a href="http://developer.android.com/reference/android/net/TrafficStats.html">android 官方API文档</a>）：</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>以下是TrafficStats类的一些主要方法（摘录自<a href="http://developer.android.com/reference/android/net/TrafficStats.html">android 官方API文档</a>）：</p>
 <pre><code>static long getMobileRxBytes()
 Return number of bytes received across mobile networks since device boot.
 
@@ -381,16 +318,12 @@ Return number of packets transmitted by the given UID since device boot.
     <div class="entry">
       
         <p>ListView作为android上最常用的控件之一，其原理与效率十分值得我们去探究，特别是当与Button、ImageView一起时，许多问题便纷至沓来。今天我就说说这老生常谈的话题，也是由此做一个总结。</p>
-<p>##一，ListView的原理</p>
-<p>在Android中有一个Recycler的构件，滑出屏幕的的Item就会被缓存在里面。但并不是缓存全部，只是会根据item的类型数来缓存相应的个数。举个例子，一般情况下都没有必要去重写ListView的getViewTypeCount())函数，那么type值也就为1，也就是说，Recycler中只会缓存一个item View。如下图（图片来自网络）：</p>
+<h2 id="一，ListView的原理"><a href="#一，ListView的原理" class="headerlink" title="一，ListView的原理"></a>一，ListView的原理</h2><p>在Android中有一个Recycler的构件，滑出屏幕的的Item就会被缓存在里面。但并不是缓存全部，只是会根据item的类型数来缓存相应的个数。举个例子，一般情况下都没有必要去重写ListView的getViewTypeCount())函数，那么type值也就为1，也就是说，Recycler中只会缓存一个item View。如下图（图片来自网络）：</p>
 <p> <img src="http://zhenghuiy-blog.qiniudn.com/recycler.jpeg" alt=""></p>
 <p>当Item1滑出屏幕的时候，Recycler构件中就缓存了item1,再往上滑，item2滑出屏幕。这时有趣的事情就发生了，Recycler构件只会缓存一个item，这时毫无争议会缓存Item2，那么item1就被复用，显示为item8（实际上当item1完全滑出界面时就会被显示作Item8了）。</p>
-<p>##二，需要注意的地方</p>
-<p>###1，数据与显示分离</p>
-<p>由于ListView的<code>item view</code>是复用的，这就要求我们将数据与显示分离，否则将造成显示的结果错乱。比如，当ListView的<code>Item</code>中含有单选按钮时，假如只是简单地记录按钮的点击状态，那么当滑动ListView的时候，“已点击”与“未点击”就显示混乱。再举个例子，ListView的<code>item</code>中含有图片，选择异步加载。如果做法是当下载完毕后就设置ImageView的显示内容，那么也会造成混乱。</p>
+<h2 id="二，需要注意的地方"><a href="#二，需要注意的地方" class="headerlink" title="二，需要注意的地方"></a>二，需要注意的地方</h2><h3 id="1，数据与显示分离"><a href="#1，数据与显示分离" class="headerlink" title="1，数据与显示分离"></a>1，数据与显示分离</h3><p>由于ListView的<code>item view</code>是复用的，这就要求我们将数据与显示分离，否则将造成显示的结果错乱。比如，当ListView的<code>Item</code>中含有单选按钮时，假如只是简单地记录按钮的点击状态，那么当滑动ListView的时候，“已点击”与“未点击”就显示混乱。再举个例子，ListView的<code>item</code>中含有图片，选择异步加载。如果做法是当下载完毕后就设置ImageView的显示内容，那么也会造成混乱。</p>
 <p>比较明智的做法是自己单独维护一个数据结构来缓存数据，上文的点击状态就时候使用<code>ArrayList</code>,异步加载的图片就适合使用<code>HashMap</code>。</p>
-<p>###2，数据更新</p>
-<p>ListView的数据更新只能在UI主线程中进行，否则会报：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“java.lang.IllegalStateException: The content of the adapter has changed but ListView did not receive a notification. Make sure the content of your adapter is not modified from a background thread, but only from the UI thread.”</span><br></pre></td></tr></table></figure></p>
+<h3 id="2，数据更新"><a href="#2，数据更新" class="headerlink" title="2，数据更新"></a>2，数据更新</h3><p>ListView的数据更新只能在UI主线程中进行，否则会报：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“java.lang.IllegalStateException: The content of the adapter has changed but ListView did not receive a notification. Make sure the content of your adapter is not modified from a background thread, but only from the UI thread.”</span><br></pre></td></tr></table></figure></p>
 <p>另外还需要注意的是，不能更改原来的数据指向的对象。比如，原来的数据<code>List</code> 指向的是 <code>ArrayList1</code>。在数据更新后，为了方便，我们直接 <code>List = ArrayList2</code>。这样就使<code>List</code>指向新的<code>ArrayList</code>，也是会出错的。总而言之，唯一的做法就是在原理的ArrayList1中增加或删除数据。</p>
       
     </div>
@@ -441,15 +374,13 @@ Return number of packets transmitted by the given UID since device boot.
       
         <p>近日用到一个不错的开源库<a href="https://github.com/HackPlan/AndroidCharts">AndroidCharts</a>使用方便，易于扩展和自定制。在使用的过程中发现了一个小bug,于是果断发起了pull request。第一次使用GitHub参与开源项目还是十分手生的，需要各种查资料，学习Git的用法。</p>
 <p>参考了许多资料，这里记录一下在GitHub上参与开源项目的过程。 </p>
-<p>##1，寻找项目</p>
-<p>可以是你使用到的项目，你觉得想参与的，或者在这里找：</p>
+<h2 id="1，寻找项目"><a href="#1，寻找项目" class="headerlink" title="1，寻找项目"></a>1，寻找项目</h2><p>可以是你使用到的项目，你觉得想参与的，或者在这里找：</p>
 <ul>
 <li><a href="https://github.com/explore">GitHub Explore</a>：受欢迎和热门的项目。 </li>
 <li><a href="https://github.com/stars?direction=desc&amp;sort=created">GitHub Stars</a>：被其他人star过的项目（指的是你自己库的项目）。 </li>
 <li><a href="https://github.com/showcases">GitHub Showcases</a>：一个能搜索相关库的方法。 </li>
 </ul>
-<p>##2，查看社区和文档</p>
-<p>一般项目中都有的文件。</p>
+<h2 id="2，查看社区和文档"><a href="#2，查看社区和文档" class="headerlink" title="2，查看社区和文档"></a>2，查看社区和文档</h2><p>一般项目中都有的文件。</p>
 <ul>
 <li><p>Readme：几乎所有的Github项目都包含一个README.md文件。readme提供了该项目的一个概览及关于如何使用、构建甚至如何贡献于一个项目的相关细节。</p>
 </li>
@@ -460,7 +391,7 @@ Return number of packets transmitted by the given UID since device boot.
 <li><p>Documentation and Wikis：许多大型项目有的不只有一个readme来指导人么如何使用他们的项目。在这种情况下你通常能够发现一个指向库中名为“docs”的另一个文件或文件夹的链接。</p>
 </li>
 </ul>
-<p>##3，发起一个issue<br>
+<h2 id="3，发起一个issue"><a href="#3，发起一个issue" class="headerlink" title="3，发起一个issue"></a>3，发起一个issue</h2>
       
     </div>
     <footer>
@@ -509,11 +440,9 @@ Return number of packets transmitted by the given UID since device boot.
     <div class="entry">
       
         <p>svn与git是目前比较主流的版本控制系统，在这里简单记录一下它们之间的异同。</p>
-<p>##一，从架构来说，SVN是集中式，git是分布式。</p>
-<p>集中式的优点是代码高度统一，缺点也很明显就是非常依赖于中央服务器。如果服务器宕机或者本地无法联网，那么你将无法提交更新、还原、对比等，也就无法协同工作。同时SVN上的提交也并非是每次都成功，如果有一个人在你提交的时候先提交，那么就会提示你先更新再提交。SVN原理上只关心文件内容的具体差异，每次记录有哪些文件做了更新并且更新了哪些内容。</p>
+<h2 id="一，从架构来说，SVN是集中式，git是分布式。"><a href="#一，从架构来说，SVN是集中式，git是分布式。" class="headerlink" title="一，从架构来说，SVN是集中式，git是分布式。"></a>一，从架构来说，SVN是集中式，git是分布式。</h2><p>集中式的优点是代码高度统一，缺点也很明显就是非常依赖于中央服务器。如果服务器宕机或者本地无法联网，那么你将无法提交更新、还原、对比等，也就无法协同工作。同时SVN上的提交也并非是每次都成功，如果有一个人在你提交的时候先提交，那么就会提示你先更新再提交。SVN原理上只关心文件内容的具体差异，每次记录有哪些文件做了更新并且更新了哪些内容。</p>
 <p>而分布式的git会在本地克隆一个自己的版本库，在无法联网的时候，依然能够提交文件，查看历史版本记录等。Git中每个版本库都是平等的。与SVN不同，Git只关心文件数据的整体是否发生变化，Git并不保存文件内容前后变化的差异数据，更像是把变化的文件作快照后记录在一个微型的文件系统中（为提高性能，没有变化的文件不会再次保存）。</p>
-<p>##二，版本库与工作区的差异</p>
-<p>SVN的版本库与工作区是分离的。工作区在你本地检出的那个目录，它是一份版本库在某个历史状态下的快照。SVN的工作区中每个目录下都包含一个名为.svn的控制目录（隐藏目录）。</p>
+<h2 id="二，版本库与工作区的差异"><a href="#二，版本库与工作区的差异" class="headerlink" title="二，版本库与工作区的差异"></a>二，版本库与工作区的差异</h2><p>SVN的版本库与工作区是分离的。工作区在你本地检出的那个目录，它是一份版本库在某个历史状态下的快照。SVN的工作区中每个目录下都包含一个名为.svn的控制目录（隐藏目录）。</p>
 <p>git的版本库与工作区在同一个目录下，工作区的根目录有一个.git的子目录。git的工作区必须要有.git目录，它是用来保存元数据和对象数据库的地方，并且Git的工作区下只有一个.git目录，此外再无任何控制目录，如果删除它，则破环了整个历史，版本库也永远失去了。（可以在工作区之外克隆一个版本库，并且经常把提交push到里面，这样就实现了数据备份。）</p>
       
     </div>
@@ -522,6 +451,67 @@ Return number of packets transmitted by the given UID since device boot.
         
           <div class="alignleft">
             <a href="/2014/07/21/简记git与svn/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-06-16T02:44:31.000Z"><a href="/2014/06/16/Android中保持Service的存活/">Jun 16 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/06/16/Android中保持Service的存活/">Android中保持Service的存活</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>如何让Service keep alive是一个很常见的问题。</p>
+<p>在APP开发过程中，需要Service持续提供服务的应用场景太多了，比如闹钟需要作出及时提醒，那么比如得有一个Service不断去比较当前时间和设置时间；QQ要能流畅的聊天，必然也需要及时接收消息等。</p>
+<p>但是Android并没有保证Service有这样功能，毕竟一个系统面对的是用户，必然以对用户友好为先。</p>
+<p>关于如何让Service keep alive，我在上篇博客给出的解决方案是：方案一，让服务器端发一个推送，检查Service是否还存活；方案二，将Service独立出来，运行在另一个进程中。</p>
+<p>这两个方案有些地方需要说明和改进，然后还会有其他方案补充进来。</p>
+<h3 id="方案一：利用推送来确保Service存活。"><a href="#方案一：利用推送来确保Service存活。" class="headerlink" title="方案一：利用推送来确保Service存活。"></a>方案一：利用推送来确保Service存活。</h3><p>方案一的做法有点“偷懒”。因为相当于把这个难题转移给推送服务提供者来处理，或者说，只需要依靠推送，就不需要自己去考虑存活问题。</p>
+<p>推送一直是移动客户端开发的热门话题（实际上也是传统软件开发的热门话题）。</p>
+<p>一般情况下，C/S结构（B/S是特殊的C/S结构）中的业务流程是这样的：客户端主动向服务器端发出请求，服务器端响应请求，建立二者之间的连接。通过建立的链接，双方可以发送/接收数据。最后客户端和服务器端断开连接。也就是说，客户端是主动方，是请求连接的发起者；服务器端保持对某个端口的监听（0-1023是系统端口号，比如80端口被指派给HTTP），而被动地等待客户端的连接请求。</p>
+<p>那么推送指的是，服务器端在没有收到请求的情况下主动向客户端发送信息，比如服务器端收到一封邮件后主动发往邮件的客户端。</p>
+<p>推送是如何实现的呢？首先，服务器端的功能还是不变，监听某个端口等待请求。然后我们可以看到，服务器端能主动发送信息的唯一时间段就是在建立了服务器端到客户端的连接之后、二者断开连接之前。因此，推送的实现就是基于保持服务器端和客户端的连接一直存在，方式可以是持续连接或者轮询。</p>
+<p>回到Service这个问题上来，推送服务的提供者必然会保证推送技术的稳定性，依靠推送，可以唤醒我们的APP，那么保证Service的存活也就不在话下。</p>
+<h3 id="方案二：将Service运行在另一个进程中。"><a href="#方案二：将Service运行在另一个进程中。" class="headerlink" title="方案二：将Service运行在另一个进程中。"></a>方案二：将Service运行在另一个进程中。</h3><p>将Service放在另一个进程中，可以避免APP所在的进程因资源紧张或者被用户手动结束的时候，Service也被结束。</p>
+<p>这个做法的另一个优点是，可以让Service独立出来，为同一个公司的不同APP提供相同的服务。比如当大部分APP都需要同一个信息的时候，为每个APP都写一个Service显然不好，这时完全可以写一个独立进程中的Service，为所有APP提供信息。</p>
+<p>当然，这个方案有个缺点是，当某些手机助手无脑式结束掉全部的非系统进程时，Service无法存活。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/06/16/Android中保持Service的存活/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -571,7 +561,7 @@ Return number of packets transmitted by the given UID since device boot.
   
     <li><a href="/categories/记事/">记事</a><small>4</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>1</small></li>
   
   </ul>
 </div>
