@@ -1,0 +1,533 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android抖动动画的实现与思考 | Zhenghui&#39;s World</title>
+  <meta name="author" content="Zhenghui Yan">
+  
+  <meta name="description" content="大家好，我是光源。
+在日常使用app或者玩游戏的过程中，我们经常可以看到某个view通过抖动来吸引用户注意，今天就来说说怎么实现这个动画。
+具体需求是，实现一个抖动动画要求同时对大小、旋转角度进行更改且可定制。
+要实现动画，我们首先应该想到的是 Android 中动画相关的内容。
+Android 中一共有三类动画：
+
+View Animation又称补间动画，在 android.view.animation.Animation 类之下衍生了五个子类。
+
+
+
+
+类名
+作用
+
+
+
+
+AlphaAnimation
+渐变透明度
+
+
+RotateAnimation
+旋转
+
+
+ScaleAnimation
+尺寸缩放
+
+
+TranslateAnimation
+位置平移
+
+
+AnimationSet
+动画集合
+
+
+
+​通过前四个类，基本可以解决大部分动画需求，再使用 AnimationSet 使动画具有组合的能力。
+
+Drawable Animation又称逐帧动画，通过设置多个帧在一定时间内不断进行帧的变换形成动画的效果，类似 gif 图。通过 xml 中的 animation-list 标签定义动画，再在 java 代码中用 AnimationDrawable 类来进行控制。
+
+Property AnimationView Animation 虽然可以解决大部分动画，但还是有些无法实现，而 Drawable Animation 则太过费时费力，所以在 Android 3.0（API 11）引入了属性动画，属性动画实现原理就是修改控件的属性值实现的动画。具体实现又分为 ValueAnimator 和 ObjectAnimator，这里不展开。
+
+
+回到需求本身，从需求上看，三种方式都可以实现（其实对最接近动画本质的逐帧动画而言，还真没有不能实现的动画 ），这里不妨三种方式都尝试一下(为方便代码展示，以下尽量使用java代码实现动画)。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Android抖动动画的实现与思考"/>
+  <meta property="og:site_name" content="Zhenghui&#39;s World"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Zhenghui&#39;s World" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//libs.baidu.com/jquery/1.8.0/jquery.min.js"></script>
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<div class="alignleft">
+  <h1><a href="/">Zhenghui&#39;s World</a></h1>
+  <h2><a href="/">Write the code, change the world</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+      <li><a href="/history">我的编年史</a></li>
+    
+	<li> <a href="/atom.xml">RSS</a> </li>
+<li> <a title="把这个链接拖到你的Chrome收藏夹工具栏中" href='javascript:(function() {
+	function c() {
+		var e = document.createElement("link");
+		e.setAttribute("type", "text/css");
+		e.setAttribute("rel", "stylesheet");
+		e.setAttribute("href", f);
+		e.setAttribute("class", l);
+		document.body.appendChild(e)
+	}
+ 
+	function h() {
+		var e = document.getElementsByClassName(l);
+		for (var t = 0; t < e.length; t++) {
+			document.body.removeChild(e[t])
+		}
+	}
+ 
+	function p() {
+		var e = document.createElement("div");
+		e.setAttribute("class", a);
+		document.body.appendChild(e);
+		setTimeout(function() {
+			document.body.removeChild(e)
+		}, 100)
+	}
+ 
+	function d(e) {
+		return {
+			height : e.offsetHeight,
+			width : e.offsetWidth
+		}
+	}
+ 
+	function v(i) {
+		var s = d(i);
+		return s.height > e && s.height < n && s.width > t && s.width < r
+	}
+ 
+	function m(e) {
+		var t = e;
+		var n = 0;
+		while (!!t) {
+			n += t.offsetTop;
+			t = t.offsetParent
+		}
+		return n
+	}
+ 
+	function g() {
+		var e = document.documentElement;
+		if (!!window.innerWidth) {
+			return window.innerHeight
+		} else if (e && !isNaN(e.clientHeight)) {
+			return e.clientHeight
+		}
+		return 0
+	}
+ 
+	function y() {
+		if (window.pageYOffset) {
+			return window.pageYOffset
+		}
+		return Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+	}
+ 
+	function E(e) {
+		var t = m(e);
+		return t >= w && t <= b + w
+	}
+ 
+	function S() {
+		var e = document.createElement("audio");
+		e.setAttribute("class", l);
+		e.src = i;
+		e.loop = false;
+		e.addEventListener("canplay", function() {
+			setTimeout(function() {
+				x(k)
+			}, 500);
+			setTimeout(function() {
+				N();
+				p();
+				for (var e = 0; e < O.length; e++) {
+					T(O[e])
+				}
+			}, 15500)
+		}, true);
+		e.addEventListener("ended", function() {
+			N();
+			h()
+		}, true);
+		e.innerHTML = " <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>";
+		document.body.appendChild(e);
+		e.play()
+	}
+ 
+	function x(e) {
+		e.className += " " + s + " " + o
+	}
+ 
+	function T(e) {
+		e.className += " " + s + " " + u[Math.floor(Math.random() * u.length)]
+	}
+ 
+	function N() {
+		var e = document.getElementsByClassName(s);
+		var t = new RegExp("\\b" + s + "\\b");
+		for (var n = 0; n < e.length; ) {
+			e[n].className = e[n].className.replace(t, "")
+		}
+	}
+ 
+	var e = 30;
+	var t = 30;
+	var n = 350;
+	var r = 350;
+	var i = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3";
+	var s = "mw-harlem_shake_me";
+	var o = "im_first";
+	var u = ["im_drunk", "im_baked", "im_trippin", "im_blown"];
+	var a = "mw-strobe_light";
+	var f = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css";
+	var l = "mw_added_css";
+	var b = g();
+	var w = y();
+	var C = document.getElementsByTagName("*");
+	var k = null;
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			if (E(A)) {
+				k = A;
+				break
+			}
+		}
+	}
+	if (A === null) {
+		console.warn("Could not find a node of the right size. Please try a different page.");
+		return
+	}
+	c();
+	S();
+	var O = [];
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			O.push(A)
+		}
+	}
+})()    '>High一下</a> </li>
+
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-06-01T04:00:00.000Z"><a href="/2016/06/01/Android抖动动画的实现与思考/">Jun 1 2016</a></time>
+      
+      
+  
+    <h1 class="title">Android抖动动画的实现与思考</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>大家好，我是光源。</p>
+<p>在日常使用app或者玩游戏的过程中，我们经常可以看到某个view通过抖动来吸引用户注意，今天就来说说怎么实现这个动画。</p>
+<p>具体需求是，<strong>实现一个抖动动画要求同时对大小、旋转角度进行更改且可定制</strong>。</p>
+<p>要实现动画，我们首先应该想到的是 Android 中动画相关的内容。</p>
+<p>Android 中一共有三类动画：</p>
+<ul>
+<li>View Animation<br>又称补间动画，在 android.view.animation.Animation 类之下衍生了五个子类。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://developer.android.com/reference/android/view/animation/AlphaAnimation.html" target="_blank" rel="external">AlphaAnimation</a></td>
+<td>渐变透明度</td>
+</tr>
+<tr>
+<td><a href="https://developer.android.com/reference/android/view/animation/RotateAnimation.html" target="_blank" rel="external">RotateAnimation</a></td>
+<td>旋转</td>
+</tr>
+<tr>
+<td><a href="https://developer.android.com/reference/android/view/animation/ScaleAnimation.html" target="_blank" rel="external">ScaleAnimation</a></td>
+<td>尺寸缩放</td>
+</tr>
+<tr>
+<td><a href="https://developer.android.com/reference/android/view/animation/TranslateAnimation.html" target="_blank" rel="external">TranslateAnimation</a></td>
+<td>位置平移</td>
+</tr>
+<tr>
+<td><a href="https://developer.android.com/reference/android/view/animation/AnimationSet.html" target="_blank" rel="external">AnimationSet</a></td>
+<td>动画集合</td>
+</tr>
+</tbody>
+</table>
+<p>​通过前四个类，基本可以解决大部分动画需求，再使用 AnimationSet 使动画具有组合的能力。</p>
+<ul>
+<li><p>Drawable Animation<br>又称逐帧动画，通过设置多个帧在一定时间内不断进行帧的变换形成动画的效果，类似 gif 图。通过 xml 中的 animation-list 标签定义动画，再在 java 代码中用 AnimationDrawable 类来进行控制。</p>
+</li>
+<li><p>Property Animation<br>View Animation 虽然可以解决大部分动画，但还是有些无法实现，而 Drawable Animation 则太过费时费力，所以在 Android 3.0（API 11）引入了属性动画，属性动画实现原理就是修改控件的属性值实现的动画。具体实现又分为 ValueAnimator 和 ObjectAnimator，这里不展开。</p>
+</li>
+</ul>
+<p>回到需求本身，从需求上看，三种方式都可以实现（其实对最接近动画本质的逐帧动画而言，还真没有不能实现的动画 ），这里不妨三种方式都尝试一下(<strong>为方便代码展示，以下尽量使用java代码实现动画</strong>)。<br><a id="more"></a></p>
+<h1 id="方案一：使用-View-Animation"><a href="#方案一：使用-View-Animation" class="headerlink" title="方案一：使用 View Animation"></a>方案一：使用 View Animation</h1><p>看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">startShakeByViewAnim</span><span class="params">(View view, <span class="keyword">float</span> scaleSmall, <span class="keyword">float</span> scaleLarge, <span class="keyword">float</span> shakeDegrees, <span class="keyword">long</span> duration)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (view == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//TODO 验证参数的有效性</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//由小变大</span></span><br><span class="line">        Animation scaleAnim = <span class="keyword">new</span> ScaleAnimation(scaleSmall, scaleLarge, scaleSmall, scaleLarge);</span><br><span class="line">        <span class="comment">//从左向右</span></span><br><span class="line">        Animation rotateAnim = <span class="keyword">new</span> RotateAnimation(-shakeDegrees, shakeDegrees, Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>, Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>);</span><br><span class="line"></span><br><span class="line">        scaleAnim.setDuration(duration);</span><br><span class="line">        rotateAnim.setDuration(duration / <span class="number">10</span>);</span><br><span class="line">        rotateAnim.setRepeatMode(Animation.REVERSE);</span><br><span class="line">        rotateAnim.setRepeatCount(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        AnimationSet smallAnimationSet = <span class="keyword">new</span> AnimationSet(<span class="keyword">false</span>);</span><br><span class="line">        smallAnimationSet.addAnimation(scaleAnim);</span><br><span class="line">        smallAnimationSet.addAnimation(rotateAnim);</span><br><span class="line"></span><br><span class="line">        view.startAnimation(smallAnimationSet);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>使用 ScaleAnimation + RotateAnimation 形成一边先小后大一边摇晃的动画效果。为了效果，需要使 view的缩放效果速率远小于摇晃效果，这里采用10倍差距。效果如下：</p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/shake-1.gif" alt=""></p>
+<p>这个方案的优点是：</p>
+<ol>
+<li>使用了常见的动画方案，使用成本与代码阅读成本较低；</li>
+</ol>
+<p>缺点是：</p>
+<ol>
+<li>为了实现左右连续抖动的效果，把两个动画的初始值都没有设置为 view 本身的属性大小，导致初始和结束时会有突变；</li>
+<li>缩放效果和摇晃效果的速率区别是通过 duration 的倍数 + 动画的 reverse repeat 来实现的，意味着 duration 必须作为初始化参数传入；</li>
+<li>在 view 变大时，摇晃的焦点还是以前的位置，导致摇晃的效果不大好。</li>
+<li>对动画的定制粒度太大，比如这里的需求是先小后大，实际上是有两个动画，但是 View Animation 中并没有串行执行动画的方法提供，这里是用取巧的方式实现，颇花费了一番心思。</li>
+</ol>
+<h1 id="方案二：使用属性动画"><a href="#方案二：使用属性动画" class="headerlink" title="方案二：使用属性动画"></a>方案二：使用属性动画</h1><p>看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">startShakeByPropertyAnim</span><span class="params">(View view, <span class="keyword">float</span> scaleSmall, <span class="keyword">float</span> scaleLarge, <span class="keyword">float</span> shakeDegrees, <span class="keyword">long</span> duration)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (view == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//TODO 验证参数的有效性</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//先变小后变大</span></span><br><span class="line">        PropertyValuesHolder scaleXValuesHolder = PropertyValuesHolder.ofKeyframe(View.SCALE_X,</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0f</span>, <span class="number">1.0f</span>),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.25f</span>, scaleSmall),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.5f</span>, scaleLarge),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.75f</span>, scaleLarge),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">1.0f</span>, <span class="number">1.0f</span>)</span><br><span class="line">        );</span><br><span class="line">        PropertyValuesHolder scaleYValuesHolder = PropertyValuesHolder.ofKeyframe(View.SCALE_Y,</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0f</span>, <span class="number">1.0f</span>),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.25f</span>, scaleSmall),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.5f</span>, scaleLarge),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.75f</span>, scaleLarge),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">1.0f</span>, <span class="number">1.0f</span>)</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="comment">//先往左再往右</span></span><br><span class="line">        PropertyValuesHolder rotateValuesHolder = PropertyValuesHolder.ofKeyframe(View.ROTATION,</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0f</span>, <span class="number">0f</span>),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.1f</span>, -shakeDegrees),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.2f</span>, shakeDegrees),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.3f</span>, -shakeDegrees),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.4f</span>, shakeDegrees),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.5f</span>, -shakeDegrees),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.6f</span>, shakeDegrees),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.7f</span>, -shakeDegrees),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.8f</span>, shakeDegrees),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">0.9f</span>, -shakeDegrees),</span><br><span class="line">                Keyframe.ofFloat(<span class="number">1.0f</span>, <span class="number">0f</span>)</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        ObjectAnimator objectAnimator = ObjectAnimator.ofPropertyValuesHolder(view, scaleXValuesHolder, scaleYValuesHolder, rotateValuesHolder);</span><br><span class="line">        objectAnimator.setDuration(duration);</span><br><span class="line">        objectAnimator.start();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>为了能使多个动画同时进行，使用属性动画中的 PropertyValuesHolder 来实现。分别对 scaleX、scaleY、 rotation三个属性做属性动画处理。实现效果如下：</p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/shake-2.gif" alt=""></p>
+<p>从代码上看，这里实现缩放速率和摇晃速率不一致是通过 keyFrame 的设置实现的，与 duration 参数解耦。</p>
+<p>这个方案的优点是：</p>
+<ol>
+<li>对动画的定制粒度较小，理论上可以对无限小的动画帧进行定制。</li>
+<li>基于第一点的缘故，实现效果较好，基本可以实现任何动画效果。</li>
+</ol>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文提出两种方案，上文也提到了，实际上任何动画都可以用帧动画来实现，只不过费时费力，所以方案三我就不多说了。<strong>另外还有一个方案四，就是自定义Animation，在一个动画周期内对控件属性进行修改，这种方案虽然属于Animation的范畴，但是实质与属性动画一致，这里就不做扩展，感兴趣的读者可以留言讨论。</strong> </p>
+<p>从上面的比较可以看出，View Animation 比较适合于一些简单的动画效果，可以达到快速开发的目的。而一些复杂的、复合的动画效果，用属性动画则事半功倍，效果也会比较好。当然属性动画的局限性在于，如果对应的控件没有动画所需的属性，则“巧妇”也难以解决。</p>
+<p>为了便于大家比较，我写了一个demo放在github上，在保证各种变量尽量一致的情况下可以看到两种方案的实现效果——当然如果你有更好的方案欢迎留言告知。</p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/shake-3.gif" alt=""></p>
+<p>代码地址：<a href="https://github.com/zhenghuiy/ShakeAnimationDemo" target="_blank" rel="external">https://github.com/zhenghuiy/ShakeAnimationDemo</a></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="http://blog.csdn.net/harvic880925/article/details/50752838" target="_blank" rel="external">http://blog.csdn.net/harvic880925/article/details/50752838</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Android/">Android</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Android/">Android</a>, <a href="/tags/动画/">动画</a>, <a href="/tags/抖动动画/">抖动动画</a>
+  </div>
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    
+    <a href="/2016/05/20/Android朝花夕拾之Android权限最佳实践/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+
+
+<section id="comment">
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2016/06/01/Android抖动动画的实现与思考/" data-title="Android抖动动画的实现与思考" data-url="http://zhenghuiy.github.io/2016/06/01/Android抖动动画的实现与思考/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start  -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"zhenghuiy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:zhenghuiy.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Android/">Android</a><small>8</small></li>
+  
+    <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
+  
+    <li><a href="/categories/Android朝花夕拾/">Android朝花夕拾</a><small>1</small></li>
+  
+    <li><a href="/categories/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/categories/在路上/">在路上</a><small>1</small></li>
+  
+    <li><a href="/categories/工具/">工具</a><small>2</small></li>
+  
+    <li><a href="/categories/感悟/">感悟</a><small>1</small></li>
+  
+    <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
+  
+    <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
+  
+    <li><a href="/categories/记事/">记事</a><small>3</small></li>
+  
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2371914483&verifier=c4ac827b&dpc=1"></iframe>
+
+  <div class="widget tag">
+<h3 class="title">Friends</h3>
+<ul class="entry">
+<li><a href="http://blog.saymagic.cn/index.html" title="saymagic">saymagic</a></li>
+</ul>
+</div>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><section>
+Theme of <a href="https://github.com/zippera/lightum">Lightum</a>, Improved from <a href="https://github.com/hexojs/hexo-theme-light">Light</a>, by <a href="/">zippera</a> 
+</section>
+<div class="clearfix"></div>
+</footer>
+  <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
+
+
+<a href="https://github.com/zhenghuiy" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png" alt="Fork me on GitHub"></a>

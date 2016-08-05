@@ -219,64 +219,81 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-07-23T04:16:15.000Z"><a href="/2014/07/23/代码实现Android流量统计/">Jul 23 2014</a></time>
+        <time datetime="2015-03-11T07:34:00.000Z"><a href="/2015/03/11/完成以前博客的搬家/">Mar 11 2015</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/07/23/代码实现Android流量统计/">代码实现Android流量统计</a></h1>
+    <h1 class="title"><a href="/2015/03/11/完成以前博客的搬家/">完成以前博客的搬家</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>尽管现在WIFI的覆盖范围越来越广，但是设备（在这里设备指手机或平板）流量的使用仍然是用户很关注的一个点。因此，在APP中加入流量统计模块对于提升用户体验（让用户可以知晓使用了多少流量，可以使用户使用APP时更加放心）有很大帮助。</p>
-<p>Android使用的是Linux内核，在Linux系统里，所有信息都是以文件的形式存在的，因此在Android中，所有应用的流量信息都将被保存在操作系统的文件中。</p>
-<p>对于Android2.2之前，流量信息存储在proc/net/dev（或者 proc/self/net/dev）文件下，我们解析文件即可得到流量信息。</p>
-<p>在Android2.2（API Level 8）之后，系统提供了TrafficStats类，我们可以通过该类来获取流量信息。需要注意一点的是，有些设备不支持流量统计，具体表现是，当调用TrafficStats的方法时将返回TrafficStats.UNSUPPORTED，这种情况下，我们需要自己去解析/sys/class/net/  下的log文件。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>以下是TrafficStats类的一些主要方法（摘录自<a href="http://developer.android.com/reference/android/net/TrafficStats.html">android 官方API文档</a>）：</p>
-<pre><code>static long getMobileRxBytes()
-Return number of bytes received across mobile networks since device boot.
+        <p>花费了四五个小时，终于把以前的博客全部搬到新的博客里。将所有的图片都存成外链。</p>
+<p>一方面，觉得工作量真是大；另一方面，又觉得以前积累的博客实在是太少。</p>
+<p>幸好去年开始使用有道云笔记，有了记录笔记的习惯。如果开始写博客，估计可以整理出好多篇。</p>
+<p>hexo搭建初自动生成的”Hello,world”那篇博客我就不删除了，当做”之前”与”现在”的分割线。</p>
+<p>由此，以前博客可以删除。开始正式使用现在的博客了。</p>
+<p>最后，是我最喜欢的星空图。</p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/1.png" alt=""></p>
 
-static long getMobileRxPackets()
-Return number of packets received across mobile networks since device boot.
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
 
-static long getMobileTxBytes()
-Return number of bytes transmitted across mobile networks since device boot.
 
-static long getMobileTxPackets()
-Return number of packets transmitted across mobile networks since device boot.
 
-static long getTotalRxBytes()
-Return number of bytes received since device boot.
 
-static long getTotalRxPackets()
-Return number of packets received since device boot.
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-03-10T03:03:29.000Z"><a href="/2015/03/10/给计算机相关专业大一学生的一点建议/">Mar 10 2015</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/03/10/给计算机相关专业大一学生的一点建议/">给计算机相关专业大一学生的一点建议</a></h1>
+  
 
-static long getTotalTxBytes()
-Return number of bytes transmitted since device boot.
-
-static long getTotalTxPackets()
-Return number of packets transmitted since device boot.
-
-static long getUidRxBytes(int uid)
-Return number of bytes received by the given UID since device boot.
-
-static long getUidRxPackets(int uid)
-Return number of packets received by the given UID since device boot.
-
-static long getUidTcpRxBytes(int uid)
-This method was deprecated in API level 18. Starting in JELLY_BEAN_MR2, transport layer statistics are no longer available, and will always return UNSUPPORTED.
-
-static long getUidTxPackets(int uid)
-Return number of packets transmitted by the given UID since device boot.
-</code></pre>
+    </header>
+    <div class="entry">
+      
+        <p>现在是15年3月，还有四个月我将毕业工作。大学四年就这样过去，现在回校已经有一种复杂的别离情绪。大学四年到底过得如何，是好是坏，是成功还是失败，这个很难回答。但是有些曾经迷茫过的问题，现在看来，似乎已经有了一些答案。因此在这里做一些记录与分享。如果你还为时未晚，希望可以帮助到你。</p>
+<h2 id="将来的路"><a href="#将来的路" class="headerlink" title="将来的路"></a>将来的路</h2><p>就本科生而言，可以分成两个大方向：一，就业。就业又可分为进外企、进事业单位、进国企、进民企；二，读研。读研又可分为保研、考研、出国留学。</p>
+<p>到底选哪条路，这个问题对于大一乃至大四的某些同学，都是一个难题。未来似乎就把握在自己手里，又似乎自己无力去掌控。因此，有明确的目标的人是幸运的，当然最后能否成事，还看他能否真正用心去做。</p>
+<p>我且谈谈计算机方面的就业（<em>这里特指普通的，专业对口的就业</em>）。</p>
+<p>首先我绝对不是这方面的高手，因此我只能分享一下在我求职过程中的感悟还有周围同学的经历给我的启发。<strong>我觉得比较重要的几个要点是：一，项目经验；二，专业基础；三，实习经验；四，算法；五，比赛经验。</strong></p>
+<p>要点没有先后之分，我觉得不可缺少的是第二点“专业基础”，不管你选择了去什么公司，这个是必然会考察到的。这里的“专业基础”，指的就是你在学校里课堂上学的例如数据结构、算法、操作系统、计算机组成结构等等。——实际上，不只是就业，走其他出路你也必须学好这些。</p>
+<p>你一定注意到第四点“算法”和第二点“基础”有重复。这里的“算法”，已经超出了“基础”的范围。算法一直是诸多IT公司考察的一个重要的点。不管是国内的BAT，还是国外的Google、facebook，如果你算法好，那拿offer的概率就大很多。如果对算法感兴趣的话，可以尝试加入学校的ACM队伍。<br>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2014/07/23/代码实现Android流量统计/#more" class="more-link">阅读全文</a>
+            <a href="/2015/03/10/给计算机相关专业大一学生的一点建议/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -307,31 +324,30 @@ Return number of packets transmitted by the given UID since device boot.
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-07-23T04:00:16.000Z"><a href="/2014/07/23/ListView的高效率使用/">Jul 23 2014</a></time>
+        <time datetime="2015-03-05T07:35:40.000Z"><a href="/2015/03/05/开始博客新纪元/">Mar 5 2015</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/07/23/ListView的高效率使用/">ListView的高效率使用</a></h1>
+    <h1 class="title"><a href="/2015/03/05/开始博客新纪元/">开始博客新纪元</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>ListView作为android上最常用的控件之一，其原理与效率十分值得我们去探究，特别是当与Button、ImageView一起时，许多问题便纷至沓来。今天我就说说这老生常谈的话题，也是由此做一个总结。</p>
-<h2 id="一，ListView的原理"><a href="#一，ListView的原理" class="headerlink" title="一，ListView的原理"></a>一，ListView的原理</h2><p>在Android中有一个Recycler的构件，滑出屏幕的的Item就会被缓存在里面。但并不是缓存全部，只是会根据item的类型数来缓存相应的个数。举个例子，一般情况下都没有必要去重写ListView的getViewTypeCount())函数，那么type值也就为1，也就是说，Recycler中只会缓存一个item View。如下图（图片来自网络）：</p>
-<p> <img src="http://zhenghuiy-blog.qiniudn.com/recycler.jpeg" alt=""></p>
-<p>当Item1滑出屏幕的时候，Recycler构件中就缓存了item1,再往上滑，item2滑出屏幕。这时有趣的事情就发生了，Recycler构件只会缓存一个item，这时毫无争议会缓存Item2，那么item1就被复用，显示为item8（实际上当item1完全滑出界面时就会被显示作Item8了）。</p>
-<h2 id="二，需要注意的地方"><a href="#二，需要注意的地方" class="headerlink" title="二，需要注意的地方"></a>二，需要注意的地方</h2><h3 id="1，数据与显示分离"><a href="#1，数据与显示分离" class="headerlink" title="1，数据与显示分离"></a>1，数据与显示分离</h3><p>由于ListView的<code>item view</code>是复用的，这就要求我们将数据与显示分离，否则将造成显示的结果错乱。比如，当ListView的<code>Item</code>中含有单选按钮时，假如只是简单地记录按钮的点击状态，那么当滑动ListView的时候，“已点击”与“未点击”就显示混乱。再举个例子，ListView的<code>item</code>中含有图片，选择异步加载。如果做法是当下载完毕后就设置ImageView的显示内容，那么也会造成混乱。</p>
-<p>比较明智的做法是自己单独维护一个数据结构来缓存数据，上文的点击状态就时候使用<code>ArrayList</code>,异步加载的图片就适合使用<code>HashMap</code>。</p>
-<h3 id="2，数据更新"><a href="#2，数据更新" class="headerlink" title="2，数据更新"></a>2，数据更新</h3><p>ListView的数据更新只能在UI主线程中进行，否则会报：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“java.lang.IllegalStateException: The content of the adapter has changed but ListView did not receive a notification. Make sure the content of your adapter is not modified from a background thread, but only from the UI thread.”</span><br></pre></td></tr></table></figure></p>
-<p>另外还需要注意的是，不能更改原来的数据指向的对象。比如，原来的数据<code>List</code> 指向的是 <code>ArrayList1</code>。在数据更新后，为了方便，我们直接 <code>List = ArrayList2</code>。这样就使<code>List</code>指向新的<code>ArrayList</code>，也是会出错的。总而言之，唯一的做法就是在原理的ArrayList1中增加或删除数据。</p>
+        <h2 id="不断被“和谐”的博客园"><a href="#不断被“和谐”的博客园" class="headerlink" title="不断被“和谐”的博客园"></a>不断被“和谐”的博客园</h2><p>一直想弄个小空间，写点自己的东西，做做技术分享。开始有这个念头的时候大概是大一，从教我们C语言的文老师口中知道了博客园的存在。打开之后顿时被里面纯粹的博客氛围，以及靠谱的质量吸引。于是在博客园开了博客，满怀热情地写了几篇稚嫩的博客后，迎来了博客园第一次“和谐”。</p>
+<p>“和谐”的原因是被怀疑在做广告。我仔细查看了下，无非就是使用了几个外部网站的链接。因此就按照申诉流程发email去申诉，申诉的过程倒是蛮顺利，马上解了封。但重头戏在后面。自从有了这样一次“黑历史”后，只要我一发含有外站链接的博客，马上就被“和谐”。尽管申诉解封的流程蛮顺利，但是试过几次之后真是累觉不爱。</p>
+<p>我严重怀疑，在第一次被人工和谐之后，我就被列上了黑名单，然后每次我发布博文到首页，就自动判断我处于黑名单上，然后就是被和谐。因为除了第一次，引用的是其他网站的某些博客的连接外，后面我都用的是诸如Android官网之类的链接啊（那时候Android官网还可以无障碍访问，现在。。唉）。这点来说，有很大可能后面两次和谐是机器处理的。</p>
+<p>于是，上博客园就变成只看不写了。——现在已经把刷博客园的习惯改成刷知乎了。</p>
+<h2 id="且走且行的WordPress"><a href="#且走且行的WordPress" class="headerlink" title="且走且行的WordPress"></a>且走且行的WordPress</h2><p>大二的时候接触了php,玩过一个学期的discuz,做了个很垃圾的某网站后台外包——外包来源是某个土老板，不断改需求逼走了之前的合作对象，作为接任者，真的无力吐槽前任程序员的“无框架，无模块概念”的行为，总之代码就是一滩烂泥，当然当时还不懂这些，只能根据前任的习惯修改代码。于是在完成了土老板给的需求后马上理性地（实际上是不能忍了）结束合作，连另一半钱都不要了。唔，这是题外话。总之，就是了解了PHP，顺便知道了wp的存在。</p>
+<p>那个时候SAE和BAE刚刚兴起，果断占坑，在SAE上搭建了一个博客。大二真是我的混乱时代，各种东西玩的飞起，php,discuz,Android,阿里云主机，尝试推广自己的论坛，域名注册等等。这些就是我几乎没有写博客的借口了。</p>
+<p>直到大三暑假，也就是去年，在网易实习的时候，终于知道做点总结了。于是慢慢写起博客来。<br>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2014/07/23/ListView的高效率使用/#more" class="more-link">阅读全文</a>
+            <a href="/2015/03/05/开始博客新纪元/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -362,44 +378,30 @@ Return number of packets transmitted by the given UID since device boot.
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-07-22T03:36:39.000Z"><a href="/2014/07/22/在github上参与开源项目/">Jul 22 2014</a></time>
+        <time datetime="2015-03-05T00:35:40.000Z"><a href="/2015/03/05/hello-world/">Mar 5 2015</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/07/22/在github上参与开源项目/">在github上参与开源项目</a></h1>
+    <h1 class="title"><a href="/2015/03/05/hello-world/">Hello World</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>近日用到一个不错的开源库<a href="https://github.com/HackPlan/AndroidCharts">AndroidCharts</a>使用方便，易于扩展和自定制。在使用的过程中发现了一个小bug,于是果断发起了pull request。第一次使用GitHub参与开源项目还是十分手生的，需要各种查资料，学习Git的用法。</p>
-<p>参考了许多资料，这里记录一下在GitHub上参与开源项目的过程。 </p>
-<h2 id="1，寻找项目"><a href="#1，寻找项目" class="headerlink" title="1，寻找项目"></a>1，寻找项目</h2><p>可以是你使用到的项目，你觉得想参与的，或者在这里找：</p>
-<ul>
-<li><a href="https://github.com/explore">GitHub Explore</a>：受欢迎和热门的项目。 </li>
-<li><a href="https://github.com/stars?direction=desc&amp;sort=created">GitHub Stars</a>：被其他人star过的项目（指的是你自己库的项目）。 </li>
-<li><a href="https://github.com/showcases">GitHub Showcases</a>：一个能搜索相关库的方法。 </li>
-</ul>
-<h2 id="2，查看社区和文档"><a href="#2，查看社区和文档" class="headerlink" title="2，查看社区和文档"></a>2，查看社区和文档</h2><p>一般项目中都有的文件。</p>
-<ul>
-<li><p>Readme：几乎所有的Github项目都包含一个README.md文件。readme提供了该项目的一个概览及关于如何使用、构建甚至如何贡献于一个项目的相关细节。</p>
-</li>
-<li><p>Contributing：项目和项目维护者不同，所以每个项目所期望的作贡献的最佳方法也会有所不同。一定要注意一个标注为CONTRIBUTING的文档，Contributing文档详细描述了一个项目的维护者希望看到贡献的补丁或功能应该符合怎样的规格。这可能包含要写什么测试，代码语法规范或补丁集中的区域。</p>
-</li>
-<li><p>License：一个 LICENSE 文件当然就是该项目的许可证了。一个开源项目的 license 会告诉用户他们能做和不能做的（例如使用、修改、重新发布），及告诉贡献者他们允许其他人做的。有许多的办法对开源项目加上许可证，你可以在 <a href="http://choosealicense.com/">choosealicense.com</a> 读到更多的关于每个许可证的含义。</p>
-</li>
-<li><p>Documentation and Wikis：许多大型项目有的不只有一个readme来指导人么如何使用他们的项目。在这种情况下你通常能够发现一个指向库中名为“docs”的另一个文件或文件夹的链接。</p>
-</li>
-</ul>
-<h2 id="3，发起一个issue"><a href="#3，发起一个issue" class="headerlink" title="3，发起一个issue"></a>3，发起一个issue</h2>
+        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+
       
     </div>
     <footer>
       
-        
-          <div class="alignleft">
-            <a href="/2014/07/22/在github上参与开源项目/#more" class="more-link">阅读全文</a>
-          </div>
         
         
       
@@ -429,89 +431,29 @@ Return number of packets transmitted by the given UID since device boot.
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-07-21T02:55:17.000Z"><a href="/2014/07/21/简记git与svn/">Jul 21 2014</a></time>
+        <time datetime="2014-08-07T07:26:33.000Z"><a href="/2014/08/07/谨慎使用静态注册的BroadcastReceiver/">Aug 7 2014</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/07/21/简记git与svn/">简记git与svn</a></h1>
+    <h1 class="title"><a href="/2014/08/07/谨慎使用静态注册的BroadcastReceiver/">谨慎使用静态注册的BroadcastReceiver</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>svn与git是目前比较主流的版本控制系统，在这里简单记录一下它们之间的异同。</p>
-<h2 id="一，从架构来说，SVN是集中式，git是分布式。"><a href="#一，从架构来说，SVN是集中式，git是分布式。" class="headerlink" title="一，从架构来说，SVN是集中式，git是分布式。"></a>一，从架构来说，SVN是集中式，git是分布式。</h2><p>集中式的优点是代码高度统一，缺点也很明显就是非常依赖于中央服务器。如果服务器宕机或者本地无法联网，那么你将无法提交更新、还原、对比等，也就无法协同工作。同时SVN上的提交也并非是每次都成功，如果有一个人在你提交的时候先提交，那么就会提示你先更新再提交。SVN原理上只关心文件内容的具体差异，每次记录有哪些文件做了更新并且更新了哪些内容。</p>
-<p>而分布式的git会在本地克隆一个自己的版本库，在无法联网的时候，依然能够提交文件，查看历史版本记录等。Git中每个版本库都是平等的。与SVN不同，Git只关心文件数据的整体是否发生变化，Git并不保存文件内容前后变化的差异数据，更像是把变化的文件作快照后记录在一个微型的文件系统中（为提高性能，没有变化的文件不会再次保存）。</p>
-<h2 id="二，版本库与工作区的差异"><a href="#二，版本库与工作区的差异" class="headerlink" title="二，版本库与工作区的差异"></a>二，版本库与工作区的差异</h2><p>SVN的版本库与工作区是分离的。工作区在你本地检出的那个目录，它是一份版本库在某个历史状态下的快照。SVN的工作区中每个目录下都包含一个名为.svn的控制目录（隐藏目录）。</p>
-<p>git的版本库与工作区在同一个目录下，工作区的根目录有一个.git的子目录。git的工作区必须要有.git目录，它是用来保存元数据和对象数据库的地方，并且Git的工作区下只有一个.git目录，此外再无任何控制目录，如果删除它，则破环了整个历史，版本库也永远失去了。（可以在工作区之外克隆一个版本库，并且经常把提交push到里面，这样就实现了数据备份。）</p>
+        <p>在Android中，BroadcastReceiver有两种注册方式。</p>
+<p>第一种是静态注册，在<code>Androidmanifest.xml</code>文件中以类似activity注册的方式进行注册。</p>
+<p>第二种是动态注册，在<code>onResume()</code>中注册，在<code>onPause()</code>中注销。</p>
+<p>一般而言，我们需要根据具体的使用场景来判断使用何种注册方式。</p>
+<p>静态注册的特点是接收设备全局的相应广播，尽管静态注册看起来比较方便，但实际上是十分耗费资源的。</p>
+<p>现在使用以下代码进行测试。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class WifiReceiver extends BroadcastReceiver&#123;</span><br><span class="line">public static final String FLAG = &quot;WifiReceiver&quot;;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public void onReceive(Context arg0, Intent arg1) &#123;</span><br><span class="line">if (arg1.getAction().equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) &#123;</span><br><span class="line">int state = arg1.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED);</span><br><span class="line"></span><br><span class="line">if (state == WifiManager.WIFI_STATE_DISABLED) &#123;</span><br><span class="line">Log.v(FLAG,&quot;wifi is disabled!&quot;);</span><br><span class="line">&#125; else if (state == WifiManager.WIFI_STATE_ENABLED) &#123;</span><br><span class="line">Log.v(FLAG,&quot;wifi is enabled!&quot;);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2014/07/21/简记git与svn/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-06-16T02:44:31.000Z"><a href="/2014/06/16/Android中保持Service的存活/">Jun 16 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/06/16/Android中保持Service的存活/">Android中保持Service的存活</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>如何让Service keep alive是一个很常见的问题。</p>
-<p>在APP开发过程中，需要Service持续提供服务的应用场景太多了，比如闹钟需要作出及时提醒，那么比如得有一个Service不断去比较当前时间和设置时间；QQ要能流畅的聊天，必然也需要及时接收消息等。</p>
-<p>但是Android并没有保证Service有这样功能，毕竟一个系统面对的是用户，必然以对用户友好为先。</p>
-<p>关于如何让Service keep alive，我在上篇博客给出的解决方案是：方案一，让服务器端发一个推送，检查Service是否还存活；方案二，将Service独立出来，运行在另一个进程中。</p>
-<p>这两个方案有些地方需要说明和改进，然后还会有其他方案补充进来。</p>
-<h3 id="方案一：利用推送来确保Service存活。"><a href="#方案一：利用推送来确保Service存活。" class="headerlink" title="方案一：利用推送来确保Service存活。"></a>方案一：利用推送来确保Service存活。</h3><p>方案一的做法有点“偷懒”。因为相当于把这个难题转移给推送服务提供者来处理，或者说，只需要依靠推送，就不需要自己去考虑存活问题。</p>
-<p>推送一直是移动客户端开发的热门话题（实际上也是传统软件开发的热门话题）。</p>
-<p>一般情况下，C/S结构（B/S是特殊的C/S结构）中的业务流程是这样的：客户端主动向服务器端发出请求，服务器端响应请求，建立二者之间的连接。通过建立的链接，双方可以发送/接收数据。最后客户端和服务器端断开连接。也就是说，客户端是主动方，是请求连接的发起者；服务器端保持对某个端口的监听（0-1023是系统端口号，比如80端口被指派给HTTP），而被动地等待客户端的连接请求。</p>
-<p>那么推送指的是，服务器端在没有收到请求的情况下主动向客户端发送信息，比如服务器端收到一封邮件后主动发往邮件的客户端。</p>
-<p>推送是如何实现的呢？首先，服务器端的功能还是不变，监听某个端口等待请求。然后我们可以看到，服务器端能主动发送信息的唯一时间段就是在建立了服务器端到客户端的连接之后、二者断开连接之前。因此，推送的实现就是基于保持服务器端和客户端的连接一直存在，方式可以是持续连接或者轮询。</p>
-<p>回到Service这个问题上来，推送服务的提供者必然会保证推送技术的稳定性，依靠推送，可以唤醒我们的APP，那么保证Service的存活也就不在话下。</p>
-<h3 id="方案二：将Service运行在另一个进程中。"><a href="#方案二：将Service运行在另一个进程中。" class="headerlink" title="方案二：将Service运行在另一个进程中。"></a>方案二：将Service运行在另一个进程中。</h3><p>将Service放在另一个进程中，可以避免APP所在的进程因资源紧张或者被用户手动结束的时候，Service也被结束。</p>
-<p>这个做法的另一个优点是，可以让Service独立出来，为同一个公司的不同APP提供相同的服务。比如当大部分APP都需要同一个信息的时候，为每个APP都写一个Service显然不好，这时完全可以写一个独立进程中的Service，为所有APP提供信息。</p>
-<p>当然，这个方案有个缺点是，当某些手机助手无脑式结束掉全部的非系统进程时，Service无法存活。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/06/16/Android中保持Service的存活/#more" class="more-link">阅读全文</a>
+            <a href="/2014/08/07/谨慎使用静态注册的BroadcastReceiver/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -547,7 +489,11 @@ Return number of packets transmitted by the given UID since device boot.
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Android/">Android</a><small>6</small></li>
+    <li><a href="/categories/Android/">Android</a><small>8</small></li>
+  
+    <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
+  
+    <li><a href="/categories/Android朝花夕拾/">Android朝花夕拾</a><small>1</small></li>
   
     <li><a href="/categories/Java/">Java</a><small>2</small></li>
   
@@ -557,11 +503,13 @@ Return number of packets transmitted by the given UID since device boot.
   
     <li><a href="/categories/感悟/">感悟</a><small>1</small></li>
   
+    <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
+  
     <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
   
-    <li><a href="/categories/记事/">记事</a><small>4</small></li>
+    <li><a href="/categories/记事/">记事</a><small>3</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>1</small></li>
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
   
   </ul>
 </div>

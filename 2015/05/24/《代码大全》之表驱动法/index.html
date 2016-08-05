@@ -259,8 +259,7 @@ charType = charTypeTable[ inputChar ];
 </code></pre><p>使用表驱动法，必须要解决两个问题。</p>
 <p>1，怎样从表中查询条目。 比如你希望把数据按月进行分类，那么创建一个月份表是非常直截了当的，你可以用一个下标从 1 到 12 的数组实现它。而另一些数据可能很难直接用于查表。</p>
 <p>2，你应该在表里存些什么。有<br>时候，表查询出来的结果是数据，有时候，表查询出来的结果是动作，或者有时候，查出来的是子程序的引用。无论何种情况，表都会变得更为复杂。<br><a id="more"></a></p>
-<p>##直接访问表</p>
-<p>之所以称为“直接访问”的，是因为你无须绕很多复杂的圈子就能够在表里面找到你想要的信息。</p>
+<h2 id="直接访问表"><a href="#直接访问表" class="headerlink" title="直接访问表"></a>直接访问表</h2><p>之所以称为“直接访问”的，是因为你无须绕很多复杂的圈子就能够在表里面找到你想要的信息。</p>
 <p>例子二：一个月中的天数</p>
 <pre><code>if (month == 1) {
     days = 31;
@@ -280,11 +279,9 @@ charType = charTypeTable[ inputChar ];
 <pre><code>max( min( 66,age ), 17 );
 </code></pre><p>通过以上代码，可以生成位于 17 到 66 之间的键值。又比如，在另一个程序里，age 不是以 1，而是以 5 为步数，那么就需要将所有 age 除以 5 来构造这样的键值。</p>
 <p>3，把键值转换提取成独立的子程序。比如 Java 中的 HashMap。</p>
-<p>##索引访问表</p>
-<p>当使用索引的时候，先用一个基本类型的数据从一张索引表中查处一个键值，然后再用这一键值查出你感兴趣的主数据。</p>
+<h2 id="索引访问表"><a href="#索引访问表" class="headerlink" title="索引访问表"></a>索引访问表</h2><p>当使用索引的时候，先用一个基本类型的数据从一张索引表中查处一个键值，然后再用这一键值查出你感兴趣的主数据。</p>
 <p>第一项优点是，如果主查询表中每一条记录都很大，那么创建一个浪费了很多空间的索引数组所用的空间就会更小。<br>第二项优点是，即使你用了索引以后没有节省内存空间，操作位于索引中的记录有时也要比操作位于主表中的记录更方便廉价。</p>
-<p>##阶梯访问表</p>
-<p>阶梯结构的基本思想是，表中的记录对于不同的数据范围有效，而不是对不同的数据点有效。</p>
+<h2 id="阶梯访问表"><a href="#阶梯访问表" class="headerlink" title="阶梯访问表"></a>阶梯访问表</h2><p>阶梯结构的基本思想是，表中的记录对于不同的数据范围有效，而不是对不同的数据点有效。</p>
 <p>为了使用阶梯方法，你要把每一区间的上限写入一张表里，然后写一个循环，按照各区间的上限来检查分数。当分数第一次超过某个区间的上限时，你就知道相应的等级了。</p>
 <pre><code>double[] range = {50.0, 65.0, 75.0, 90.0, 100.0};
 String[] grade = {&quot;F&quot;, &quot;D&quot;, &quot;C&quot;, &quot;B&quot;, &quot;A&quot;};
@@ -341,6 +338,8 @@ document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static
 
  <nav id="pagination" >
     
+    <a href="/2016/01/11/回望2015/" class="alignleft prev" >上一页</a>
+    
     
     <a href="/2015/05/18/《代码大全》之变量名的力量/" class="alignright next" >下一页</a>
     
@@ -385,7 +384,11 @@ var duoshuoQuery = {short_name:"zhenghuiy"};
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Android/">Android</a><small>6</small></li>
+    <li><a href="/categories/Android/">Android</a><small>8</small></li>
+  
+    <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
+  
+    <li><a href="/categories/Android朝花夕拾/">Android朝花夕拾</a><small>1</small></li>
   
     <li><a href="/categories/Java/">Java</a><small>2</small></li>
   
@@ -395,9 +398,11 @@ var duoshuoQuery = {short_name:"zhenghuiy"};
   
     <li><a href="/categories/感悟/">感悟</a><small>1</small></li>
   
+    <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
+  
     <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
   
-    <li><a href="/categories/记事/">记事</a><small>4</small></li>
+    <li><a href="/categories/记事/">记事</a><small>3</small></li>
   
     <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
   

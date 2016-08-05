@@ -219,29 +219,69 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-05-18T06:10:57.000Z"><a href="/2015/05/18/《代码大全》之变量名的力量/">May 18 2015</a></time>
+        <time datetime="2016-06-01T04:00:00.000Z"><a href="/2016/06/01/Android抖动动画的实现与思考/">Jun 1 2016</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/05/18/《代码大全》之变量名的力量/">《代码大全》之变量名的力量</a></h1>
+    <h1 class="title"><a href="/2016/06/01/Android抖动动画的实现与思考/">Android抖动动画的实现与思考</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="一，选择好变量名的注意事项"><a href="#一，选择好变量名的注意事项" class="headerlink" title="一，选择好变量名的注意事项"></a>一，选择好变量名的注意事项</h1><p>一个好的变量名是可读的、易记的和恰如其分的。可以通过应用多条原则来实现这些目标。</p>
-<h3 id="1，最重要的命名注意事项"><a href="#1，最重要的命名注意事项" class="headerlink" title="1，最重要的命名注意事项"></a>1，最重要的命名注意事项</h3><p>为变量命名时最重要的考虑事项是，<strong>该名字要完全、准确地描述出该变量所代表的事物</strong>。获得好名字的一种使用技巧是<strong>用文字表达变量所代表的是什么</strong>。</p>
-<h3 id="2，以问题为导向"><a href="#2，以问题为导向" class="headerlink" title="2，以问题为导向"></a>2，以问题为导向</h3><p>一个好名字通常表达的是“什么”，而不是“如何”。</p>
-<h3 id="3，最适当的名字长度"><a href="#3，最适当的名字长度" class="headerlink" title="3，最适当的名字长度"></a>3，最适当的名字长度</h3><p>平均名字长度在 8 到 20 个字符的程序容易调试。当然这并不意味着你应该尽量把变量名控制到这个范围。它强调的是，<strong>如果你查看自己写的代码时发现了很多更短的名字，那么你需要认真检查，确保这些名字含义足够清晰</strong>。</p>
-<h3 id="4，变量名对作用域的影响"><a href="#4，变量名对作用域的影响" class="headerlink" title="4，变量名对作用域的影响"></a>4，变量名对作用域的影响</h3><p>较长的名字适用于很少用到的变量或者全局变量，而较短的名字则适用于局部变量或者循环变量。</p>
-<p>对位于全局命名空间中的名字加以限定词。</p>
+        <p>大家好，我是光源。</p>
+<p>在日常使用app或者玩游戏的过程中，我们经常可以看到某个view通过抖动来吸引用户注意，今天就来说说怎么实现这个动画。</p>
+<p>具体需求是，<strong>实现一个抖动动画要求同时对大小、旋转角度进行更改且可定制</strong>。</p>
+<p>要实现动画，我们首先应该想到的是 Android 中动画相关的内容。</p>
+<p>Android 中一共有三类动画：</p>
+<ul>
+<li>View Animation<br>又称补间动画，在 android.view.animation.Animation 类之下衍生了五个子类。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://developer.android.com/reference/android/view/animation/AlphaAnimation.html">AlphaAnimation</a></td>
+<td>渐变透明度</td>
+</tr>
+<tr>
+<td><a href="https://developer.android.com/reference/android/view/animation/RotateAnimation.html">RotateAnimation</a></td>
+<td>旋转</td>
+</tr>
+<tr>
+<td><a href="https://developer.android.com/reference/android/view/animation/ScaleAnimation.html">ScaleAnimation</a></td>
+<td>尺寸缩放</td>
+</tr>
+<tr>
+<td><a href="https://developer.android.com/reference/android/view/animation/TranslateAnimation.html">TranslateAnimation</a></td>
+<td>位置平移</td>
+</tr>
+<tr>
+<td><a href="https://developer.android.com/reference/android/view/animation/AnimationSet.html">AnimationSet</a></td>
+<td>动画集合</td>
+</tr>
+</tbody>
+</table>
+<p>​通过前四个类，基本可以解决大部分动画需求，再使用 AnimationSet 使动画具有组合的能力。</p>
+<ul>
+<li><p>Drawable Animation<br>又称逐帧动画，通过设置多个帧在一定时间内不断进行帧的变换形成动画的效果，类似 gif 图。通过 xml 中的 animation-list 标签定义动画，再在 java 代码中用 AnimationDrawable 类来进行控制。</p>
+</li>
+<li><p>Property Animation<br>View Animation 虽然可以解决大部分动画，但还是有些无法实现，而 Drawable Animation 则太过费时费力，所以在 Android 3.0（API 11）引入了属性动画，属性动画实现原理就是修改控件的属性值实现的动画。具体实现又分为 ValueAnimator 和 ObjectAnimator，这里不展开。</p>
+</li>
+</ul>
+<p>回到需求本身，从需求上看，三种方式都可以实现（其实对最接近动画本质的逐帧动画而言，还真没有不能实现的动画 ），这里不妨三种方式都尝试一下(<strong>为方便代码展示，以下尽量使用java代码实现动画</strong>)。<br>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2015/05/18/《代码大全》之变量名的力量/#more" class="more-link">阅读全文</a>
+            <a href="/2016/06/01/Android抖动动画的实现与思考/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -272,31 +312,28 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-03-16T08:32:41.000Z"><a href="/2015/03/16/南京/">Mar 16 2015</a></time>
+        <time datetime="2016-05-20T12:25:00.000Z"><a href="/2016/05/20/Android朝花夕拾之Android权限最佳实践/">May 20 2016</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/03/16/南京/">南京</a></h1>
+    <h1 class="title"><a href="/2016/05/20/Android朝花夕拾之Android权限最佳实践/">Android朝花夕拾之Android权限最佳实践</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p><img src="http://zhenghuiy-blog.qiniudn.com/IMG_20150313_231927.jpg" alt=""></p>
-<p>大概只有在旅行的时候才能真正认识一个城市吧。</p>
-<p>我睁大眼睛仔细观察着，目光扫过之处，皆是独特的事物，路边拥有曲折枝干的悬铃木的木纹，掩映在钢铁水泥之中偶尔出现的古建筑，或者是窄小且并不干净的秦淮河。</p>
-<p>此时我正坐在1路公交上，在南京。</p>
-<h2 id="周五"><a href="#周五" class="headerlink" title="周五"></a>周五</h2><p>在上周，就跟同事J约好周末去南京玩两天。幸运的是，J曾经去过南京，因此她轻车熟路地帮我们两定好了国际青年旅舍夫子庙店。令我惊讶的是，周一订房间的时候，就被告知周五周六男生方面只剩下男女混住的房间了，这个对我来说自然是无所谓，觉得女生应该接受不了这样的房间，也从侧面体现出，青旅不错，生意火爆。</p>
-<p>带着激动和小期待，傍晚在食堂草草解决晚饭，踏上了去南京的旅途。</p>
-<p>透过动车，外面有着各种颜色的亮点。</p>
-<p><img src="http://zhenghuiy-blog.qiniudn.com/IMG_20150313_210524.jpg" alt=""></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>大家好，我是光源。</p>
+<p>从 Android6.0 开始Android的权限模式有了一番更改，从安装时一股脑列给用户，到运行时动态申请权限。对于 Android开发者而言，这是一个重要的变更。</p>
+<p>讨论这个问题之前，我们得先检查一下项目的 target version。如果是 23及以上，则必须得适配新权限模式；如果是 23之下，则还是统一在安装时全部申请权限——即便如此，使用Android 6.0及以上系统的用户还是可以在设置中去关闭你的某些权限。当权限被关闭时，不会导致你的应用直接崩溃，但是会导致你获取到的返回值为null 或者 0，这个是需要注意的地方。</p>
+<p>以下是 Android 官网给出的最佳实践，草草翻译，有不妥之处还请斧正。</p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>app很容易用海量的权限请求淹没用户。如果用户发现 app 影响使用或者担忧 app 滥用用户个人信息，他们可能不再使用或者完全删除这个app。以下最佳实践能帮助你避免这种糟糕的用户体验。<br>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2015/03/16/南京/#more" class="more-link">阅读全文</a>
+            <a href="/2016/05/20/Android朝花夕拾之Android权限最佳实践/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -327,81 +364,26 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-03-11T07:34:00.000Z"><a href="/2015/03/11/完成以前博客的搬家/">Mar 11 2015</a></time>
+        <time datetime="2016-04-05T11:38:00.000Z"><a href="/2016/04/05/Android-性能典范：拯救计划/">Apr 5 2016</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/03/11/完成以前博客的搬家/">完成以前博客的搬家</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>花费了四五个小时，终于把以前的博客全部搬到新的博客里。将所有的图片都存成外链。</p>
-<p>一方面，觉得工作量真是大；另一方面，又觉得以前积累的博客实在是太少。</p>
-<p>幸好去年开始使用有道云笔记，有了记录笔记的习惯。如果开始写博客，估计可以整理出好多篇。</p>
-<p>hexo搭建初自动生成的”Hello,world”那篇博客我就不删除了，当做”之前”与”现在”的分割线。</p>
-<p>由此，以前博客可以删除。开始正式使用现在的博客了。</p>
-<p>最后，是我最喜欢的星空图。</p>
-<p><img src="http://zhenghuiy-blog.qiniudn.com/1.png" alt=""></p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2015-03-10T03:03:29.000Z"><a href="/2015/03/10/给计算机相关专业大一学生的一点建议/">Mar 10 2015</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2015/03/10/给计算机相关专业大一学生的一点建议/">给计算机相关专业大一学生的一点建议</a></h1>
+    <h1 class="title"><a href="/2016/04/05/Android-性能典范：拯救计划/">Android 性能典范：拯救计划</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>现在是15年3月，还有四个月我将毕业工作。大学四年就这样过去，现在回校已经有一种复杂的别离情绪。大学四年到底过得如何，是好是坏，是成功还是失败，这个很难回答。但是有些曾经迷茫过的问题，现在看来，似乎已经有了一些答案。因此在这里做一些记录与分享。如果你还为时未晚，希望可以帮助到你。</p>
-<h2 id="将来的路"><a href="#将来的路" class="headerlink" title="将来的路"></a>将来的路</h2><p>就本科生而言，可以分成两个大方向：一，就业。就业又可分为进外企、进事业单位、进国企、进民企；二，读研。读研又可分为保研、考研、出国留学。</p>
-<p>到底选哪条路，这个问题对于大一乃至大四的某些同学，都是一个难题。未来似乎就把握在自己手里，又似乎自己无力去掌控。因此，有明确的目标的人是幸运的，当然最后能否成事，还看他能否真正用心去做。</p>
-<p>我且谈谈计算机方面的就业（<em>这里特指普通的，专业对口的就业</em>）。</p>
-<p>首先我绝对不是这方面的高手，因此我只能分享一下在我求职过程中的感悟还有周围同学的经历给我的启发。<strong>我觉得比较重要的几个要点是：一，项目经验；二，专业基础；三，实习经验；四，算法；五，比赛经验。</strong></p>
-<p>要点没有先后之分，我觉得不可缺少的是第二点“专业基础”，不管你选择了去什么公司，这个是必然会考察到的。这里的“专业基础”，指的就是你在学校里课堂上学的例如数据结构、算法、操作系统、计算机组成结构等等。——实际上，不只是就业，走其他出路你也必须学好这些。</p>
-<p>你一定注意到第四点“算法”和第二点“基础”有重复。这里的“算法”，已经超出了“基础”的范围。算法一直是诸多IT公司考察的一个重要的点。不管是国内的BAT，还是国外的Google、facebook，如果你算法好，那拿offer的概率就大很多。如果对算法感兴趣的话，可以尝试加入学校的ACM队伍。<br>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天逛稀土时偶然看到<a href="http://gold.xitu.io/#/user/567a559d60b25aa3dcb2a1ce">hanks</a>分享的一篇英文文章，粗略浏览便已觉得不错，因此翻译成中文，与君分享。</p>
+<p>原文地址：<a href="https://medium.com/@laanayabdrzak/android-performance-patterns-rescue-tips-8c1e4c7cb1f0#.xzvcgcall">Android Performance Patterns: Rescue tips</a></p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>现在的app到处都充斥着华丽的动画、复杂的转化还有自定义View，然而用户体验必须尽可能直观且类似。以下这些范例将会帮助你做出一个流畅的、快速响应的、甚至可能减少电量损耗的app，这些范例由一些可以提升整体应用表现的微优化组成。<br>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2015/03/10/给计算机相关专业大一学生的一点建议/#more" class="more-link">阅读全文</a>
+            <a href="/2016/04/05/Android-性能典范：拯救计划/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -432,30 +414,84 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-03-05T07:35:40.000Z"><a href="/2015/03/05/开始博客新纪元/">Mar 5 2015</a></time>
+        <time datetime="2016-04-02T15:31:00.000Z"><a href="/2016/04/02/记一件需要反省的事——如何实现webView内部跳转/">Apr 2 2016</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/03/05/开始博客新纪元/">开始博客新纪元</a></h1>
+    <h1 class="title"><a href="/2016/04/02/记一件需要反省的事——如何实现webView内部跳转/">记一件需要反省的事——如何实现webView内部跳转</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="不断被“和谐”的博客园"><a href="#不断被“和谐”的博客园" class="headerlink" title="不断被“和谐”的博客园"></a>不断被“和谐”的博客园</h2><p>一直想弄个小空间，写点自己的东西，做做技术分享。开始有这个念头的时候大概是大一，从教我们C语言的文老师口中知道了博客园的存在。打开之后顿时被里面纯粹的博客氛围，以及靠谱的质量吸引。于是在博客园开了博客，满怀热情地写了几篇稚嫩的博客后，迎来了博客园第一次“和谐”。</p>
-<p>“和谐”的原因是被怀疑在做广告。我仔细查看了下，无非就是使用了几个外部网站的链接。因此就按照申诉流程发email去申诉，申诉的过程倒是蛮顺利，马上解了封。但重头戏在后面。自从有了这样一次“黑历史”后，只要我一发含有外站链接的博客，马上就被“和谐”。尽管申诉解封的流程蛮顺利，但是试过几次之后真是累觉不爱。</p>
-<p>我严重怀疑，在第一次被人工和谐之后，我就被列上了黑名单，然后每次我发布博文到首页，就自动判断我处于黑名单上，然后就是被和谐。因为除了第一次，引用的是其他网站的某些博客的连接外，后面我都用的是诸如Android官网之类的链接啊（那时候Android官网还可以无障碍访问，现在。。唉）。这点来说，有很大可能后面两次和谐是机器处理的。</p>
-<p>于是，上博客园就变成只看不写了。——现在已经把刷博客园的习惯改成刷知乎了。</p>
-<h2 id="且走且行的WordPress"><a href="#且走且行的WordPress" class="headerlink" title="且走且行的WordPress"></a>且走且行的WordPress</h2><p>大二的时候接触了php,玩过一个学期的discuz,做了个很垃圾的某网站后台外包——外包来源是某个土老板，不断改需求逼走了之前的合作对象，作为接任者，真的无力吐槽前任程序员的“无框架，无模块概念”的行为，总之代码就是一滩烂泥，当然当时还不懂这些，只能根据前任的习惯修改代码。于是在完成了土老板给的需求后马上理性地（实际上是不能忍了）结束合作，连另一半钱都不要了。唔，这是题外话。总之，就是了解了PHP，顺便知道了wp的存在。</p>
-<p>那个时候SAE和BAE刚刚兴起，果断占坑，在SAE上搭建了一个博客。大二真是我的混乱时代，各种东西玩的飞起，php,discuz,Android,阿里云主机，尝试推广自己的论坛，域名注册等等。这些就是我几乎没有写博客的借口了。</p>
-<p>直到大三暑假，也就是去年，在网易实习的时候，终于知道做点总结了。于是慢慢写起博客来。<br>
+        <h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>今天在做一个“WebView内部跳转”的小需求时，发现了一件比较诡异的事：项目中没有在 <code>shouldOverrideUrlLoading</code>中主动去用<code>view.loadUrl</code>逻辑处理，为何能够实现WebView内部跳转呢？</p>
+<p>带着这个小疑惑，我去问了一个厉害的同事，他说道，只要<code>shouldOverrideUrlLoading</code>返回值为<code>false</code>，即可实现内部跳转。</p>
+<p>听到这个我有些困扰，因为记忆中一直是需要手动去load新的url才能实现，否则就跳浏览器的。然后google了下，就搜到以下两个：</p>
+<p>[<a href="http://stackoverflow.com/questions/16693507/shouldoverrideurlloading-return-method">shouldOverrideUrlLoading return method</a>]</p>
+<p>[<a href="http://www.cnblogs.com/shaobin0604/p/3313680.html">WebViewClient shouldOverrideUrlLoading 常见错误用法</a>]</p>
+<p>我的内心是崩溃的。。</p>
+<h1 id="分析原因"><a href="#分析原因" class="headerlink" title="分析原因"></a>分析原因</h1><p>我之所以会记错技术点，小原因有三：<br>1，我之前使用WebView都比较简单，没有去设置WebViewClient，所以会有链接跳转都交由系统处理的惯性思维；<br>2，在之前的项目中，接触到了系统对webView中的以http协议开头的处理，更加加深了“系统会主动去处理链接”的想法；<br>3，然后就是之前包括刚刚搜索了几次“webView 内部跳转”，都是说需要手动去调用<code>view.loadUrl</code>处理的博客。<br>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2015/03/05/开始博客新纪元/#more" class="more-link">阅读全文</a>
+            <a href="/2016/04/02/记一件需要反省的事——如何实现webView内部跳转/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-03-28T13:09:00.000Z"><a href="/2016/03/28/try-catch会影响性能么/">Mar 28 2016</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/03/28/try-catch会影响性能么/">try catch会影响性能么</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天 code review 时发现某个同事的代码中存在滥用<code>try catch</code>的现象。其实这种行为我们也许都经历过，刚参加工作想尽量避免出现崩溃问题，因此不可避免得想在所有可能抛出异常的地方都try catch一下。</p>
+<p>当然，这种行为肯定是不可取的。如果这样，那还不如所有逻辑都包在大大的try catch里好了。<strong>代码的是否具有高健壮性必然是代码是否高效优雅决定的。</strong></p>
+<p>当然，这个也引起我的思考，<code>try catch</code>会影响性能么？</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p><strong><code>try catch</code>不会影响性能。</strong>——严格意义上说是微乎其微。</p>
+<p>这个结论的确很难让人接受，最起码与我的预估不大一样。</p>
+<p>按照我的想法，当代码中出现的各种特性越多，轻量点的如<code>enum</code>，重一点的如“反射”，必然会增加更多的开销。</p>
+<p>然而，从结果看，在没有抛出异常时，try catch的影响跟添加了一个 if else是同一个量级的。也就是说，我们完全可以忽视try catch耗费的那点性能。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2016/03/28/try-catch会影响性能么/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -489,7 +525,11 @@
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Android/">Android</a><small>6</small></li>
+    <li><a href="/categories/Android/">Android</a><small>8</small></li>
+  
+    <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
+  
+    <li><a href="/categories/Android朝花夕拾/">Android朝花夕拾</a><small>1</small></li>
   
     <li><a href="/categories/Java/">Java</a><small>2</small></li>
   
@@ -499,11 +539,13 @@
   
     <li><a href="/categories/感悟/">感悟</a><small>1</small></li>
   
+    <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
+  
     <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
   
-    <li><a href="/categories/记事/">记事</a><small>4</small></li>
+    <li><a href="/categories/记事/">记事</a><small>3</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>1</small></li>
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
   
   </ul>
 </div>

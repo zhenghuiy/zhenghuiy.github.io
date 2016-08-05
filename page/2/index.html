@@ -219,82 +219,28 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-03-05T00:35:40.000Z"><a href="/2015/03/05/hello-world/">Mar 5 2015</a></time>
+        <time datetime="2016-03-09T14:36:00.000Z"><a href="/2016/03/09/Android中Serializable和Parcelable的对比/">Mar 9 2016</a></time>
       
       
   
-    <h1 class="title"><a href="/2015/03/05/hello-world/">Hello World</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-08-07T07:26:33.000Z"><a href="/2014/08/07/谨慎使用静态注册的BroadcastReceiver/">Aug 7 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/08/07/谨慎使用静态注册的BroadcastReceiver/">谨慎使用静态注册的BroadcastReceiver</a></h1>
+    <h1 class="title"><a href="/2016/03/09/Android中Serializable和Parcelable的对比/">Android中Serializable和Parcelable的对比</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>在Android中，BroadcastReceiver有两种注册方式。</p>
-<p>第一种是静态注册，在<code>Androidmanifest.xml</code>文件中以类似activity注册的方式进行注册。</p>
-<p>第二种是动态注册，在<code>onResume()</code>中注册，在<code>onPause()</code>中注销。</p>
-<p>一般而言，我们需要根据具体的使用场景来判断使用何种注册方式。</p>
-<p>静态注册的特点是接收设备全局的相应广播，尽管静态注册看起来比较方便，但实际上是十分耗费资源的。</p>
-<p>现在使用以下代码进行测试。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class WifiReceiver extends BroadcastReceiver&#123;</span><br><span class="line">public static final String FLAG = &quot;WifiReceiver&quot;;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public void onReceive(Context arg0, Intent arg1) &#123;</span><br><span class="line">if (arg1.getAction().equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) &#123;</span><br><span class="line">int state = arg1.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED);</span><br><span class="line"></span><br><span class="line">if (state == WifiManager.WIFI_STATE_DISABLED) &#123;</span><br><span class="line">Log.v(FLAG,&quot;wifi is disabled!&quot;);</span><br><span class="line">&#125; else if (state == WifiManager.WIFI_STATE_ENABLED) &#123;</span><br><span class="line">Log.v(FLAG,&quot;wifi is enabled!&quot;);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于Android开发者来说，序列化总是一个不能避免的问题。前有“使用<code>enum</code>实现单例模式可以自动序列化”的观点，后有“在Intent传输过程中使用<code>Parcelable</code>进行序列化可以减少性能损耗”的思考。</p>
+<p>由此，我们很有必要找到应对各种场景的最佳实践。</p>
+<p>本文中我们谈谈<code>Serializable</code> 和 <code>Parcelable</code>。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>二话不说先说结论（就是这么直接干脆）：序列化的数据仅需在内存中传输的，使用<code>Parcelable</code>；反之，如果需要持久化或者网络传输等等的，请使用<code>Serializable</code>。</p>
+<h2 id="论述"><a href="#论述" class="headerlink" title="论述"></a>论述</h2><p><code>Serializable</code>相信大家不会陌生，从Java中就有这个接口存在。<code>Serializable</code>接口是一种标识接口，它的迷人之处在于，你只要让需要序列化的类实现该接口，Java便会对该类进行高效的序列化。<br>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2014/08/07/谨慎使用静态注册的BroadcastReceiver/#more" class="more-link">阅读全文</a>
+            <a href="/2016/03/09/Android中Serializable和Parcelable的对比/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -325,29 +271,28 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-08-03T07:05:35.000Z"><a href="/2014/08/03/[转]Java中单例模式的实现/">Aug 3 2014</a></time>
+        <time datetime="2016-01-10T16:46:00.000Z"><a href="/2016/01/11/回望2015/">Jan 11 2016</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/08/03/[转]Java中单例模式的实现/">[转]Java中单例模式的实现</a></h1>
+    <h1 class="title"><a href="/2016/01/11/回望2015/">回望2015</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>近日在看Effective JAVA这本书，看到这一条的时候去网上查找下资料，发现了这篇写的不错的博客，因此觉得没有重复造轮子的必要，特此转载。</p>
-<p>原文：</p>
-<p>Inspired by Effective Java.</p>
-<p>Singleton模式是在编程实践中应用最广泛的几种设计模式之一。以前知道的，实现单例的方法有两种(下面的A、B)。刚刚在读《Effective Java的时候》学到一种新的更好的方法(E)：单元素的枚举类型。同时通过网上资料也知道了其他两种方法(C、D)。最后一种在Java中从1.5版本开始支持，其他语言在验证后说明。</p>
-<h2 id="A-饿汉式-类加载的时候就创建实例-。"><a href="#A-饿汉式-类加载的时候就创建实例-。" class="headerlink" title="A.饿汉式(类加载的时候就创建实例)。"></a>A.饿汉式(类加载的时候就创建实例)。</h2><p>代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class MaYun &#123;</span><br><span class="line"></span><br><span class="line">    public static final Mayun instance = new Mayun(); //静态的final的MaYun</span><br><span class="line">    </span><br><span class="line">    private MaYun() &#123;</span><br><span class="line">        //MaYun诞生要做的事情</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public void splitAlipay() &#123;</span><br><span class="line">    </span><br><span class="line">        System.out.println(“Alipay是我的啦！看你丫Yahoo绿眉绿眼的望着。。。”);</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Call：MaYun.instance.splitAlipay();</span><br></pre></td></tr></table></figure></p>
-<p><strong>Feature</strong>：可以通过反射机制攻击；线程安全[多个类加载器除外]。<br>
+        <p>今天是2016年处于工作时间内的第一个星期天——暂且忽略包含在元旦假期内的3号吧。每次跨越一个年头，第一个要头疼的就是每次写日期的时候不得不提醒一遍自己，现在是新的一年了。</p>
+<p>以往的习惯，也是要写一写年度总结的，不过都是在农历新年的夜里、在爆竹声声辞旧岁的氛围中，写下一些文字发在自己的QQ空间里。</p>
+<p>而今年，本来是不准备再写了的。一方面是身份的转变，似乎看清了一些东西，不必把事事都演化成习惯，让自己背负着前进；另一方面是有了一种明悟，生活之精彩，实在不是文字所能表达，强行给经历贴上一段似是而非的记录，反而局限了记忆中事物的万千变化。</p>
+<p>但今天，突然想写点什么。</p>
+<p>博客搭建在github上，形式不错，但是没有了一个固定的编辑器。<del>恰巧注册了简书，就写在这里吧。</del>既然提到了身份的转变，就以这点开始好了。<br>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2014/08/03/[转]Java中单例模式的实现/#more" class="more-link">阅读全文</a>
+            <a href="/2016/01/11/回望2015/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -378,26 +323,38 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-08-01T06:56:08.000Z"><a href="/2014/08/01/Java中类的构造顺序/">Aug 1 2014</a></time>
+        <time datetime="2015-05-24T09:34:00.000Z"><a href="/2015/05/24/《代码大全》之表驱动法/">May 24 2015</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/08/01/Java中类的构造顺序/">Java中类的构造顺序</a></h1>
+    <h1 class="title"><a href="/2015/05/24/《代码大全》之表驱动法/">《代码大全》之表驱动法</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>先看代码：</p>
-<p>Father类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">package com.zhenghuiyan.testorder;</span><br><span class="line"></span><br><span class="line">public class Father &#123;</span><br><span class="line">    public String fStr1 = &quot;father1&quot;;</span><br><span class="line">    protected String fStr2 = &quot;father2&quot;;</span><br><span class="line">    private String fStr3 = &quot;father3&quot;;</span><br><span class="line">    </span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;Father common block be called&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;Father static block be called&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public Father() &#123;</span><br><span class="line">        System.out.println(&quot;Father constructor be called&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>首先是Father类，该类有一个默认构造函数，有一个static的代码块，为了方便查看结果，还有一个普通代码块。<br>
+        <p>表驱动法是一种编程模式——从表里查找信息而不是使用逻辑语句（if 和 case）。事实上，凡是能通过逻辑语句来选择的事务，都可以通过查表来选择。<strong>对简单的情况而言，使用逻辑语句更为容易和直白。但随着逻辑链的越来越复杂，查表法也就愈发显得更具吸引力。</strong></p>
+<h2 id="表驱动法使用总则"><a href="#表驱动法使用总则" class="headerlink" title="表驱动法使用总则"></a>表驱动法使用总则</h2><p>例子一：<br>    使用复杂的逻辑对字符分类</p>
+<pre><code>if(((&apos;a&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;z&apos;)) || 
+((&apos;A&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;Z‘）））{
+    charType = CharacterType.Letter;
+}else if ((inputChar == &apos; &apos;) || (inputChar == &apos;,&apos;) || (inputChar == &apos;.&apos;) || (inputChar == &apos;!&apos;) || (inputChar == &apos;(&apos;) || (inputChar == &apos;)&apos;) || (inputChar == &apos;:&apos;) || (inputChar == &apos;;&apos;) || (inputChar == &apos;?&apos;) || (inputChar == &apos;-&apos;)) {
+    charType = CharacterType.Punctuation;
+} else if ((&apos;0&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;9&apos;)){
+    charType = CharacterType.Digit;
+}
+</code></pre><p>使用一个查询表，就可以把每个字符的类型保存在一个用字符编码访问的数组里，那么上述代码可以替换为：</p>
+<pre><code>charType = charTypeTable[ inputChar ];
+</code></pre><p>使用表驱动法，必须要解决两个问题。</p>
+<p>1，怎样从表中查询条目。 比如你希望把数据按月进行分类，那么创建一个月份表是非常直截了当的，你可以用一个下标从 1 到 12 的数组实现它。而另一些数据可能很难直接用于查表。</p>
+<p>2，你应该在表里存些什么。有<br>时候，表查询出来的结果是数据，有时候，表查询出来的结果是动作，或者有时候，查出来的是子程序的引用。无论何种情况，表都会变得更为复杂。<br>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2014/08/01/Java中类的构造顺序/#more" class="more-link">阅读全文</a>
+            <a href="/2015/05/24/《代码大全》之表驱动法/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -428,37 +385,84 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-07-25T06:33:21.000Z"><a href="/2014/07/25/[翻译]大牛告诉你一天时间能学些什么/">Jul 25 2014</a></time>
+        <time datetime="2015-05-18T06:10:57.000Z"><a href="/2015/05/18/《代码大全》之变量名的力量/">May 18 2015</a></time>
       
       
   
-    <h1 class="title"><a href="/2014/07/25/[翻译]大牛告诉你一天时间能学些什么/">[翻译]大牛告诉你一天时间能学些什么</a></h1>
+    <h1 class="title"><a href="/2015/05/18/《代码大全》之变量名的力量/">《代码大全》之变量名的力量</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>为了学好一门编程语言，我们日复一日地看书、练习并参与实际的项目。就像马拉松，你坚持得越久，就收获得越多。在这样一个长期而乏味的时期内,你总是能有一些简短的时间——比如一天，去学点什么。学习到的这些技术将会给你带来巨大的满足感。</p>
-<p>一个目前在谷歌工作的大牛，Jacob Jensen，给出了以下清单，清单上列出了一些你能在一天之内学会的技术。</p>
-<ul>
-<li><p>阅读你最喜欢的语言的手册。在过去，因为不知道python中有Counter计数器，我为此花费了许多时间。同时还得忍受因为使用字典充当计数器而不断出现的bug。有很多诸如此类的教训。</p>
-</li>
-<li><p>申请一个stackOverFlow帐号并学会使用这个网站。如果你是一个母语为英语的程序员，却不知道stactOverFlow是一个很好的资源，那你就真的错了。</p>
-</li>
-<li><p>独立实现一个简单的机器学习算法。并有一个完整的系统。就是说你读取一个简单的csv格式输入，把它划分成训练集和测试集，运行一个使用了可调整或者探索的超参数的简单算法，并且获得一份简单的相关统计输出。</p>
-</li>
-<li><p>学习怎样在Excel中画一个线形图。</p>
-</li>
-<li><p>学习怎样不使用Excel去画一个线性图。</p>
-</li>
-</ul>
+        <h1 id="一，选择好变量名的注意事项"><a href="#一，选择好变量名的注意事项" class="headerlink" title="一，选择好变量名的注意事项"></a>一，选择好变量名的注意事项</h1><p>一个好的变量名是可读的、易记的和恰如其分的。可以通过应用多条原则来实现这些目标。</p>
+<h3 id="1，最重要的命名注意事项"><a href="#1，最重要的命名注意事项" class="headerlink" title="1，最重要的命名注意事项"></a>1，最重要的命名注意事项</h3><p>为变量命名时最重要的考虑事项是，<strong>该名字要完全、准确地描述出该变量所代表的事物</strong>。获得好名字的一种使用技巧是<strong>用文字表达变量所代表的是什么</strong>。</p>
+<h3 id="2，以问题为导向"><a href="#2，以问题为导向" class="headerlink" title="2，以问题为导向"></a>2，以问题为导向</h3><p>一个好名字通常表达的是“什么”，而不是“如何”。</p>
+<h3 id="3，最适当的名字长度"><a href="#3，最适当的名字长度" class="headerlink" title="3，最适当的名字长度"></a>3，最适当的名字长度</h3><p>平均名字长度在 8 到 20 个字符的程序容易调试。当然这并不意味着你应该尽量把变量名控制到这个范围。它强调的是，<strong>如果你查看自己写的代码时发现了很多更短的名字，那么你需要认真检查，确保这些名字含义足够清晰</strong>。</p>
+<h3 id="4，变量名对作用域的影响"><a href="#4，变量名对作用域的影响" class="headerlink" title="4，变量名对作用域的影响"></a>4，变量名对作用域的影响</h3><p>较长的名字适用于很少用到的变量或者全局变量，而较短的名字则适用于局部变量或者循环变量。</p>
+<p>对位于全局命名空间中的名字加以限定词。</p>
       
     </div>
     <footer>
       
         
           <div class="alignleft">
-            <a href="/2014/07/25/[翻译]大牛告诉你一天时间能学些什么/#more" class="more-link">阅读全文</a>
+            <a href="/2015/05/18/《代码大全》之变量名的力量/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-03-16T08:32:41.000Z"><a href="/2015/03/16/南京/">Mar 16 2015</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/03/16/南京/">南京</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><img src="http://zhenghuiy-blog.qiniudn.com/IMG_20150313_231927.jpg" alt=""></p>
+<p>大概只有在旅行的时候才能真正认识一个城市吧。</p>
+<p>我睁大眼睛仔细观察着，目光扫过之处，皆是独特的事物，路边拥有曲折枝干的悬铃木的木纹，掩映在钢铁水泥之中偶尔出现的古建筑，或者是窄小且并不干净的秦淮河。</p>
+<p>此时我正坐在1路公交上，在南京。</p>
+<h2 id="周五"><a href="#周五" class="headerlink" title="周五"></a>周五</h2><p>在上周，就跟同事J约好周末去南京玩两天。幸运的是，J曾经去过南京，因此她轻车熟路地帮我们两定好了国际青年旅舍夫子庙店。令我惊讶的是，周一订房间的时候，就被告知周五周六男生方面只剩下男女混住的房间了，这个对我来说自然是无所谓，觉得女生应该接受不了这样的房间，也从侧面体现出，青旅不错，生意火爆。</p>
+<p>带着激动和小期待，傍晚在食堂草草解决晚饭，踏上了去南京的旅途。</p>
+<p>透过动车，外面有着各种颜色的亮点。</p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/IMG_20150313_210524.jpg" alt=""></p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2015/03/16/南京/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -494,7 +498,11 @@
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Android/">Android</a><small>6</small></li>
+    <li><a href="/categories/Android/">Android</a><small>8</small></li>
+  
+    <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
+  
+    <li><a href="/categories/Android朝花夕拾/">Android朝花夕拾</a><small>1</small></li>
   
     <li><a href="/categories/Java/">Java</a><small>2</small></li>
   
@@ -504,11 +512,13 @@
   
     <li><a href="/categories/感悟/">感悟</a><small>1</small></li>
   
+    <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
+  
     <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
   
-    <li><a href="/categories/记事/">记事</a><small>4</small></li>
+    <li><a href="/categories/记事/">记事</a><small>3</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>1</small></li>
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
   
   </ul>
 </div>
