@@ -219,6 +219,60 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-05-18T01:57:36.000Z"><a href="/2014/05/18/Android中Service生命周期/">May 18 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/05/18/Android中Service生命周期/">Android中Service生命周期</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>这几天面试的时候，反复被问到一个关于Service的问题。</p>
+<p>在大二暑假实习的时候，做了一个APP。有一个应用场景是，需要开机启动一个Service，在Service中另开一个线程，去对比用户配置中的时间，作出及时提醒。</p>
+<p>然后面试的时候在描述该做法时就被问到一个问题，如果Service被系统或者其他应用kill了怎么办？我当时的回答是，在onDestroy中去处理。面试官说，onDestroy并不会被调用。</p>
+<p>面试的详情暂且不表，在后期会专门写面经。现在讨论这个问题，Service被kill后生命周期是怎样的。</p>
+<p>OK，用代码说话。</p>
+<h3 id="1-新建一个项目，项目中有一个Activity-一个Service。在Activity的button的监听处理中去开启这个Service"><a href="#1-新建一个项目，项目中有一个Activity-一个Service。在Activity的button的监听处理中去开启这个Service" class="headerlink" title="1,新建一个项目，项目中有一个Activity,一个Service。在Activity的button的监听处理中去开启这个Service"></a>1,新建一个项目，项目中有一个Activity,一个Service。在Activity的button的监听处理中去开启这个Service</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zhenghuiy.killedservicelifecycletest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.view.Menu;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.view.View.OnClickListener;</span><br><span class="line"><span class="keyword">import</span> android.widget.Button;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> <span class="keyword">implements</span> <span class="title">OnClickListener</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Button startServiceBtn;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        initViews();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initViews</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        startServiceBtn = (Button)findViewById(R.id.startService);</span><br><span class="line">        startServiceBtn.setOnClickListener(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(view.getId() == R.id.startService)&#123;</span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">        intent.setClass(<span class="keyword">this</span>, MyService.class);</span><br><span class="line">        <span class="keyword">this</span>.startService(intent);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-重写Service的大部分函数，具体看注释"><a href="#2-重写Service的大部分函数，具体看注释" class="headerlink" title="2,重写Service的大部分函数，具体看注释"></a>2,重写Service的大部分函数，具体看注释</h3>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/05/18/Android中Service生命周期/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-05-10T01:33:20.000Z"><a href="/2014/05/10/[转]Steve-Yegge-Google面试秘籍/">May 10 2014</a></time>
       
       
@@ -360,6 +414,8 @@
     <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
   
     <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
+  
+    <li><a href="/categories/计算机网络/">计算机网络</a><small>1</small></li>
   
     <li><a href="/categories/记事/">记事</a><small>3</small></li>
   

@@ -219,6 +219,60 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-03-28T13:09:00.000Z"><a href="/2016/03/28/try-catch会影响性能么/">Mar 28 2016</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/03/28/try-catch会影响性能么/">try catch会影响性能么</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天 code review 时发现某个同事的代码中存在滥用<code>try catch</code>的现象。其实这种行为我们也许都经历过，刚参加工作想尽量避免出现崩溃问题，因此不可避免得想在所有可能抛出异常的地方都try catch一下。</p>
+<p>当然，这种行为肯定是不可取的。如果这样，那还不如所有逻辑都包在大大的try catch里好了。<strong>代码的是否具有高健壮性必然是代码是否高效优雅决定的。</strong></p>
+<p>当然，这个也引起我的思考，<code>try catch</code>会影响性能么？</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p><strong><code>try catch</code>不会影响性能。</strong>——严格意义上说是微乎其微。</p>
+<p>这个结论的确很难让人接受，最起码与我的预估不大一样。</p>
+<p>按照我的想法，当代码中出现的各种特性越多，轻量点的如<code>enum</code>，重一点的如“反射”，必然会增加更多的开销。</p>
+<p>然而，从结果看，在没有抛出异常时，try catch的影响跟添加了一个 if else是同一个量级的。也就是说，我们完全可以忽视try catch耗费的那点性能。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2016/03/28/try-catch会影响性能么/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-03-09T14:36:00.000Z"><a href="/2016/03/09/Android中Serializable和Parcelable的对比/">Mar 9 2016</a></time>
       
       
@@ -420,61 +474,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2015-03-16T08:32:41.000Z"><a href="/2015/03/16/南京/">Mar 16 2015</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2015/03/16/南京/">南京</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p><img src="http://zhenghuiy-blog.qiniudn.com/IMG_20150313_231927.jpg" alt=""></p>
-<p>大概只有在旅行的时候才能真正认识一个城市吧。</p>
-<p>我睁大眼睛仔细观察着，目光扫过之处，皆是独特的事物，路边拥有曲折枝干的悬铃木的木纹，掩映在钢铁水泥之中偶尔出现的古建筑，或者是窄小且并不干净的秦淮河。</p>
-<p>此时我正坐在1路公交上，在南京。</p>
-<h2 id="周五"><a href="#周五" class="headerlink" title="周五"></a>周五</h2><p>在上周，就跟同事J约好周末去南京玩两天。幸运的是，J曾经去过南京，因此她轻车熟路地帮我们两定好了国际青年旅舍夫子庙店。令我惊讶的是，周一订房间的时候，就被告知周五周六男生方面只剩下男女混住的房间了，这个对我来说自然是无所谓，觉得女生应该接受不了这样的房间，也从侧面体现出，青旅不错，生意火爆。</p>
-<p>带着激动和小期待，傍晚在食堂草草解决晚饭，踏上了去南京的旅途。</p>
-<p>透过动车，外面有着各种颜色的亮点。</p>
-<p><img src="http://zhenghuiy-blog.qiniudn.com/IMG_20150313_210524.jpg" alt=""></p>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2015/03/16/南京/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -515,6 +514,8 @@
     <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
   
     <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
+  
+    <li><a href="/categories/计算机网络/">计算机网络</a><small>1</small></li>
   
     <li><a href="/categories/记事/">记事</a><small>3</small></li>
   

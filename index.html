@@ -219,6 +219,80 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-08-19T04:18:00.000Z"><a href="/2016/08/19/转-QUIC和TCP/">Aug 19 2016</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/08/19/转-QUIC和TCP/">[转]QUIC和TCP</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这几天在研究部门内部的自定义协议，因此去了解Google的QUIC协议的特性，下面这篇文章将QUIC协议和TCP协议做了比较，个人比较喜欢作者的阐述，特地转到博客中来。</p>
+<p>原文作者：henrystark henrystark@126.com<br>原文地址：<a href="http://blog.chinaunix.net/uid-28387257-id-4335291.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-28387257-id-4335291.html</a></p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="0-写作目的"><a href="#0-写作目的" class="headerlink" title="0.写作目的"></a>0.写作目的</h3><p>QUIC由Google提出，基于UDP，用于加快网络速率。常用来和基于TCP的SPDY比较。Google在传输层、应用层或其他方面做出的提升网络质量的贡献令人佩服。本篇blog将论述QUIC的起源、优缺点，以及TCP存在的问题。</p>
+<h3 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h3><p>Why QUIC is necessary? 每个接触QUIC的programmer总会这样问。答案也很简单：SPDY、TCP不够好！不过这样说太肤浅了，下面我来分析本质原因【引 1】。基于一条TCP连接的SPDY复用连接会面临这样的情况：当有丢包发生时，所有连接都将阻塞，这是由TCP的拥塞控制特性决定的【引 2 3】。丢包必须恢复，而恢复过程中，或早或晚，滑动窗口总有停等的时刻，耗费一个RTT。在广域网上，一个RTT相当于50-100ms。相比较而言，当x条并行HTTP连接中，有一条丢包，只会阻塞一条。</p>
+<p>QUIC是和HTTP同一层的应用层协议，其核心是将丢包控制工作转移到应用层【注 1】。由于QUIC基于UDP，可以不理会丢包，快速投递，再用丢包恢复方法保证可靠性。除此之外，基于一条TCP连接的SPDY和多条并行HTTP连接相比，没有优势可言。多条连接中，每个连接都有一个拥塞窗口，不受彼此丢包影响。Google希望通过QUIC更好地处理多条连接下的拥塞状况。</p>
+<h3 id="2-TCP的症结"><a href="#2-TCP的症结" class="headerlink" title="2.TCP的症结"></a>2.TCP的症结</h3><p>以上所述其实反映了TCP基于窗口的拥塞控制策略的问题。TCP的核心在于“丢包必须恢复”，正是这种丢包恢复导致传输速率降低。而除此之外，TCP拥塞控制也存在粒度不精细等问题。举例而言，往年有一道很好的面试题：早期网络中，为什么蚂蚁等下载器比网页下载快？答案是下载器使用多线程，多连接下载，而网页下载往往使用单连接。也许回答到这种程度，大部分人已经满意了。但往下问，还有更深刻的内涵：为什么多连接比单连接快？ISP给用户分配的带宽不是固定吗？</p>
+<p>我想，到了这种程度，大多数人回答不出所以然来。可以从两方面解释：1.多连接下载中，每个连接负责下载不同的offset range 2.TCP基于窗口的拥塞控制不够好，多个连接更具有侵略性，能占据更多的带宽。关于第一点，学过网络编程的人多多少少知道。第二点，则需要详细解释了。TCP用congestion window（cwnd）来控制发送速率，发送初期，cwnd二次增长，丢包时减半，之后线性增长。TCP的初始窗口为2MSS，下限为1MSS，当多条流存在时，即便丢包，窗口减幅也有限。现有用户带宽并不高，带宽时延积BDP也不会很大，100MSS的cwnd足够大了。如果有10条TCP连接并发下载，那么最差的cwnd之和也是10MSS，当然比只有一条连接时，窗口为1MSS要好。</p>
+<p>也许说到这种程度就可以了，但是我们还可以更深一步：为什么TCP基于窗口的拥塞控制行为会有这样的缺陷？怎么改进？首先需要明确两个概念：窗口、段，TCP中，窗口是以段（segment，MSS）为单位的，一个MSS通常为1460Bytes，cwnd就是x*MSS。再来看多流并发的问题：多连接下载中，假设流数为n，那么总窗口最低降为n个MSS。这对于并行下载来说是优势，因为最低窗口也很高。那么，从反方面看呢？你觉得并发下载好，是因为多流可以提升带宽利用率，换言之，多流窗口之和没有超过BDP。那是否存在这样的状况：多流最低窗口之和远远大于BDP？不幸的是，存在。这种状况诞生的场景是：并发量高而BDP小的网络，其中最典型的就是数据中心网络。数据中心网络具有的特征为：高带宽、低延时、高并发、BDP小，交换机缓存有限。实际上，当多流窗口之和远大于BDP时，会频繁引发网络拥塞，造成超时，也就是著名的TCP吞吐率崩塌问题，也称为Incast问题。</p>
+<p>说这么多，意义何在呢？启发TCP下一步的改进方向，基于窗口的拥塞控制能力有限，或许已经到了改变的时候了【注 2】。TCP下一步的改变方向或许是“速率控制”，而非“窗口控制”。丢包时，“速率减半”。RCP等协议是基于速率的。表面看来，这两种控制方式并无差别。但是速率控制能精确控制发送速率，而不降低负载率。举例来说，如果窗口到了1MSS，还是不能避免丢包拥塞超时，那怎么办呢？很多人会说减小MSS，可是这会降低带宽利用率，举例来说，当MSS为500时，带宽利用率最大为40/540，因为包头的40字节是无用的。比40/1500低了很多。而速率控制方法可以在不降低带宽利用率的情况下控制发送速率。其根本区别在于：基于窗口的控制策略是burst投递，也就是突发投递【注 3】。而基于速率的控制可以渐缓投递。</p>
+<p>讲到这里，是否有醍醐灌顶的感觉？传输控制的本质已经在你眼前揭开了，希望你得到点什么，不过那并不是属于你自己的东西，而是无数前辈的结晶，我只是按我的理解方式叙述而已。</p>
+<h3 id="3-QUIC的机制"><a href="#3-QUIC的机制" class="headerlink" title="3.QUIC的机制"></a>3.QUIC的机制</h3><p>QUIC具有的特性如下【引 4】：</p>
+<p>0-RTT connections<br>Packet pacing that reduces packet loss<br>Forward error correction that reduces retransmission latency<br>Adaptive congestion control (friendly to TCP), reducing reconnections for mobile clients<br>Encryption equivalent to TLS<br>Chrome can talk QUIC to Google today<br>其中，QUIC对packet loss和拥塞避免的处理最值得关注。下面我来介绍这两部分处理【引 5】。</p>
+<p>packet loss：QUIC丢包恢复有两种办法，前向纠错（FEC）和重传。前向纠错可以减少重传，但需要在包中添加冗余信息，用XOR实现【注 4】。如果前向纠错不能恢复包，就启用重传，重传的不是旧包，而是重新构造的包。<br>congestion avoidance：TCP使用了窗口来进行拥塞控制，QUIC使用带宽探测器、监察delay变化并使用pacing来减少丢包【注 5】。当接收端判定丢包后，发送NACK给对端，通知丢包事件。此后进行的速率降低工作类似于TCP，保持对TCP的友好性。</p>
+<p>（本篇只是开头，QUIC的源码我还没把握体系，关于QUIC的内容会逐步补充，待续。。。）</p>
+<p>引用</p>
+<ol>
+<li>QUIC FAQ for Geeks。<br><a href="https://docs.google.com/document/d/1lmL9EF6qKrk7gbazY8bIdvq3Pno2Xj_l_YShP40GLQE/edit。参见“Why" target="_blank" rel="external">https://docs.google.com/document/d/1lmL9EF6qKrk7gbazY8bIdvq3Pno2Xj_l_YShP40GLQE/edit。参见“Why</a> isn’t SPDY over TCP good enough?”。</li>
+<li>Head-of-line blocking。<a href="http://en.wikipedia.org/wiki/Head-of-line_blocking。" target="_blank" rel="external">http://en.wikipedia.org/wiki/Head-of-line_blocking。</a></li>
+<li>HTTP pipeline。<a href="http://en.wikipedia.org/wiki/HTTP_pipelining。HTTP" target="_blank" rel="external">http://en.wikipedia.org/wiki/HTTP_pipelining。HTTP</a> pipeling特性支持把多条HTTP连接封装到一条TCP连接中，但Head-of-line blocking会严重降低这种复用连接的性能。这本来是为了减少握手交互时间而提出的特性改进，却带来了上述的性能降低问题。</li>
+<li>QUIC特性。<a href="http://www.infoq.com/news/2014/02/quic。" target="_blank" rel="external">http://www.infoq.com/news/2014/02/quic。</a></li>
+<li>QUIC dealing with packet loss。<a href="https://docs.google.com/document/d/1RNHkx_VvKWyWg6Lr8SZ-saqsQx7rFV-ev2jRFUoVD34/edit#。" target="_blank" rel="external">https://docs.google.com/document/d/1RNHkx_VvKWyWg6Lr8SZ-saqsQx7rFV-ev2jRFUoVD34/edit#。</a></li>
+</ol>
+<p>注解</p>
+<ol>
+<li>将拥塞控制分离的想法很早就有人提出，基于传输层的可靠协议UDT或TCP甚至也可以分离到内核之外，成为用户空间协议栈。</li>
+<li>If you understand these words, congratulations! This thought is very meaningful, in other words, it may be epochal. You deserve it. But don’t say the thought owe to you, because it’s not my own, it’s proposed by researchers. Thanks to my friend, “jedihy” (<a href="http://c2fun.cn" target="_blank" rel="external">http://c2fun.cn</a> 8th blogs of him), I got the idea from him.</li>
+<li>参阅TCP Pacing。</li>
+<li>前向纠错并不是一种新手段，基于XOR的包恢复策略屡见不鲜，参阅“链路层 network coding”。</li>
+<li>pacing是一个重要策略，如果你理解了第一部分“TCP的症结”，就会知道它有多重要。</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-06-01T04:00:00.000Z"><a href="/2016/06/01/Android抖动动画的实现与思考/">Jun 1 2016</a></time>
       
       
@@ -450,60 +524,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-03-28T13:09:00.000Z"><a href="/2016/03/28/try-catch会影响性能么/">Mar 28 2016</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/03/28/try-catch会影响性能么/">try catch会影响性能么</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天 code review 时发现某个同事的代码中存在滥用<code>try catch</code>的现象。其实这种行为我们也许都经历过，刚参加工作想尽量避免出现崩溃问题，因此不可避免得想在所有可能抛出异常的地方都try catch一下。</p>
-<p>当然，这种行为肯定是不可取的。如果这样，那还不如所有逻辑都包在大大的try catch里好了。<strong>代码的是否具有高健壮性必然是代码是否高效优雅决定的。</strong></p>
-<p>当然，这个也引起我的思考，<code>try catch</code>会影响性能么？</p>
-<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p><strong><code>try catch</code>不会影响性能。</strong>——严格意义上说是微乎其微。</p>
-<p>这个结论的确很难让人接受，最起码与我的预估不大一样。</p>
-<p>按照我的想法，当代码中出现的各种特性越多，轻量点的如<code>enum</code>，重一点的如“反射”，必然会增加更多的开销。</p>
-<p>然而，从结果看，在没有抛出异常时，try catch的影响跟添加了一个 if else是同一个量级的。也就是说，我们完全可以忽视try catch耗费的那点性能。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2016/03/28/try-catch会影响性能么/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -542,6 +562,8 @@
     <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
   
     <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
+  
+    <li><a href="/categories/计算机网络/">计算机网络</a><small>1</small></li>
   
     <li><a href="/categories/记事/">记事</a><small>3</small></li>
   
