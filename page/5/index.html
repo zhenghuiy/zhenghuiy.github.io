@@ -219,6 +219,94 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-07-23T04:16:15.000Z"><a href="/2014/07/23/代码实现Android流量统计/">Jul 23 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/07/23/代码实现Android流量统计/">代码实现Android流量统计</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>尽管现在WIFI的覆盖范围越来越广，但是设备（在这里设备指手机或平板）流量的使用仍然是用户很关注的一个点。因此，在APP中加入流量统计模块对于提升用户体验（让用户可以知晓使用了多少流量，可以使用户使用APP时更加放心）有很大帮助。</p>
+<p>Android使用的是Linux内核，在Linux系统里，所有信息都是以文件的形式存在的，因此在Android中，所有应用的流量信息都将被保存在操作系统的文件中。</p>
+<p>对于Android2.2之前，流量信息存储在proc/net/dev（或者 proc/self/net/dev）文件下，我们解析文件即可得到流量信息。</p>
+<p>在Android2.2（API Level 8）之后，系统提供了TrafficStats类，我们可以通过该类来获取流量信息。需要注意一点的是，有些设备不支持流量统计，具体表现是，当调用TrafficStats的方法时将返回TrafficStats.UNSUPPORTED，这种情况下，我们需要自己去解析/sys/class/net/  下的log文件。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>以下是TrafficStats类的一些主要方法（摘录自<a href="http://developer.android.com/reference/android/net/TrafficStats.html">android 官方API文档</a>）：</p>
+<pre><code>static long getMobileRxBytes()
+Return number of bytes received across mobile networks since device boot.
+
+static long getMobileRxPackets()
+Return number of packets received across mobile networks since device boot.
+
+static long getMobileTxBytes()
+Return number of bytes transmitted across mobile networks since device boot.
+
+static long getMobileTxPackets()
+Return number of packets transmitted across mobile networks since device boot.
+
+static long getTotalRxBytes()
+Return number of bytes received since device boot.
+
+static long getTotalRxPackets()
+Return number of packets received since device boot.
+
+static long getTotalTxBytes()
+Return number of bytes transmitted since device boot.
+
+static long getTotalTxPackets()
+Return number of packets transmitted since device boot.
+
+static long getUidRxBytes(int uid)
+Return number of bytes received by the given UID since device boot.
+
+static long getUidRxPackets(int uid)
+Return number of packets received by the given UID since device boot.
+
+static long getUidTcpRxBytes(int uid)
+This method was deprecated in API level 18. Starting in JELLY_BEAN_MR2, transport layer statistics are no longer available, and will always return UNSUPPORTED.
+
+static long getUidTxPackets(int uid)
+Return number of packets transmitted by the given UID since device boot.
+</code></pre>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/07/23/代码实现Android流量统计/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-07-23T04:00:16.000Z"><a href="/2014/07/23/ListView的高效率使用/">Jul 23 2014</a></time>
       
       
@@ -436,66 +524,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-05-27T02:18:53.000Z"><a href="/2014/05/27/Android-4-X界面开发那点事/">May 27 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/05/27/Android-4-X界面开发那点事/">Android 4.X界面开发那点事</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h3><p>为什么要使用dp/dip?导航栏的宽度/高度应该设为多少dp合适？一般情况下应该使每个控件的高度显示为多少？本文就是要回答这些问题。</p>
-<h2 id="一，Android中的各种单位"><a href="#一，Android中的各种单位" class="headerlink" title="一，Android中的各种单位"></a>一，Android中的各种单位</h2><p>在android开发过程中，我们无法忽略的一个问题就是设备适配问题。从我们刚开始学android的时候，各类教程上就不厌其烦的说，“android碎片化严重，适配很麻烦”、“控件的长度用dip作单位，字体用sp”等等。我们有必要去详细了解一下这些东西，在开发过程中才能游刃有余。</p>
-<p>下面是android中的常见单位：  </p>
-<ul>
-<li>px（像素）可以理解为一个小颜色块，是设备显示时的单位；</li>
-<li>dip是设备独立像素，不同设备有不同的显示效果，和具体硬件有关；备注：dip == dp</li>
-<li>dpi是屏幕像素密度，每英寸像素数；</li>
-<li>sp是像素缩放。google建议用于字体显示。</li>
-</ul>
-<p>dpi等于对角线的像素值（=$\sqrt{长^2+宽^2}$）除于英寸数。比如，分辨率480 x 800，屏幕尺寸4.3英寸的DPI为：216.</p>
-<p>为了方便，google将dpi分为多种模式<em>LDPI</em>, <em>MDPI</em>, <em>HDPI</em>, <em>XHDPI</em>, <em>XXHDPI</em>, and <em>XXXHDPI</em>，常见四个如下，分别对应资源文件中的四个后缀：</p>
-<p><img src="http://ww2.sinaimg.cn/large/8d608af3gw1egsz5tfcf2j20h602oaa1.jpg" alt=""></p>
-<p>也就是说，216会被划分进hdpi。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/05/27/Android-4-X界面开发那点事/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -519,7 +547,7 @@
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Android/">Android</a><small>8</small></li>
+    <li><a href="/categories/Android/">Android</a><small>9</small></li>
   
     <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
   

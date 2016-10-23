@@ -219,6 +219,59 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2015-03-05T00:35:40.000Z"><a href="/2015/03/05/hello-world/">Mar 5 2015</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/03/05/hello-world/">Hello World</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-08-07T07:26:33.000Z"><a href="/2014/08/07/谨慎使用静态注册的BroadcastReceiver/">Aug 7 2014</a></time>
       
       
@@ -418,94 +471,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-07-23T04:16:15.000Z"><a href="/2014/07/23/代码实现Android流量统计/">Jul 23 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/07/23/代码实现Android流量统计/">代码实现Android流量统计</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>尽管现在WIFI的覆盖范围越来越广，但是设备（在这里设备指手机或平板）流量的使用仍然是用户很关注的一个点。因此，在APP中加入流量统计模块对于提升用户体验（让用户可以知晓使用了多少流量，可以使用户使用APP时更加放心）有很大帮助。</p>
-<p>Android使用的是Linux内核，在Linux系统里，所有信息都是以文件的形式存在的，因此在Android中，所有应用的流量信息都将被保存在操作系统的文件中。</p>
-<p>对于Android2.2之前，流量信息存储在proc/net/dev（或者 proc/self/net/dev）文件下，我们解析文件即可得到流量信息。</p>
-<p>在Android2.2（API Level 8）之后，系统提供了TrafficStats类，我们可以通过该类来获取流量信息。需要注意一点的是，有些设备不支持流量统计，具体表现是，当调用TrafficStats的方法时将返回TrafficStats.UNSUPPORTED，这种情况下，我们需要自己去解析/sys/class/net/  下的log文件。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>以下是TrafficStats类的一些主要方法（摘录自<a href="http://developer.android.com/reference/android/net/TrafficStats.html">android 官方API文档</a>）：</p>
-<pre><code>static long getMobileRxBytes()
-Return number of bytes received across mobile networks since device boot.
-
-static long getMobileRxPackets()
-Return number of packets received across mobile networks since device boot.
-
-static long getMobileTxBytes()
-Return number of bytes transmitted across mobile networks since device boot.
-
-static long getMobileTxPackets()
-Return number of packets transmitted across mobile networks since device boot.
-
-static long getTotalRxBytes()
-Return number of bytes received since device boot.
-
-static long getTotalRxPackets()
-Return number of packets received since device boot.
-
-static long getTotalTxBytes()
-Return number of bytes transmitted since device boot.
-
-static long getTotalTxPackets()
-Return number of packets transmitted since device boot.
-
-static long getUidRxBytes(int uid)
-Return number of bytes received by the given UID since device boot.
-
-static long getUidRxPackets(int uid)
-Return number of packets received by the given UID since device boot.
-
-static long getUidTcpRxBytes(int uid)
-This method was deprecated in API level 18. Starting in JELLY_BEAN_MR2, transport layer statistics are no longer available, and will always return UNSUPPORTED.
-
-static long getUidTxPackets(int uid)
-Return number of packets transmitted by the given UID since device boot.
-</code></pre>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/07/23/代码实现Android流量统计/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -529,7 +494,7 @@ Return number of packets transmitted by the given UID since device boot.
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Android/">Android</a><small>8</small></li>
+    <li><a href="/categories/Android/">Android</a><small>9</small></li>
   
     <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
   

@@ -1,0 +1,612 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>写给Android开发者的混淆使用手册 | Zhenghui&#39;s World</title>
+  <meta name="author" content="Zhenghui Yan">
+  
+  <meta name="description" content="写在前面大家好，我是光源。
+本文首发于我的个人公众账号，同时会在个人博客上同步。假如有任何建议还请移步博客点评，同时如果博客本身有修改或勘误，也会在博客更新。
+综述毫无疑问，混淆是打包过程中最重要的流程之一，在没有特殊原因的情况下，所有 app 都应该开启混淆。
+首先，这里说的的混淆其实是包括了代码压缩、代码混淆以及资源压缩等的优化过程。依靠 ProGuard，混淆流程将主项目以及依赖库中未被使用的类、类成员、方法、属性移除，这有助于规避64K方法数的瓶颈；同时，将类、类成员、方法重命名为无意义的简短名称，增加了逆向工程的难度。而依靠 Gradle 的 Android 插件，我们将移除未被使用的资源，可以有效减小 apk 安装包大小。
+本文由两部分构成，第一部分给出混淆的最佳实践，力求让零基础的新手都可以直接使用混淆；第二部分会介绍一下混淆的整体、自定义混淆规则的语法与实践、自定义资源保持的规则等。
+一、Android混淆最佳实践1. 混淆配置一般情况下，app module 的 build.gradle 文件默认会有如下结构：123456789android &amp;#123;    buildTypes &amp;#123;        release &amp;#123;            minifyEnabled false            proguardFiles getDefaultProguardFile(&amp;apos;proguard-android.txt&amp;apos;), &amp;apos;proguard-rules.pro&amp;apos;        &amp;#125;    &amp;#125;&amp;#125;
+因为开启混淆会使编译时间变长，所以debug模式下不应该开启。我们需要做的是：
+
+将release下minifyEnabled的值改为true，打开混淆；
+加上shrinkResources true，打开资源压缩。
+
+修改后文件内容如下：123456789android &amp;#123;    buildTypes &amp;#123;        release &amp;#123;            minifyEnabled true            shrinkResources true            proguardFiles getDefaultProguardFile(&amp;apos;proguard-android.txt&amp;apos;), &amp;apos;proguard-rules.pro&amp;apos;        &amp;#125;    &amp;#125;&amp;#125;
+2. 自定义混淆规则在 app module 下默认生成了项目的自定义混淆规则文件 proguard-rules.pro，多方调研后，一份适用于大部分项目的混淆规则最佳实践如下：">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="写给Android开发者的混淆使用手册"/>
+  <meta property="og:site_name" content="Zhenghui&#39;s World"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Zhenghui&#39;s World" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//libs.baidu.com/jquery/1.8.0/jquery.min.js"></script>
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<div class="alignleft">
+  <h1><a href="/">Zhenghui&#39;s World</a></h1>
+  <h2><a href="/">Write the code, change the world</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+      <li><a href="/history">我的编年史</a></li>
+    
+	<li> <a href="/atom.xml">RSS</a> </li>
+<li> <a title="把这个链接拖到你的Chrome收藏夹工具栏中" href='javascript:(function() {
+	function c() {
+		var e = document.createElement("link");
+		e.setAttribute("type", "text/css");
+		e.setAttribute("rel", "stylesheet");
+		e.setAttribute("href", f);
+		e.setAttribute("class", l);
+		document.body.appendChild(e)
+	}
+ 
+	function h() {
+		var e = document.getElementsByClassName(l);
+		for (var t = 0; t < e.length; t++) {
+			document.body.removeChild(e[t])
+		}
+	}
+ 
+	function p() {
+		var e = document.createElement("div");
+		e.setAttribute("class", a);
+		document.body.appendChild(e);
+		setTimeout(function() {
+			document.body.removeChild(e)
+		}, 100)
+	}
+ 
+	function d(e) {
+		return {
+			height : e.offsetHeight,
+			width : e.offsetWidth
+		}
+	}
+ 
+	function v(i) {
+		var s = d(i);
+		return s.height > e && s.height < n && s.width > t && s.width < r
+	}
+ 
+	function m(e) {
+		var t = e;
+		var n = 0;
+		while (!!t) {
+			n += t.offsetTop;
+			t = t.offsetParent
+		}
+		return n
+	}
+ 
+	function g() {
+		var e = document.documentElement;
+		if (!!window.innerWidth) {
+			return window.innerHeight
+		} else if (e && !isNaN(e.clientHeight)) {
+			return e.clientHeight
+		}
+		return 0
+	}
+ 
+	function y() {
+		if (window.pageYOffset) {
+			return window.pageYOffset
+		}
+		return Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+	}
+ 
+	function E(e) {
+		var t = m(e);
+		return t >= w && t <= b + w
+	}
+ 
+	function S() {
+		var e = document.createElement("audio");
+		e.setAttribute("class", l);
+		e.src = i;
+		e.loop = false;
+		e.addEventListener("canplay", function() {
+			setTimeout(function() {
+				x(k)
+			}, 500);
+			setTimeout(function() {
+				N();
+				p();
+				for (var e = 0; e < O.length; e++) {
+					T(O[e])
+				}
+			}, 15500)
+		}, true);
+		e.addEventListener("ended", function() {
+			N();
+			h()
+		}, true);
+		e.innerHTML = " <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>";
+		document.body.appendChild(e);
+		e.play()
+	}
+ 
+	function x(e) {
+		e.className += " " + s + " " + o
+	}
+ 
+	function T(e) {
+		e.className += " " + s + " " + u[Math.floor(Math.random() * u.length)]
+	}
+ 
+	function N() {
+		var e = document.getElementsByClassName(s);
+		var t = new RegExp("\\b" + s + "\\b");
+		for (var n = 0; n < e.length; ) {
+			e[n].className = e[n].className.replace(t, "")
+		}
+	}
+ 
+	var e = 30;
+	var t = 30;
+	var n = 350;
+	var r = 350;
+	var i = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3";
+	var s = "mw-harlem_shake_me";
+	var o = "im_first";
+	var u = ["im_drunk", "im_baked", "im_trippin", "im_blown"];
+	var a = "mw-strobe_light";
+	var f = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css";
+	var l = "mw_added_css";
+	var b = g();
+	var w = y();
+	var C = document.getElementsByTagName("*");
+	var k = null;
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			if (E(A)) {
+				k = A;
+				break
+			}
+		}
+	}
+	if (A === null) {
+		console.warn("Could not find a node of the right size. Please try a different page.");
+		return
+	}
+	c();
+	S();
+	var O = [];
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			O.push(A)
+		}
+	}
+})()    '>High一下</a> </li>
+
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-10-23T14:59:00.000Z"><a href="/2016/10/23/写给Android开发者的混淆使用手册/">Oct 23 2016</a></time>
+      
+      
+  
+    <h1 class="title">写给Android开发者的混淆使用手册</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>大家好，我是光源。</p>
+<p>本文首发于我的个人公众账号，同时会在个人博客上同步。假如有任何建议还请移步博客点评，同时如果博客本身有修改或勘误，也会在博客更新。</p>
+<h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>毫无疑问，混淆是打包过程中最重要的流程之一，在没有特殊原因的情况下，所有 app 都应该开启混淆。</p>
+<p>首先，这里说的的混淆其实是包括了代码压缩、代码混淆以及资源压缩等的优化过程。依靠 ProGuard，混淆流程将主项目以及依赖库中未被使用的类、类成员、方法、属性移除，这有助于规避64K方法数的瓶颈；同时，将类、类成员、方法重命名为无意义的简短名称，增加了逆向工程的难度。而依靠 Gradle 的 Android 插件，我们将移除未被使用的资源，可以有效减小 apk 安装包大小。</p>
+<p>本文由两部分构成，第一部分给出混淆的最佳实践，力求让零基础的新手都可以直接使用混淆；第二部分会介绍一下混淆的整体、自定义混淆规则的语法与实践、自定义资源保持的规则等。</p>
+<h2 id="一、Android混淆最佳实践"><a href="#一、Android混淆最佳实践" class="headerlink" title="一、Android混淆最佳实践"></a>一、Android混淆最佳实践</h2><h3 id="1-混淆配置"><a href="#1-混淆配置" class="headerlink" title="1. 混淆配置"></a>1. 混淆配置</h3><p>一般情况下，app module 的 <code>build.gradle</code> 文件默认会有如下结构：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>因为开启混淆会使编译时间变长，所以<code>debug</code>模式下不应该开启。我们需要做的是：</p>
+<ol>
+<li>将<code>release</code>下<code>minifyEnabled</code>的值改为<code>true</code>，打开混淆；</li>
+<li>加上<code>shrinkResources true</code>，打开资源压缩。</li>
+</ol>
+<p>修改后文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled true</span><br><span class="line">            shrinkResources true</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-自定义混淆规则"><a href="#2-自定义混淆规则" class="headerlink" title="2. 自定义混淆规则"></a>2. 自定义混淆规则</h3><p>在 <code>app module</code> 下默认生成了项目的自定义混淆规则文件 <code>proguard-rules.pro</code>，多方调研后，一份适用于大部分项目的混淆规则最佳实践如下：<br><a id="more"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">#指定压缩级别</span><br><span class="line">-optimizationpasses 5</span><br><span class="line"></span><br><span class="line">#不跳过非公共的库的类成员</span><br><span class="line">-dontskipnonpubliclibraryclassmembers</span><br><span class="line"></span><br><span class="line">#混淆时采用的算法</span><br><span class="line">-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*</span><br><span class="line"></span><br><span class="line">#把混淆类中的方法名也混淆了</span><br><span class="line">-useuniqueclassmembernames</span><br><span class="line"></span><br><span class="line">#优化时允许访问并修改有修饰符的类和类的成员 </span><br><span class="line">-allowaccessmodification</span><br><span class="line"></span><br><span class="line">#将文件来源重命名为“SourceFile”字符串</span><br><span class="line">-renamesourcefileattribute SourceFile</span><br><span class="line">#保留行号</span><br><span class="line">-keepattributes SourceFile,LineNumberTable</span><br><span class="line"></span><br><span class="line">#保持所有实现 Serializable 接口的类成员</span><br><span class="line">-keepclassmembers class * implements java.io.Serializable &#123;</span><br><span class="line">    static final long serialVersionUID;</span><br><span class="line">    private static final java.io.ObjectStreamField[] serialPersistentFields;</span><br><span class="line">    private void writeObject(java.io.ObjectOutputStream);</span><br><span class="line">    private void readObject(java.io.ObjectInputStream);</span><br><span class="line">    java.lang.Object writeReplace();</span><br><span class="line">    java.lang.Object readResolve();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#Fragment不需要在AndroidManifest.xml中注册，需要额外保护下</span><br><span class="line">-keep public class * extends android.support.v4.app.Fragment</span><br><span class="line">-keep public class * extends android.app.Fragment</span><br><span class="line"></span><br><span class="line"># 保持测试相关的代码</span><br><span class="line">-dontnote junit.framework.**</span><br><span class="line">-dontnote junit.runner.**</span><br><span class="line">-dontwarn android.test.**</span><br><span class="line">-dontwarn android.support.test.**</span><br><span class="line">-dontwarn org.junit.**</span><br></pre></td></tr></table></figure>
+<p>真正通用的、需要添加的就是上面这些，除此之外，需要每个项目根据自身的需求添加一些混淆规则：</p>
+<ul>
+<li>第三方库所需的混淆规则。正规的第三方库一般都会在接入文档中写好所需混淆规则，使用时注意添加。</li>
+<li>在运行时动态改变的代码，例如反射。比较典型的例子就是会与 json 相互转换的实体类。假如项目命名规范要求实体类都要放在<code>model</code>包下的话，可以添加类似这样的代码把所有实体类都保持住：<code>-keep public class **.*Model*.** {*;}</code></li>
+<li><code>JNI</code>中调用的类。</li>
+<li><code>WebView</code>中<code>JavaScript</code>调用的方法</li>
+<li><code>Layout</code>布局使用的<code>View</code>构造函数、<code>android:onClick</code>等。</li>
+</ul>
+<h3 id="3-检查混淆结果"><a href="#3-检查混淆结果" class="headerlink" title="3. 检查混淆结果"></a>3. 检查混淆结果</h3><p>混淆过的包必须进行检查，避免因混淆引入的bug。</p>
+<p>一方面，需要从代码层面检查。使用上文的配置进行混淆打包后在 <code>&lt;module-name&gt;/build/outputs/mapping/release/</code> 目录下会输出以下文件：</p>
+<ul>
+<li><code>dump.txt</code><br>描述APK文件中所有类的内部结构</li>
+<li><code>mapping.txt</code><br>提供混淆前后类、方法、类成员等的对照表</li>
+<li><code>seeds.txt</code><br>列出没有被混淆的类和成员</li>
+<li><code>usage.txt</code><br>列出被移除的代码</li>
+</ul>
+<p>我们可以根据 <code>seeds.txt</code> 文件检查未被混淆的类和成员中是否已包含所有期望保留的，再根据 <code>usage.txt</code> 文件查看是否有被误移除的代码。</p>
+<p>另一方面，需要从测试方面检查。将混淆过的包进行全方面测试，检查是否有 bug 产生。</p>
+<h3 id="4-解出混淆栈"><a href="#4-解出混淆栈" class="headerlink" title="4. 解出混淆栈"></a>4. 解出混淆栈</h3><p>混淆后的类、方法名等等难以阅读，这固然会增加逆向工程的难度，但对追踪线上 crash 也造成了阻碍。我们拿到 crash 的堆栈信息后会发现很难定位，这时需要将混淆反解。</p>
+<p>在 <code>&lt;sdk-root&gt;/tools/proguard/</code>  路径下有附带的的反解工具（Window 系统为 <code>proguardgui.bat</code>，Mac 或 Linux 系统为 <code>proguardgui.sh</code>）。</p>
+<p>这里以 Window 平台为例。双击运行 <code>proguardgui.bat</code> 后，可以看到左侧的一行菜单。点击 <code>ReTrace</code>，选择该混淆包对应的 mapping 文件（混淆后在 <code>&lt;module-name&gt;/build/outputs/mapping/release/</code> 路径下会生成 <code>mapping.txt</code> 文件，它的作用是提供混淆前后类、方法、类成员等的对照表），再将 crash 的 <code>stack trace</code> 黏贴进输入框中，点击右下角的 <code>ReTrace</code> ，混淆后的堆栈信息就显示出来了。</p>
+<p>以上使用 GUI 程序进行操作，另一种方式是利用该路径下的 <code>retrace</code> 工具通过命令行进行反解，命令是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">retrace.bat|retrace.sh [-verbose] mapping.txt [&lt;stacktrace_file&gt;]</span><br></pre></td></tr></table></figure></p>
+<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">retrace.bat -verbose mapping.txt obfuscated_trace.txt</span><br></pre></td></tr></table></figure></p>
+<h3 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h3><p>1) 所有在 <code>AndroidManifest.xml</code> 涉及到的类已经自动被保持，因此不用特意去添加这块混淆规则。（很多老的混淆文件里会加，现在已经没必要）</p>
+<p>2) <code>proguard-android.txt</code> 已经存在一些默认混淆规则，没必要在 <code>proguard-rules.pro</code> 重复添加，该文件具体规则见附录1：</p>
+<h2 id="二、混淆简介"><a href="#二、混淆简介" class="headerlink" title="二、混淆简介"></a>二、混淆简介</h2><p>Android中的“混淆”可以分为两部分，一部分是 Java 代码的优化与混淆，依靠 proguard 混淆器来实现；另一部分是资源压缩，将移除项目及依赖的库中未被使用的资源(资源压缩严格意义上跟混淆没啥关系，但一般我们都会放一起讲)。</p>
+<h3 id="1-代码压缩"><a href="#1-代码压缩" class="headerlink" title="1. 代码压缩"></a>1. 代码压缩</h3><p><img src="http://zhenghuiy-blog.qiniudn.com/proguard-process.png" alt=""></p>
+<p>代码混淆是包含了代码压缩、优化、混淆等一系列行为的过程。如上图所示，混淆过程会有如下几个功能：</p>
+<ol>
+<li>压缩。移除无效的类、类成员、方法、属性等；</li>
+<li>优化。分析和优化方法的二进制代码；根据proguard-android-optimize.txt中的描述，优化可能会造成一些潜在风险，不能保证在所有版本的Dalvik上都正常运行。</li>
+<li>混淆。把类名、属性名、方法名替换为简短且无意义的名称；</li>
+<li>预校验。添加预校验信息。这个预校验是作用在Java平台上的，Android平台上不需要这项功能，去掉之后还可以加快混淆速度。</li>
+</ol>
+<p>这四个流程默认开启。</p>
+<p>在 Android 项目中我们可以选择将“优化”和“预校验”关闭，对应命令是<code>-dontoptimize</code>、<code>-dontpreverify</code>（当然，默认的 <code>proguard-android.txt</code> 文件已包含这两条混淆命令，不需要开发者额外配置）。</p>
+<h3 id="2-资源压缩"><a href="#2-资源压缩" class="headerlink" title="2. 资源压缩"></a>2. 资源压缩</h3><p>资源压缩将移除项目及依赖的库中未被使用的资源，这在减少 apk 包体积上会有不错的效果，一般建议开启。具体做法是在 <code>build.grade</code> 文件中，将 <code>shrinkResources</code> 属性设置为 <code>true</code>。需要注意的是，<strong>只有在用<code>minifyEnabled true</code>开启了代码压缩后，资源压缩才会生效</strong>。</p>
+<p>资源压缩包含了“合并资源”和“移除资源”两个流程。</p>
+<p>“合并资源”流程中，名称相同的资源被视为重复资源会被合并。需要注意的是，<strong>这一流程不受<code>shrinkResources</code>属性控制，也无法被禁止，</strong> gradle 必然会做这项工作，因为假如不同项目中存在相同名称的资源将导致错误。gradle 在四处地方寻找重复资源：</p>
+<ul>
+<li><code>src/main/res/</code> 路径</li>
+<li>不同的构建类型（debug、release等等）</li>
+<li>不同的构建渠道</li>
+<li>项目依赖的第三方库</li>
+</ul>
+<p>合并资源时按照如下优先级顺序：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">依赖 -&gt; main -&gt; 渠道 -&gt; 构建类型</span><br></pre></td></tr></table></figure></p>
+<p>举个例子，假如重复资源同时存在于<code>main</code>文件夹和不同渠道中，gradle 会选择保留渠道中的资源。</p>
+<p>同时，如果重复资源在同一层次出现，比如<code>src/main/res/</code> 和 <code>src/main/res/</code>，则 gradle 无法完成资源合并，这时会报资源合并错误。</p>
+<p>“移除资源”流程则见名知意，需要注意的是，类似代码，混淆资源移除也可以定义哪些资源需要被保留，这点在下文给出。</p>
+<h2 id="三、自定义混淆规则"><a href="#三、自定义混淆规则" class="headerlink" title="三、自定义混淆规则"></a>三、自定义混淆规则</h2><p>在上文“混淆配置”中有这样一行代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br></pre></td></tr></table></figure></p>
+<p>这行代码定义了混淆规则由两部分构成：位于 SDK 的 <code>tools/proguard/</code> 文件夹中的 <code>proguard-android.txt</code> 的内容以及默认放置于模块根目录的 <code>proguard-rules.pro</code> 的内容。前者是 SDK 提供的默认混淆文件（内容见附录1），后者是开发者自定义混淆规则的地方。</p>
+<h3 id="1-常见混淆命令："><a href="#1-常见混淆命令：" class="headerlink" title="1. 常见混淆命令："></a>1. 常见混淆命令：</h3><ul>
+<li>optimizationpasses</li>
+<li>dontoptimize</li>
+<li>dontusemixedcaseclassnames</li>
+<li>dontskipnonpubliclibraryclasses</li>
+<li>dontpreverify</li>
+<li>dontwarn</li>
+<li>verbose</li>
+<li>optimizations</li>
+<li>keep</li>
+<li>keepnames</li>
+<li>keepclassmembers</li>
+<li>keepclassmembernames</li>
+<li>keepclasseswithmembers</li>
+<li>keepclasseswithmembernames</li>
+</ul>
+<p>在第一部分 Android 混淆最佳实践中已介绍部分需要使用到的混淆命令，这里不再赘述，详情请查阅<a href="http://proguard.sourceforge.net" target="_blank" rel="external">官网</a>。需要特别介绍的是与保持相关元素不参与混淆的规则相关的几种命令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">命令</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-keep</td>
+<td style="text-align:left">防止类和成员被移除或者被重命名</td>
+</tr>
+<tr>
+<td style="text-align:left">-keepnames</td>
+<td style="text-align:left">防止类和成员被重命名</td>
+</tr>
+<tr>
+<td style="text-align:left">-keepclassmembers</td>
+<td style="text-align:left">防止成员被移除或者被重命名</td>
+</tr>
+<tr>
+<td style="text-align:left">-keepnames</td>
+<td style="text-align:left">防止成员被重命名</td>
+</tr>
+<tr>
+<td style="text-align:left">-keepclasseswithmembers</td>
+<td style="text-align:left">防止<strong>拥有该成员的</strong>类和成员被移除或者被重命名</td>
+</tr>
+<tr>
+<td style="text-align:left">-keepclasseswithmembernames</td>
+<td style="text-align:left">防止<strong>拥有该成员的</strong>类和成员被重命名</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-保持元素不参与混淆的规则"><a href="#2-保持元素不参与混淆的规则" class="headerlink" title="2. 保持元素不参与混淆的规则"></a>2. 保持元素不参与混淆的规则</h3><p>形如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[保持命令] [类] &#123;</span><br><span class="line">    [成员] </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>“类”代表类相关的限定条件，它将最终定位到某些符合该限定条件的类。它的内容可以使用：</p>
+<ul>
+<li>具体的类</li>
+<li>访问修饰符（<code>public</code>、<code>protected</code>、<code>private</code>）</li>
+<li>通配符<code>*</code>，匹配任意长度字符，但不含包名分隔符(.)</li>
+<li>通配符<code>**</code>，匹配任意长度字符，并且包含包名分隔符(.)</li>
+<li><code>extends</code>，即可以指定类的基类</li>
+<li><code>implement</code>，匹配实现了某接口的类</li>
+<li>$，内部类</li>
+</ul>
+<p>“成员”代表类成员相关的限定条件，它将最终定位到某些符合该限定条件的类成员。它的内容可以使用：</p>
+<ul>
+<li><init> 匹配所有构造器</init></li>
+<li><fields> 匹配所有域</fields></li>
+<li><methods> 匹配所有方法</methods></li>
+<li>通配符<code>*</code>，匹配任意长度字符，但不含包名分隔符(.)</li>
+<li>通配符<code>**</code>，匹配任意长度字符，并且包含包名分隔符(.)</li>
+<li>通配符<code>***</code>，匹配任意参数类型</li>
+<li><code>…</code>，匹配任意长度的任意类型参数。比如void test(…)就能匹配任意 <code>void test(String a)</code> 或者是 <code>void test(int a, String b)</code> 这些方法。</li>
+<li>访问修饰符（<code>public</code>、<code>protected</code>、<code>private</code>）</li>
+</ul>
+<p>举个例子，假如需要将<code>name.huihui.test</code>包下所有继承<code>Activity</code>的<code>public</code>类及其构造函数都保持住，可以这样写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-keep public class name.huihui.test.** extends Android.app.Activity &#123;</span><br><span class="line">    &lt;init&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-常用的自定义混淆规则"><a href="#3-常用的自定义混淆规则" class="headerlink" title="3. 常用的自定义混淆规则"></a>3. 常用的自定义混淆规则</h3><ul>
+<li><p>不混淆某个类 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-keep public class name.huihui.example.Test &#123; *; &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不混淆某个包所有的类 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-keep class name.huihui.test.** &#123; *; &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不混淆某个类的子类 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-keep public class * extends name.huihui.example.Test &#123; *; &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不混淆所有类名中包含了“model”的类及其成员</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-keep public class **.*model*.** &#123;*;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不混淆某个接口的实现 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-keep class * implements name.huihui.example.TestInterface &#123; *; &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不混淆某个类的构造方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-keepclassmembers class name.huihui.example.Test &#123; </span><br><span class="line">    public &lt;init&gt;(); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不混淆某个类的特定的方法 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-keepclassmembers class name.huihui.example.Test &#123; </span><br><span class="line">    public void test(java.lang.String); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="四、自定义资源保持规则"><a href="#四、自定义资源保持规则" class="headerlink" title="四、自定义资源保持规则"></a>四、自定义资源保持规则</h2><h3 id="1-keep-xml"><a href="#1-keep-xml" class="headerlink" title="1. keep.xml"></a>1. keep.xml</h3><p>用<code>shrinkResources true</code>开启资源压缩后，所有未被使用的资源默认被移除。假如你需要定义哪些资源必须被保留，在 <code>res/raw/</code> 路径下创建一个 xml 文件，例如 <code>keep.xml</code>。</p>
+<p>通过一些属性的设置可以实现定义资源保持的需求，可配置的属性有：</p>
+<ul>
+<li><code>tools:keep</code> 定义哪些资源需要被保留（资源之间用“,”隔开）</li>
+<li><code>tools:discard</code> 定义哪些资源需要被移除（资源之间用“,”隔开）</li>
+<li><code>tools:shrinkMode</code> 开启严格模式</li>
+</ul>
+<p>当代码中通过 <code>Resources.getIdentifier()</code>  用动态的字符串来获取并使用资源时，普通的资源引用检查就可能会有问题。例如，如下代码会导致所有以“img_”开头的资源都被标记为已使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String name = String.format(&quot;img_%1d&quot;, angle + 1);</span><br><span class="line">res = getResources().getIdentifier(name, &quot;drawable&quot;, getPackageName());</span><br></pre></td></tr></table></figure></p>
+<p>我们可以设置 <code>tools:shrinkMode</code> 为 <code>strict</code> 来开启严格模式，使只有确实被使用的资源被保留。</p>
+<p>以上就是自定义资源保持规则相关的配置，举个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;resources xmlns:tools=&quot;http://schemas.android.com/tools&quot;</span><br><span class="line">    tools:keep=&quot;@layout/l_used*_c,@layout/l_used_a,@layout/l_used_b*&quot;</span><br><span class="line">    tools:discard=&quot;@layout/unused2&quot;</span><br><span class="line">    tools:shrinkMode=&quot;strict&quot;/&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-移除替代资源"><a href="#2-移除替代资源" class="headerlink" title="2. 移除替代资源"></a>2. 移除替代资源</h3><p>一些替代资源，例如多语言支持的 <code>strings.xml</code>，多分辨率支持的 <code>layout.xml</code> 等，在我们不需要使用又不想删除掉时，可以使用资源压缩将它们移除。</p>
+<p>我们使用 <code>resConfig</code> 属性来指定需要支持的属性，例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        ...</span><br><span class="line">        resConfigs &quot;en&quot;, &quot;fr&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其他未显式声明的语言资源将被移除。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://developer.android.com/studio/build/shrink-code.html" target="_blank" rel="external">Shrink Your Code and Resources</a></li>
+<li><a href="http://proguard.sourceforge.net" target="_blank" rel="external">proguard</a></li>
+<li><a href="http://blog.csdn.net/sinyu890807/article/details/50451259" target="_blank" rel="external">Android安全攻防战，反编译与混淆技术完全解析（下）</a></li>
+<li><a href="http://www.jianshu.com/p/7436a1a32891" target="_blank" rel="external">Android混淆从入门到精通</a></li>
+<li><a href="http://rensanning.iteye.com/blog/2224635" target="_blank" rel="external">Android代码混淆之ProGuard</a></li>
+</ul>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><ol>
+<li><code>proguard-android.txt</code>文件内容</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">#包名不混合大小写</span><br><span class="line">-dontusemixedcaseclassnames</span><br><span class="line"></span><br><span class="line">#不跳过非公共的库的类</span><br><span class="line">-dontskipnonpubliclibraryclasses</span><br><span class="line"></span><br><span class="line">#混淆时记录日志</span><br><span class="line">-verbose</span><br><span class="line"></span><br><span class="line">#关闭预校验</span><br><span class="line">-dontpreverify</span><br><span class="line"></span><br><span class="line">#不优化输入的类文件</span><br><span class="line">-dontoptimize</span><br><span class="line"></span><br><span class="line">#保护注解</span><br><span class="line">-keepattributes *Annotation*</span><br><span class="line"></span><br><span class="line">#保持所有拥有本地方法的类名及本地方法名</span><br><span class="line">-keepclasseswithmembernames class * &#123;</span><br><span class="line">    native &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#保持自定义View的get和set相关方法</span><br><span class="line">-keepclassmembers public class * extends android.view.View &#123;</span><br><span class="line">   void set*(***);</span><br><span class="line">   *** get*();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#保持Activity中View及其子类入参的方法</span><br><span class="line">-keepclassmembers class * extends android.app.Activity &#123;</span><br><span class="line">   public void *(android.view.View);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#枚举</span><br><span class="line">-keepclassmembers enum * &#123;</span><br><span class="line">    **[] $VALUES;</span><br><span class="line">    public *;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#Parcelable</span><br><span class="line">-keepclassmembers class * implements android.os.Parcelable &#123;</span><br><span class="line">  public static final android.os.Parcelable$Creator CREATOR;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#R文件的静态成员</span><br><span class="line">-keepclassmembers class **.R$* &#123;</span><br><span class="line">    public static &lt;fields&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-dontwarn android.support.**</span><br><span class="line"></span><br><span class="line">#keep相关注解</span><br><span class="line">-keep class android.support.annotation.Keep</span><br><span class="line"></span><br><span class="line">-keep @android.support.annotation.Keep class * &#123;*;&#125;</span><br><span class="line"></span><br><span class="line">-keepclasseswithmembers class * &#123;</span><br><span class="line">    @android.support.annotation.Keep &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keepclasseswithmembers class * &#123;</span><br><span class="line">    @android.support.annotation.Keep &lt;fields&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keepclasseswithmembers class * &#123;</span><br><span class="line">    @android.support.annotation.Keep &lt;init&gt;(...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>十分感谢你能看到最后，因本人水平有限，如有错漏还请不吝赐教，同时，假如有这方面的困惑或者讨论，也十分欢迎联系我。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Android/">Android</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Android/">Android</a>, <a href="/tags/混淆/">混淆</a>, <a href="/tags/Android混淆/">Android混淆</a>, <a href="/tags/混淆使用手册/">混淆使用手册</a>
+  </div>
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    
+    <a href="/2016/08/19/转-QUIC和TCP/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+
+
+<section id="comment">
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2016/10/23/写给Android开发者的混淆使用手册/" data-title="写给Android开发者的混淆使用手册" data-url="http://zhenghuiy.github.io/2016/10/23/写给Android开发者的混淆使用手册/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start  -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"zhenghuiy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:zhenghuiy.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Android/">Android</a><small>9</small></li>
+  
+    <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
+  
+    <li><a href="/categories/Android朝花夕拾/">Android朝花夕拾</a><small>1</small></li>
+  
+    <li><a href="/categories/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/categories/在路上/">在路上</a><small>1</small></li>
+  
+    <li><a href="/categories/工具/">工具</a><small>2</small></li>
+  
+    <li><a href="/categories/感悟/">感悟</a><small>1</small></li>
+  
+    <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
+  
+    <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
+  
+    <li><a href="/categories/计算机网络/">计算机网络</a><small>1</small></li>
+  
+    <li><a href="/categories/记事/">记事</a><small>3</small></li>
+  
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2371914483&verifier=c4ac827b&dpc=1"></iframe>
+
+  <div class="widget tag">
+<h3 class="title">Friends</h3>
+<ul class="entry">
+<li><a href="http://blog.saymagic.cn/index.html" title="saymagic">saymagic</a></li>
+</ul>
+</div>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><section>
+Theme of <a href="https://github.com/zippera/lightum">Lightum</a>, Improved from <a href="https://github.com/hexojs/hexo-theme-light">Light</a>, by <a href="/">zippera</a> 
+</section>
+<div class="clearfix"></div>
+</footer>
+  <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
+
+
+<a href="https://github.com/zhenghuiy" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png" alt="Fork me on GitHub"></a>
