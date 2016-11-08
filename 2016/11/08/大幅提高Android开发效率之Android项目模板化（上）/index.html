@@ -1,0 +1,588 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>大幅提高Android开发效率之Android项目模板化（上） | Zhenghui&#39;s World</title>
+  <meta name="author" content="Zhenghui Yan">
+  
+  <meta name="description" content="一、两个场景的思考大家好，我是光源。
+首先思考一个最普通的场景：创建一个 Activity。你需要做的是：
+1、 创建 Activity 类文件；2、 创建对应的 Layout 布局文件；3、 在 AndroidManifest.xml 注册；
+当然现在 MVP 模式(mvp 模式有多种实现方式，这里选择一种普遍的)基本成为标配，所以你还需要接着：
+4、 对应的 View interface;5、 对应的 Presenter interface；6、对应的 View 实现；7、对应的 Presenter 实现；8、对应的 Model 类；
+当你气喘吁吁地做好以上工作后，你又想起这个页面你需要用 RecyclerView 实现，所以你继续：9、在布局中加入 RecyclerView;10、设置 LayoutManager；11、创建 RecyclerView Adapter；······终于，你可以开始写具体的业务代码了，而此刻距刚开始已经过去了 N 首歌的时间。
+开始写代码后，我们再思考一下这样的场景：显示一个 Dialog 。这时一般有两种情况，一种是你需要从零开始构造一个对话框、设置样式、编写逻辑等等，这与上面一个场景一样，一大堆的样板式代码；另一种情况是部门内已经对 Dialog 的设置样式、构造等代码做了封装，比较常见的方式会像这样：1DialogUtil.show(...);
+那么你直接调用就行。但这同样存在“无脑写代码”的问题，以及对于部门内的新人来说，可能不一定会遵循这种使用封装好的代码的约定。
+看到这里，假如你有一点点感同身受的话，那么恭喜你，本文将教你如何解决这些问题。如果没有共鸣也没关系，看完本文，你也会有一定的收获——实际上对于所有还不知道 Android 模板相关内容的开发者而言，看完本文都能大幅提升项目开发效率，这也是本文标题的由来。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="大幅提高Android开发效率之Android项目模板化（上）"/>
+  <meta property="og:site_name" content="Zhenghui&#39;s World"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Zhenghui&#39;s World" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//libs.baidu.com/jquery/1.8.0/jquery.min.js"></script>
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<div class="alignleft">
+  <h1><a href="/">Zhenghui&#39;s World</a></h1>
+  <h2><a href="/">Write the code, change the world</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+	<li> <a href="/atom.xml">RSS</a> </li>
+<li> <a title="把这个链接拖到你的Chrome收藏夹工具栏中" href='javascript:(function() {
+	function c() {
+		var e = document.createElement("link");
+		e.setAttribute("type", "text/css");
+		e.setAttribute("rel", "stylesheet");
+		e.setAttribute("href", f);
+		e.setAttribute("class", l);
+		document.body.appendChild(e)
+	}
+ 
+	function h() {
+		var e = document.getElementsByClassName(l);
+		for (var t = 0; t < e.length; t++) {
+			document.body.removeChild(e[t])
+		}
+	}
+ 
+	function p() {
+		var e = document.createElement("div");
+		e.setAttribute("class", a);
+		document.body.appendChild(e);
+		setTimeout(function() {
+			document.body.removeChild(e)
+		}, 100)
+	}
+ 
+	function d(e) {
+		return {
+			height : e.offsetHeight,
+			width : e.offsetWidth
+		}
+	}
+ 
+	function v(i) {
+		var s = d(i);
+		return s.height > e && s.height < n && s.width > t && s.width < r
+	}
+ 
+	function m(e) {
+		var t = e;
+		var n = 0;
+		while (!!t) {
+			n += t.offsetTop;
+			t = t.offsetParent
+		}
+		return n
+	}
+ 
+	function g() {
+		var e = document.documentElement;
+		if (!!window.innerWidth) {
+			return window.innerHeight
+		} else if (e && !isNaN(e.clientHeight)) {
+			return e.clientHeight
+		}
+		return 0
+	}
+ 
+	function y() {
+		if (window.pageYOffset) {
+			return window.pageYOffset
+		}
+		return Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+	}
+ 
+	function E(e) {
+		var t = m(e);
+		return t >= w && t <= b + w
+	}
+ 
+	function S() {
+		var e = document.createElement("audio");
+		e.setAttribute("class", l);
+		e.src = i;
+		e.loop = false;
+		e.addEventListener("canplay", function() {
+			setTimeout(function() {
+				x(k)
+			}, 500);
+			setTimeout(function() {
+				N();
+				p();
+				for (var e = 0; e < O.length; e++) {
+					T(O[e])
+				}
+			}, 15500)
+		}, true);
+		e.addEventListener("ended", function() {
+			N();
+			h()
+		}, true);
+		e.innerHTML = " <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>";
+		document.body.appendChild(e);
+		e.play()
+	}
+ 
+	function x(e) {
+		e.className += " " + s + " " + o
+	}
+ 
+	function T(e) {
+		e.className += " " + s + " " + u[Math.floor(Math.random() * u.length)]
+	}
+ 
+	function N() {
+		var e = document.getElementsByClassName(s);
+		var t = new RegExp("\\b" + s + "\\b");
+		for (var n = 0; n < e.length; ) {
+			e[n].className = e[n].className.replace(t, "")
+		}
+	}
+ 
+	var e = 30;
+	var t = 30;
+	var n = 350;
+	var r = 350;
+	var i = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3";
+	var s = "mw-harlem_shake_me";
+	var o = "im_first";
+	var u = ["im_drunk", "im_baked", "im_trippin", "im_blown"];
+	var a = "mw-strobe_light";
+	var f = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css";
+	var l = "mw_added_css";
+	var b = g();
+	var w = y();
+	var C = document.getElementsByTagName("*");
+	var k = null;
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			if (E(A)) {
+				k = A;
+				break
+			}
+		}
+	}
+	if (A === null) {
+		console.warn("Could not find a node of the right size. Please try a different page.");
+		return
+	}
+	c();
+	S();
+	var O = [];
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			O.push(A)
+		}
+	}
+})()    '>High一下</a> </li>
+
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-11-08T05:06:00.000Z"><a href="/2016/11/08/大幅提高Android开发效率之Android项目模板化（上）/">Nov 8 2016</a></time>
+      
+      
+  
+    <h1 class="title">大幅提高Android开发效率之Android项目模板化（上）</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="一、两个场景的思考"><a href="#一、两个场景的思考" class="headerlink" title="一、两个场景的思考"></a>一、两个场景的思考</h2><p>大家好，我是光源。</p>
+<p>首先思考一个最普通的场景：创建一个 <code>Activity</code>。你需要做的是：</p>
+<p>1、 创建 <code>Activity</code> 类文件；<br>2、 创建对应的 <code>Layout</code> 布局文件；<br>3、 在 <code>AndroidManifest.xml</code> 注册；</p>
+<p>当然现在 <code>MVP</code> 模式(<code>mvp</code> 模式有多种实现方式，这里选择一种普遍的)基本成为标配，所以你还需要接着：</p>
+<p>4、 对应的 <code>View interface</code>;<br>5、 对应的 <code>Presenter interface</code>；<br>6、对应的 <code>View</code> 实现；<br>7、对应的 <code>Presenter</code> 实现；<br>8、对应的 <code>Model</code> 类；</p>
+<p>当你气喘吁吁地做好以上工作后，你又想起这个页面你需要用 <code>RecyclerView</code> 实现，所以你继续：<br>9、在布局中加入 <code>RecyclerView</code>;<br>10、设置 <code>LayoutManager</code>；<br>11、创建 <code>RecyclerView Adapter</code>；<br>······<br>终于，你可以开始写具体的业务代码了，而此刻距刚开始已经过去了 N 首歌的时间。</p>
+<p>开始写代码后，我们再思考一下这样的场景：显示一个 <code>Dialog</code> 。<br>这时一般有两种情况，一种是你需要从零开始构造一个对话框、设置样式、编写逻辑等等，这与上面一个场景一样，一大堆的样板式代码；另一种情况是部门内已经对 <code>Dialog</code> 的设置样式、构造等代码做了封装，比较常见的方式会像这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DialogUtil.show(...);</span><br></pre></td></tr></table></figure></p>
+<p>那么你直接调用就行。但这同样存在“无脑写代码”的问题，以及对于部门内的新人来说，可能不一定会遵循这种使用封装好的代码的约定。</p>
+<p>看到这里，假如你有一点点感同身受的话，那么恭喜你，本文将教你如何解决这些问题。如果没有共鸣也没关系，看完本文，你也会有一定的收获——实际上对于所有还不知道 Android 模板相关内容的开发者而言，看完本文都能大幅提升项目开发效率，这也是本文标题的由来。<br><a id="more"></a></p>
+<h2 id="二、Android-Studio-Template"><a href="#二、Android-Studio-Template" class="headerlink" title="二、Android Studio Template"></a>二、Android Studio Template</h2><p>针对第一个场景，我们可以通过自定义 Android Studio Template 来解决。</p>
+<h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h3><p>在我们创建项目时，在最后一步可以选择一种预设的 <code>Activity</code> 作为项目的第一个 <code>Activity</code>，如下图</p>
+<p><img src="http://huihuitest.u.qiniudn.com/at1.png" alt="图一"></p>
+<p>这就是 Android Studio Template 的初次登场。Android Studio Template 依靠 FreeMarker 引擎，将事先定义好的模板文件生成我们所需的 class 文件、layout 文件等等，可以极大减少样板式代码的编写。</p>
+<p>打开 Android Studio 的安装目录，进入到模板所在的文件夹。关于模板位置，Windows 的路径在 <code>/plugins/android/lib/templates/</code>，Mac 下是  <code>Android Studio.app/Contents/plugins/android/lib/templates/</code>。可以看到，默认已经实现了一些模板。</p>
+<p><img src="http://huihuitest.u.qiniudn.com/at2.png" alt="图二"></p>
+<h3 id="2-模板使用流程与模板结构介绍"><a href="#2-模板使用流程与模板结构介绍" class="headerlink" title="2. 模板使用流程与模板结构介绍"></a>2. 模板使用流程与模板结构介绍</h3><p>我们以相对简单典型的 <code>EmptyActivity</code>为例进行讲解。</p>
+<p><img src="http://huihuitest.u.qiniudn.com/at3.png" alt="图三"></p>
+<p>从上图我们可以看到 EmptyActivity 模板有以下文件：</p>
+<ul>
+<li>globals.xml.ftl</li>
+<li>recipe.xml.ftl</li>
+<li>template.xml</li>
+<li>template_blank_activity.png</li>
+<li>root/src/app_package/SimpleActivity.java.ftl</li>
+</ul>
+<p>在这里我并不准备直接给出各个文件的介绍，我知道那样并不容易理解，毕竟我是在写博客而不是写文档。我们先看看模板的使用流程。</p>
+<p>第一步，选择 File(或者在某个包上右键) -&gt; New，可以看到菜单最下方出现了一列模板分类，我们选择 Activity 分类下的 EmptyActivity，点击。</p>
+<p><img src="http://huihuitest.u.qiniudn.com/at4.png" alt="图四"></p>
+<p>第二步，将出现的弹框填写完整，点击完成即可生成文件。</p>
+<p><img src="http://huihuitest.u.qiniudn.com/at5.png" alt="图五"></p>
+<p>这时我们打开模板文件夹中的 <code>template.xml</code> 文件，文件内容如下：</p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/empty_template.png" alt=""></p>
+<p>看到这里，再联系上图中的元素，聪明的你一定已经知道 <code>template.xml</code>的作用了。<code>template.xml</code>是整个模板的定义，从模板名称到模板分类再到模板参数都在这里定义，功能有点像 Android 项目中的 <code>AndroidManifest.xml</code>。下面详细介绍它的主要内容。</p>
+<ol>
+<li><code>template</code> 标签，整个 <code>xml</code> 的根节点，其中 <code>name</code>属性为模板名称，<code>description</code>属性为模板的描述。</li>
+<li><code>category</code>标签，定义了模板所属的分类，即图四中的分类列表中的分类，分类名一样的模板会被归纳到同一目录下。</li>
+<li><code>parameter</code> 标签，定义了模板输入弹窗中的输入参数，每个 <code>parameter</code> 为一行。其中：<ul>
+<li><code>id</code> 属性为参数唯一标识，我们可以在代码中通过 <code>id</code>来使用该参数。</li>
+<li><code>name</code> 属性为参数名称，显示在输入控件的前面或后面。</li>
+<li><code>type</code>属性为参数类型，根据该属性和<code>constraints</code>属性的值综合比较后参数会被渲染成不同的输入形式，比如 <code>string</code> 类型会显示输入框，而 <code>boolean</code>类型会显示一个选择框。</li>
+<li><code>constraints</code>属性为输入约束，常见的有<code>class</code>，代表类名；<code>layout</code>代表布局名；<code>package</code> 代表包路径； <code>unique</code>则是不能与现有的重复；<code>nonemptye</code>表示不能为空。</li>
+<li><code>suggest</code> 和 <code>default</code>标签，前者是建议名称，后者是默认名称，前者优先级高于后者。</li>
+<li><code>help</code>属性是参数输入提示，当该参数获取焦点后，对应的帮助信息会显示在对话框上。</li>
+</ul>
+</li>
+<li><code>thumbs</code>标签定义了该目标的缩略图，这也就是<code>template_blank_activity.png</code>文件的作用了。</li>
+<li><code>globals</code>标签指定了 global 文件，具体用途下文会具体说明。</li>
+<li><code>execute</code>标签，跟字面上的意思一样，执行 <code>recipe.xml.ftl</code>文件的内容，将模板文件生成具体的可用文件。</li>
+</ol>
+<p>了解了 <code>template.xml</code> 文件后，我们再看看 <code>globals.xml.fl</code>文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;globals&gt;</span><br><span class="line">    &lt;global id=&quot;hasNoActionBar&quot; type=&quot;boolean&quot; value=&quot;false&quot; /&gt;</span><br><span class="line">    &lt;global id=&quot;parentActivityClass&quot; value=&quot;&quot; /&gt;</span><br><span class="line">    &lt;global id=&quot;simpleLayoutName&quot; value=&quot;$&#123;layoutName&#125;&quot; /&gt;</span><br><span class="line">    &lt;global id=&quot;excludeMenu&quot; type=&quot;boolean&quot; value=&quot;true&quot; /&gt;</span><br><span class="line">    &lt;global id=&quot;generateActivityTitle&quot; type=&quot;boolean&quot; value=&quot;false&quot; /&gt;</span><br><span class="line">    &lt;#include &quot;../common/common_globals.xml.ftl&quot; /&gt;</span><br><span class="line">&lt;/globals&gt;</span><br></pre></td></tr></table></figure></p>
+<p>整个文件很简单，用 <code>global</code> 标签定义了一系列的全局参数（这里的全局是指可以在其他模板文件中使用它们）供具体的模板文件使用，<code>id</code>为唯一标识，<code>type</code>为类型，<code>value</code>为参数值。</p>
+<p>至于<code>#include</code>标签的作用，相信大家能猜到一点，与 <code>xml</code> 文件中的 <code>include</code>作用是一致的，包含其他文件内容到本文件中。包含的这个文件具体内容我就不贴出来了，也是一堆定义好的参数，感兴趣的可以打开对应的文件看看。</p>
+<p>总结一下，<code>globals.xml.fl</code>文件的作用就是定义或引入一些变量（参数）供后续模板文件使用。</p>
+<p>我们讲完了三个文件的作用后，相信大家对 Android Studio Template 已经有一定了解，在讲解 <code>recipe.xml.ftl</code> 文件和 <code>SimpleActivity.java.ftl</code> 文件之前，我们先了解一下 Android Studio Template 的工作原理。看下图：</p>
+<p><img src="http://huihuitest.u.qiniudn.com/at6.png" alt="图六"></p>
+<blockquote>
+<p>图片来自：<a href="http://www.slideshare.net/murphonic/custom-android-code-templates-15537501" target="_blank" rel="external">http://www.slideshare.net/murphonic/custom-android-code-templates-15537501</a></p>
+</blockquote>
+<p>如图所示，整个模板是以 <code>FreeMarker</code> 引擎为基础工作。其中，<code>globals.xml.ftl</code>和模板的输入参数弹窗（ <code>template.xml</code> 中定义的<br><code>parameter</code> 标签）相当于声明参数和定下参数值，再执行 <code>recipe.xml.fl</code> 中定义好的命令，将 <code>SimpleActivity.java.ftl</code> 转化为 <code>SimpleActivity.java</code>。转化过程中自然免不了使用定义好的参数。</p>
+<p>说到这里，我们知道了 <code>recipe.xml.ftl</code> 文件的作用就是定义模板转化的命令。看看具体文件内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;recipe&gt;</span><br><span class="line">    &lt;#include &quot;../common/recipe_manifest.xml.ftl&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;#if generateLayout&gt;</span><br><span class="line">    &lt;#include &quot;../common/recipe_simple.xml.ftl&quot; /&gt;</span><br><span class="line">    &lt;open file=&quot;$&#123;escapeXmlAttribute(resOut)&#125;/layout/$&#123;layoutName&#125;.xml&quot; /&gt;</span><br><span class="line">&lt;/#if&gt;</span><br><span class="line"></span><br><span class="line">    &lt;instantiate from=&quot;root/src/app_package/SimpleActivity.java.ftl&quot;</span><br><span class="line">                   to=&quot;$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;activityClass&#125;.java&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;open file=&quot;$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;activityClass&#125;.java&quot; /&gt;</span><br><span class="line">&lt;/recipe&gt;</span><br></pre></td></tr></table></figure></p>
+<p>首先，<code>&lt;#include&gt;</code>标签那行表示包含了 <code>recipe_manifest.xml.ftl</code> 文件的内容，打开对应文件后会发现里面是 <code>&lt;merge&gt;</code> 标签，作用是将定义的 <code>manifest.xml.ftl</code> 文件转化为 <code>manifest.xml</code>后与项目中的 <code>AndroidManifest.xml</code> 文件合并（可以参考安卓开发中 xml 文件中的 <code>merge</code> 标签）。</p>
+<p>也就是通过 <code>merge</code> 标签，我们可以自定义一个同名文件，然后与项目中的文件合并。这里是完成了 <code>Activity</code> 在 <code>AndroidManifest.xml</code> 文件中注册的工作。</p>
+<p>然后下面的 <code>&lt;#if&gt;</code>标签代表的含义相信大家可以猜测出来。形如<code>&lt;#if condition&gt; &lt;/#if&gt;</code>，是 freeMarker 模板中的<code>if</code>语句，前后成对出现，<code>condition</code>常见的有 <code>boolean</code>、<code>var == &quot;content&quot;</code>(判断变量的值)、<code>var??</code>（判断是否为空）等等。</p>
+<p>有 <code>if</code> 当然少不了 <code>else</code>，形如<code>&lt;#if condition&gt; &lt;#else&gt; &lt;/#if&gt;</code>。</p>
+<p><code>instantiate</code> 标签是 <code>recipe.xml.ftl</code> 文件的核心标签，它的作用是将 <code>from</code> 属性的 ftl 文件转化为 <code>to</code> 属性的文件。例如文件中就是将 <code>SimpleActivity.java.ftl</code> 文件转化为对应包下的 <code>${activityClass}.java</code> 文件。（这里的 <code>${activityClass}</code>是模板变量的表示方法，activityClass 变量由上文中的 <code>template.xml</code>定义，最后会被它的值填充）</p>
+<p>最后，<code>open</code> 文件会打开对应的文件。</p>
+<p>接下来上“主菜”，打开 <code>SimpleActivity.java.ftl</code> 看看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">package $&#123;packageName&#125;;</span><br><span class="line"></span><br><span class="line">import $&#123;superClassFqcn&#125;;</span><br><span class="line">import android.os.Bundle;</span><br><span class="line"></span><br><span class="line">public class $&#123;activityClass&#125; extends $&#123;superClass&#125; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">&lt;#if generateLayout&gt;</span><br><span class="line">        setContentView(R.layout.$&#123;layoutName&#125;);</span><br><span class="line">&lt;/#if&gt;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>看起来就是一个普通的 Java class 文件，区别是多了一些 FreeMarker 标记。在 <code>recipe.xml.ftl</code> 文件定义的转化过程中，这些标记会被来自 <code>globals.xml.ftl</code> 和 <code>template.xml</code> 的参数填充为具体的值。</p>
+<h3 id="3-举个例子"><a href="#3-举个例子" class="headerlink" title="3. 举个例子"></a>3. 举个例子</h3><p>接下来我们该一展身手动手实践了。</p>
+<p>对于 <code>MVP</code> 模式我的第一感受是，爽则爽矣，然而创建一个界面需要做的事情太多了！那么这里就以 <code>MVP</code>模式为例子将它模板化，将它降低的工作效率找回来。</p>
+<p>如下图，用 <a href="https://github.com/googlesamples/android-architecture" target="_blank" rel="external">Google MVP samples</a> 的 <code>MVP</code> 模式实现写了一个简单的例子。这里已经将具体的业务代码剥离，留下的是纯粹的“必须存在的代码”。现在我们将它模板化。</p>
+<p><img src="http://huihuitest.u.qiniudn.com/at7.png" alt="图七"></p>
+<p>说到写一个模板，常规的做法是根据上面说到的模板文件从 <code>globals.xml.ftl</code> 开始一个一个编写，但这种做法个人觉得并不好。特别是对于新手而言，很可能会处于一种打开文件一片茫然不知怎么下手的状态。</p>
+<p>我这边提倡的做法是，<strong>将模板生成过程逆向后就是写模板的过程</strong>。接下来我们将一步一步实现这个模板。</p>
+<h4 id="步骤一、找到并整理模板所需的文件"><a href="#步骤一、找到并整理模板所需的文件" class="headerlink" title="步骤一、找到并整理模板所需的文件"></a>步骤一、找到并整理模板所需的文件</h4><p>我们要制作一个模板，首先得知道我们要用模板去做何种工作。在项目中找到这类工作最典型的一个实现，将它做成模板。<br>我们先将业务代码、不必要的代码剥离，找到真正所需的几个文件（这一步上述的例子中已经整理好）。我们需要的是：</p>
+<ul>
+<li>MainActivity</li>
+<li>MainFragment</li>
+<li>MainPresenter</li>
+<li>MainContract</li>
+<li>activity_main</li>
+<li>fragment_main</li>
+<li>AndroidManifest.xml (<code>Activity</code> 需要注册)</li>
+</ul>
+<p>这些文件。</p>
+<h4 id="步骤二、整理出变量（参数）"><a href="#步骤二、整理出变量（参数）" class="headerlink" title="步骤二、整理出变量（参数）"></a>步骤二、整理出变量（参数）</h4><p>这里以代码量最多的 <code>MainFragment</code> 为例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">package name.huihui.androidstudiotemplatetest.main;</span><br><span class="line"></span><br><span class="line">import android.app.Fragment;</span><br><span class="line">import android.os.Bundle;</span><br><span class="line">import android.support.annotation.NonNull;</span><br><span class="line">import android.support.annotation.Nullable;</span><br><span class="line">import android.view.LayoutInflater;</span><br><span class="line">import android.view.View;</span><br><span class="line">import android.view.ViewGroup;</span><br><span class="line"></span><br><span class="line">import name.huihui.androidstudiotemplatetest.R;</span><br><span class="line"></span><br><span class="line">public class MainFragment extends Fragment implements MainContract.View &#123;</span><br><span class="line">    private MainContract.Presenter mPresenter;</span><br><span class="line"></span><br><span class="line">    public static MainFragment newInstance() &#123;</span><br><span class="line">        MainFragment fragment = new MainFragment();</span><br><span class="line">        return fragment;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onResume() &#123;</span><br><span class="line">        super.onResume();</span><br><span class="line">        mPresenter.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) &#123;</span><br><span class="line">        View root = inflater.inflate(R.layout.fragment_main, container, false);</span><br><span class="line">        setHasOptionsMenu(true);</span><br><span class="line"></span><br><span class="line">        return root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void setPresenter(@NonNull MainContract.Presenter presenter) &#123;</span><br><span class="line">        mPresenter = presenter;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>从上往下看，第一行语句就是指定包路径。从例子中的项目结构看 <code>MainActivity</code> 是放置于 <code>main</code> 包下的，同理，我们以后创建其他 <code>Activity</code> 也会将它放到其他包下。所以第一个必须的变量就是包名，一般取名为 <code>packageName</code>。</li>
+<li>接下来一些 <code>import</code> 语句没啥可说，看这一句 <code>public class MainFragment extends Fragment implements MainContract.View</code> 显然 <code>fragment</code> 名称和 <code>contract</code> 契约类名称是需要由使用者填写的，分别定义变量为 <code>fragmentName</code>和<code>contractName</code>。</li>
+<li>定义好 <code>fragmentName</code>和<code>contractName</code> 后，再往下看到 <code>MainFragment</code> 和 <code>MainContract</code> 自然而然用前者去替换就好。</li>
+<li>下面看到需要变更的就是 <code>fragment_main</code> 布局文件名了，定义为 <code>contentLayoutName</code>。</li>
+<li>最后一步，用上面定义好的变量名去替换需要变更的代码，就是模板文件了，将模板文件命名为 <code>Fragment.java.ftl</code>。</li>
+</ol>
+<blockquote>
+<p>小提示：还记得么，FreeMarker中变量的表示方法为 ${name}</p>
+</blockquote>
+<p>修改完的 <code>Fragment.java.ftl</code> 内容如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">package $&#123;packageName&#125;;</span><br><span class="line"></span><br><span class="line">import android.app.Fragment;</span><br><span class="line">import android.os.Bundle;</span><br><span class="line">import android.support.annotation.NonNull;</span><br><span class="line">import android.support.annotation.Nullable;</span><br><span class="line">import android.view.LayoutInflater;</span><br><span class="line">import android.view.View;</span><br><span class="line">import android.view.ViewGroup;</span><br><span class="line"></span><br><span class="line">import name.huihui.androidstudiotemplatetest.R;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public class $&#123;fragmentName&#125; extends Fragment implements $&#123;contractName&#125;.View &#123;</span><br><span class="line">    private $&#123;contractName&#125;.Presenter mPresenter;</span><br><span class="line"></span><br><span class="line">    public static $&#123;fragmentName&#125; newInstance() &#123;</span><br><span class="line">        $&#123;fragmentName&#125; fragment = new $&#123;fragmentName&#125;();</span><br><span class="line">        return fragment;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onResume() &#123;</span><br><span class="line">        super.onResume();</span><br><span class="line">        mPresenter.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) &#123;</span><br><span class="line">        View root = inflater.inflate(R.layout.$&#123;layoutName&#125;, container, false);</span><br><span class="line">        setHasOptionsMenu(true);</span><br><span class="line"></span><br><span class="line">        return root;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void setPresenter(@NonNull $&#123;contractName&#125;.Presenter presenter) &#123;</span><br><span class="line">        mPresenter = presenter;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其他文件同理。最终我们整理出定义的变量为：</p>
+<ul>
+<li>packageName，包名</li>
+<li>fragmentName，<code>Fragment</code> 名</li>
+<li>contractName，<code>MVP</code>契约类名（Google这种实现方式的类，不了解含义也无伤大雅）</li>
+<li>contentLayoutName，<code>Fragment</code> 的布局文件名</li>
+<li>presenterName，<code>Presenter</code>名</li>
+<li>activityName，<code>Activity</code>名</li>
+<li>activityLayoutName，<code>Activity</code>的布局文件名</li>
+</ul>
+<p>整理出的文件为：</p>
+<ul>
+<li>Fragment.java.ftl</li>
+<li>Activity.java.ftl</li>
+<li>activity.xml.ftl</li>
+<li>Contract.java.ftl</li>
+<li>fragment.xml.ftl</li>
+<li>Presenter.java.ftl</li>
+<li>AndroidManifest.xml.ftl</li>
+</ul>
+<h4 id="步骤三、将整理出的模板文件放置到正确的路径下"><a href="#步骤三、将整理出的模板文件放置到正确的路径下" class="headerlink" title="步骤三、将整理出的模板文件放置到正确的路径下"></a>步骤三、将整理出的模板文件放置到正确的路径下</h4><p>模板文件夹下有个 <code>root</code> 文件夹，我们仿造 <code>EmptyActivity</code> 模板：</p>
+<ol>
+<li>将 <code>.java.ftl</code>文件放到 <code>root/src/app_package/</code>路径下</li>
+<li>将 <code>AndroidManifest.xml.ftl</code>放到 <code>root/</code>路径下</li>
+<li>将 <code>.xml.ftl</code>文件放到 <code>root/res/</code>路径下</li>
+</ol>
+<h4 id="步骤四、写出-template-xml"><a href="#步骤四、写出-template-xml" class="headerlink" title="步骤四、写出 template.xml"></a>步骤四、写出 template.xml</h4><p>有了所需的变量，我们就可以对照着上文中的 <code>EmptyActivity</code> 模板写出我们需要的<code>template.xml</code> 文件了。</p>
+<p>在<code>EmptyActivity</code> 模板同目录下创建一个与 <code>EmptyActivity</code> 模板文件目录基本一致的新模板文件（拷贝黏贴大法好），命名为<code>MvpActivity</code>。</p>
+<p>最终内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;template</span><br><span class="line">    format=&quot;5&quot;</span><br><span class="line">    revision=&quot;5&quot;</span><br><span class="line">    name=&quot;MVP Activity&quot;</span><br><span class="line">    minApi=&quot;7&quot;</span><br><span class="line">    minBuildApi=&quot;14&quot;</span><br><span class="line">    description=&quot;Creates a new mvp activity&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;category value=&quot;Test&quot; /&gt;</span><br><span class="line">    &lt;formfactor value=&quot;Mobile&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;parameter</span><br><span class="line">        id=&quot;activityName&quot;</span><br><span class="line">        name=&quot;Activity Name&quot;</span><br><span class="line">        type=&quot;string&quot;</span><br><span class="line">        constraints=&quot;class|unique|nonempty&quot;</span><br><span class="line">        suggest=&quot;$&#123;layoutToActivity(layoutName)&#125;&quot;</span><br><span class="line">        default=&quot;MainActivity&quot;</span><br><span class="line">        help=&quot;The name of the activity class to create&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;parameter</span><br><span class="line">        id=&quot;fragmentName&quot;</span><br><span class="line">        name=&quot;Fragment Name&quot;</span><br><span class="line">        type=&quot;string&quot;</span><br><span class="line">        constraints=&quot;class|unique|nonempty&quot;</span><br><span class="line">        default=&quot;MainFragment&quot;</span><br><span class="line">        help=&quot;The name of the fragment class to create&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;parameter</span><br><span class="line">        id=&quot;contractName&quot;</span><br><span class="line">        name=&quot;Contract Name&quot;</span><br><span class="line">        type=&quot;string&quot;</span><br><span class="line">        constraints=&quot;class|unique|nonempty&quot;</span><br><span class="line">        default=&quot;MainContract&quot;</span><br><span class="line">        help=&quot;MVP 契约类&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;parameter</span><br><span class="line">        id=&quot;presenterName&quot;</span><br><span class="line">        name=&quot;Presenter Name&quot;</span><br><span class="line">        type=&quot;string&quot;</span><br><span class="line">        constraints=&quot;class|unique|nonempty&quot;</span><br><span class="line">        default=&quot;MainContract&quot;</span><br><span class="line">        help=&quot;Presenter&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;parameter</span><br><span class="line">        id=&quot;contentLayoutName&quot;</span><br><span class="line">        name=&quot;Fragment Layout Name&quot;</span><br><span class="line">        type=&quot;string&quot;</span><br><span class="line">        constraints=&quot;layout|unique|nonempty&quot;</span><br><span class="line">        default=&quot;fragment_main&quot;</span><br><span class="line">        help=&quot;The name of the layout to create for the fragment&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;parameter</span><br><span class="line">        id=&quot;activityLayoutName&quot;</span><br><span class="line">        name=&quot;Activity Layout Name&quot;</span><br><span class="line">        type=&quot;string&quot;</span><br><span class="line">        constraints=&quot;layout|unique|nonempty&quot;</span><br><span class="line">        suggest=&quot;$&#123;activityToLayout(activityName)&#125;&quot;</span><br><span class="line">        default=&quot;activity_main&quot;</span><br><span class="line">        help=&quot;The name of the layout to create for the activity&quot; /&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;parameter</span><br><span class="line">        id=&quot;packageName&quot;</span><br><span class="line">        name=&quot;Package name&quot;</span><br><span class="line">        type=&quot;string&quot;</span><br><span class="line">        constraints=&quot;package&quot;</span><br><span class="line">        default=&quot;com.mycompany.myapp&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 128x128 thumbnails relative to template.xml --&gt;</span><br><span class="line">    &lt;thumbs&gt;</span><br><span class="line">        &lt;!-- default thumbnail is required --&gt;</span><br><span class="line">        &lt;thumb&gt;template_blank_activity.png&lt;/thumb&gt;</span><br><span class="line">    &lt;/thumbs&gt;</span><br><span class="line"></span><br><span class="line">    &lt;globals file=&quot;globals.xml.ftl&quot; /&gt;</span><br><span class="line">    &lt;execute file=&quot;recipe.xml.ftl&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure></p>
+<p>模板文件就不一一解释，有几点需要说明一下：</p>
+<ol>
+<li>为了更好地组织模板，建议将 <code>category</code>的值改为自己的项目名称，这样假如有针对其他项目创建的模板不会导致混乱。</li>
+<li><code>thumbs</code> 标签里的图片可以换成对应页面的截图。</li>
+</ol>
+<h4 id="步骤五、globals-xml-ftl-和-recipe-xml-fl"><a href="#步骤五、globals-xml-ftl-和-recipe-xml-fl" class="headerlink" title="步骤五、globals.xml.ftl 和 recipe.xml.fl"></a>步骤五、<code>globals.xml.ftl</code> 和 <code>recipe.xml.fl</code></h4><p><code>globals.xml.fl</code> 没啥好说的，保持原样即可（当然你也可以选择将不用的参数删除），来看看 <code>recipe.xml.fl</code> 文件。</p>
+<p>为了方便大家理解，这里我们不去 <code>include</code>，自己写 <code>AndroidManifest.xml</code> 的 <code>merge</code>，从零开始构建。最终内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;recipe&gt;</span><br><span class="line">    &lt;merge from=&quot;root/AndroidManifest.xml.ftl&quot;</span><br><span class="line">    	to=&quot;$&#123;escapeXmlAttribute(manifestOut)&#125;/AndroidManifest.xml&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;instantiate from=&quot;root/src/app_package/Activity.java.ftl&quot;</span><br><span class="line">                   to=&quot;$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;activityName&#125;.java&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;instantiate from=&quot;root/src/app_package/Fragment.java.ftl&quot;</span><br><span class="line">                   to=&quot;$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;fragmentName&#125;.java&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;instantiate from=&quot;root/src/app_package/Contract.java.ftl&quot;</span><br><span class="line">                   to=&quot;$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;contractName&#125;.java&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;instantiate from=&quot;root/src/app_package/Presenter.java.ftl&quot;</span><br><span class="line">                   to=&quot;$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;presenterName&#125;.java&quot; /&gt;</span><br><span class="line"></span><br><span class="line">	&lt;instantiate from=&quot;root/res/fragment.xml.ftl&quot;</span><br><span class="line">		to=&quot;$&#123;escapeXmlAttribute(resOut)&#125;/layout/$&#123;contentLayoutName&#125;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">	&lt;instantiate from=&quot;root/res/activity.xml.ftl&quot;</span><br><span class="line">		to=&quot;$&#123;escapeXmlAttribute(resOut)&#125;/layout/$&#123;activityLayoutName&#125;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;open file=&quot;$&#123;escapeXmlAttribute(manifestOut)&#125;/AndroidManifest.xml&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;open file=&quot;$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;activityName&#125;.java&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;open file=&quot;$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;fragmentName&#125;.java&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;open file=&quot;$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;contractName&#125;.java&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;open file=&quot;$&#123;escapeXmlAttribute(srcOut)&#125;/$&#123;presenterName&#125;.java&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;open file=&quot;$&#123;escapeXmlAttribute(resOut)&#125;/layout/$&#123;contentLayoutName&#125;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;open file=&quot;$&#123;escapeXmlAttribute(resOut)&#125;/layout/$&#123;activityLayoutName&#125;&quot; /&gt;</span><br><span class="line">&lt;/recipe&gt;</span><br></pre></td></tr></table></figure></p>
+<p>创建一个注册有 <code>Activity</code> 的 <code>AndroidManifest.xml</code>文件并与原项目中的合并、将模板文件转化为我们需要的文件并在最后打开它们。</p>
+<h4 id="步骤六、测试模板"><a href="#步骤六、测试模板" class="headerlink" title="步骤六、测试模板"></a>步骤六、测试模板</h4><p>重启 Android Studio，让模板生效。</p>
+<p>假设现在有一个需求是创建一个 <code>DetailActivity</code>，按照实例工程中 <code>MainActivity</code> 的结构，我们需要创建多个文件，现在我们用 <code>MVPActivity</code> 模板来做这些事。</p>
+<p>创建一个 <code>detail</code> 包路径，选中它右键选中模板，如下图：</p>
+<p><img src="http://huihuitest.u.qiniudn.com/at8.png" alt="图八"></p>
+<p>再按下图填写好所需参数，即可生成所需文件。</p>
+<p><img src="http://huihuitest.u.qiniudn.com/at9.png" alt="图九"></p>
+<p><strong>测试项目和测试模板的代码已放到 github 上: <a href="https://github.com/zhenghuiy/AndroidStudioTemplateTest" target="_blank" rel="external">AndroidStudioTemplateTest</a></strong></p>
+<h2 id="三、Android-Studio-Template-项目实践与不足"><a href="#三、Android-Studio-Template-项目实践与不足" class="headerlink" title="三、Android Studio Template 项目实践与不足"></a>三、Android Studio Template 项目实践与不足</h2><p>啰啰嗦嗦写了一堆终于把 Android Studio Template 简单介绍一下了，可能看文章时会觉得有点复杂有点麻烦，但是真正上手写出自己的模板后你就会觉得，原来这么简单！</p>
+<h3 id="1-怎么做"><a href="#1-怎么做" class="headerlink" title="1. 怎么做"></a>1. 怎么做</h3><p>说了这么多，那到底我们要怎么将它运用到项目中呢？很简单，<strong>将项目中最常见、最显得重复的类模板化</strong>。</p>
+<p>举个例子，本文开头的第一个场景：每次创建一个 <code>Activity</code> 我们都需要各种创建文件等等，我们就可以利用模板来解决这些工作。虽然 Android Studio 默认已经提供了 <code>EmptyActivity</code>模板，但实际开发中绝大多数项目的 <code>Activity</code> 都是需要继承自定义的 <code>BaseActivity</code>，然后做点其他小逻辑，那这时我们就可以自己定义一个 <code>XXEmptyActivity</code>。</p>
+<p>再举个例子，上文提到的 <code>MVP</code> 模式在创建一个 <code>Activity</code> 时需要创建大量里面有固定代码的文件，完全可以由模板代劳。点点鼠标轻松解决 <code>MVP</code> 带来的麻烦，岂不快哉。</p>
+<p>为什么我们需要自定义模板？因为我们需要的是“接地气”、与项目风格一致的模板，这才是关键。</p>
+<h3 id="2-注意事项"><a href="#2-注意事项" class="headerlink" title="2. 注意事项"></a>2. 注意事项</h3><p>有一点需要特别提醒：Android Studio Template 的功能只是利用模板将那些“固定的代码”由无脑手写改为自动生成，它不会减少代码也不会优化代码。</p>
+<p>因此使用时我们要先分清当前场景是代码写的不够好、代码没有封装优化还是真正需要模板化。</p>
+<p>具体怎么区分？保持一个原则，<strong>只将不得不做的工作交给模板</strong>。</p>
+<p>什么是不得不做的事？在写代码前先创建对应的文件是不得不做的事、在 <code>AndroidManifest.xml</code> 注册 <code>Activity</code>是不得不做的事、<code>Activity</code> 里需要在 <code>onCreate</code> 方法里去 <code>setContentView</code>也是不得不做的事，等等。</p>
+<p>而像“在 Activity 里显示 <code>ToolBar</code>”这种需求完全可以封装出一个 <code>BaseToolBarActivity</code> 出来，纯粹是代码层面的封装优化了。</p>
+<h3 id="3-不足"><a href="#3-不足" class="headerlink" title="3. 不足"></a>3. 不足</h3><p>我们简单地将日常写代码的过程划分为以下几个阶段：</p>
+<ol>
+<li>创建文件。</li>
+<li>写样前置代码（就是上文提到的“不得不做的工作”）</li>
+<li>写业务代码</li>
+</ol>
+<p>显然，利用 Android Studio Template 我们可以解决第一和第二阶段的大部分工作，而且你的项目架构越是结构优良越能从众得益（好的架构总是结构清晰）。</p>
+<p>但是不足之处体现在 Android Studio Template 的粒度是文件级别，在文件创建完毕后也就是到了第三阶段，它就无能为力了。而恰恰是在我们写代码的过程中，也极其容易产生一些“样板式”代码。</p>
+<p>比如 xml 文件中我们总是需要为每个控件“不厌其烦”地写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">android:width=&quot;match_parent&quot;</span><br><span class="line">android:height=&quot;wrap_content&quot;</span><br></pre></td></tr></table></figure></p>
+<p>之类的代码。</p>
+<p>它们当然是必要的，但是有没有什么办法可以让我们免于把时间花费在敲这些代码上呢？</p>
+<p>答案是使用 Live Template。</p>
+<p>具体介绍将会在《大幅提高Android开发效率之Android项目模板化（下）》中给出，同时本文的下半部分也会对 Android 项目模板化做一个总结。<strong>感兴趣的朋友请关注我的微信公众号得到第一时间的通知。</strong></p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/qrcode_for_gh_8d80345d7ff8_430.jpg" alt=""></p>
+<h2 id="四、参考资料"><a href="#四、参考资料" class="headerlink" title="四、参考资料"></a>四、参考资料</h2><ol>
+<li><a href="http://blog.csdn.net/lmj623565791/article/details/51635533" target="_blank" rel="external">Android Studio自定义模板 写页面竟然可以如此轻松</a></li>
+<li><a href="https://developer.android.com/studio/projects/templates.html" target="_blank" rel="external">https://developer.android.com/studio/projects/templates.html</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Android/">Android</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Android/">Android</a>, <a href="/tags/template/">template</a>
+  </div>
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    
+    <a href="/2016/10/23/写给Android开发者的混淆使用手册/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+
+
+<section id="comment">
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2016/11/08/大幅提高Android开发效率之Android项目模板化（上）/" data-title="大幅提高Android开发效率之Android项目模板化（上）" data-url="http://zhenghuiy.github.io/2016/11/08/大幅提高Android开发效率之Android项目模板化（上）/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start  -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"zhenghuiy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:zhenghuiy.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Android/">Android</a><small>10</small></li>
+  
+    <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
+  
+    <li><a href="/categories/Android朝花夕拾/">Android朝花夕拾</a><small>1</small></li>
+  
+    <li><a href="/categories/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/categories/在路上/">在路上</a><small>1</small></li>
+  
+    <li><a href="/categories/工具/">工具</a><small>2</small></li>
+  
+    <li><a href="/categories/感悟/">感悟</a><small>1</small></li>
+  
+    <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
+  
+    <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
+  
+    <li><a href="/categories/计算机网络/">计算机网络</a><small>1</small></li>
+  
+    <li><a href="/categories/记事/">记事</a><small>3</small></li>
+  
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2371914483&verifier=c4ac827b&dpc=1"></iframe>
+
+  <div class="widget tag">
+<h3 class="title">Friends</h3>
+<ul class="entry">
+<li><a href="http://blog.saymagic.cn/index.html" title="saymagic">saymagic</a></li>
+</ul>
+</div>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><section>
+Theme of <a href="https://github.com/zippera/lightum">Lightum</a>, Improved from <a href="https://github.com/hexojs/hexo-theme-light">Light</a>, by <a href="/">zippera</a> 
+</section>
+<div class="clearfix"></div>
+</footer>
+  <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
+
+
+<a href="https://github.com/zhenghuiy" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png" alt="Fork me on GitHub"></a>
