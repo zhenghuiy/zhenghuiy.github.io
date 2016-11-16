@@ -1,0 +1,572 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>大幅提高Android开发效率之Android项目模板化（下） | Zhenghui&#39;s World</title>
+  <meta name="author" content="Zhenghui Yan">
+  
+  <meta name="description" content="大家好，我是光源。
+在《大幅提高Android开发效率之Android项目模板化（上）》中我们了解了如何用 Android Studio Template 大幅减少写业务代码前的工作量，同时也稍微提了下用 Live Template 减少写业务代码过程中的“样板式代码”。
+可能有朋友会问，我们这么紧张这点效率真的必要么？
+这个问题我先不回答，我们先来看看一个场景：写一个单例。
+单例模式应该是开发过程中最常见的设计模式之一了。写单例前总得先纠结一下吧，单例模式这么多种实现方式该用哪种好呢？选定了实现方式后，老老实实写一堆代码，然后你会突然发现除了类名不一样外，其他代码都是一模一样，这时你心里会不会隐隐约约觉得这是可以优化的？
+我不知道你完成单例模式的实现需要多长时间，但我告诉你，我们可以用一秒来搞定，你会不会觉得老老实实写代码的自己很傻？
+这就是 Live Template 的第一个作用，提高编码效率。
+再接着上面的话题，又有人吐槽另一个细节了，一般有点年头的程序员对于单例模式都有自己的一个默认实现方式，不需要花时间去纠结吧？
+这话不假，像我就默认使用内部静态类的方式实现单例。但是你有没有想过，项目开发是一个团队协作的过程，就算个人不纠结，但多人开发情况下，要么每个人用自己的一套实现方式造成代码风格不统一，要么同事还是得事先通气、询问用哪种好。（编码规范文档也不会事无巨细把这类问题也事先规定好的）
+再思考一下，很多有多方案且不属于编码规范的场景，我们又要怎么去统一呢？
+答案还是用 Live Template。例如，Android 开发中，我们应该使 Message.obtain() 来获取一个 Message 实例，而不是去 new 一个，那么我们完全可以定一个 getMsg 的 Live Template，大家只要是用 getMsg 的，可以严格保证统一性——这就是 Live Template 的另一个作用了，保持项目中非编码性质的代码风格统一。（编码性质的代码风格统一果断用编码规范文档来实现了）
+大家看到这里一定已经对 Live Template 有了一定的重视与好奇了吧，别着急，下面上正餐。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="大幅提高Android开发效率之Android项目模板化（下）"/>
+  <meta property="og:site_name" content="Zhenghui&#39;s World"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Zhenghui&#39;s World" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//libs.baidu.com/jquery/1.8.0/jquery.min.js"></script>
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<div class="alignleft">
+  <h1><a href="/">Zhenghui&#39;s World</a></h1>
+  <h2><a href="/">Write the code, change the world</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+	<li> <a href="/atom.xml">RSS</a> </li>
+<li> <a title="把这个链接拖到你的Chrome收藏夹工具栏中" href='javascript:(function() {
+	function c() {
+		var e = document.createElement("link");
+		e.setAttribute("type", "text/css");
+		e.setAttribute("rel", "stylesheet");
+		e.setAttribute("href", f);
+		e.setAttribute("class", l);
+		document.body.appendChild(e)
+	}
+ 
+	function h() {
+		var e = document.getElementsByClassName(l);
+		for (var t = 0; t < e.length; t++) {
+			document.body.removeChild(e[t])
+		}
+	}
+ 
+	function p() {
+		var e = document.createElement("div");
+		e.setAttribute("class", a);
+		document.body.appendChild(e);
+		setTimeout(function() {
+			document.body.removeChild(e)
+		}, 100)
+	}
+ 
+	function d(e) {
+		return {
+			height : e.offsetHeight,
+			width : e.offsetWidth
+		}
+	}
+ 
+	function v(i) {
+		var s = d(i);
+		return s.height > e && s.height < n && s.width > t && s.width < r
+	}
+ 
+	function m(e) {
+		var t = e;
+		var n = 0;
+		while (!!t) {
+			n += t.offsetTop;
+			t = t.offsetParent
+		}
+		return n
+	}
+ 
+	function g() {
+		var e = document.documentElement;
+		if (!!window.innerWidth) {
+			return window.innerHeight
+		} else if (e && !isNaN(e.clientHeight)) {
+			return e.clientHeight
+		}
+		return 0
+	}
+ 
+	function y() {
+		if (window.pageYOffset) {
+			return window.pageYOffset
+		}
+		return Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+	}
+ 
+	function E(e) {
+		var t = m(e);
+		return t >= w && t <= b + w
+	}
+ 
+	function S() {
+		var e = document.createElement("audio");
+		e.setAttribute("class", l);
+		e.src = i;
+		e.loop = false;
+		e.addEventListener("canplay", function() {
+			setTimeout(function() {
+				x(k)
+			}, 500);
+			setTimeout(function() {
+				N();
+				p();
+				for (var e = 0; e < O.length; e++) {
+					T(O[e])
+				}
+			}, 15500)
+		}, true);
+		e.addEventListener("ended", function() {
+			N();
+			h()
+		}, true);
+		e.innerHTML = " <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>";
+		document.body.appendChild(e);
+		e.play()
+	}
+ 
+	function x(e) {
+		e.className += " " + s + " " + o
+	}
+ 
+	function T(e) {
+		e.className += " " + s + " " + u[Math.floor(Math.random() * u.length)]
+	}
+ 
+	function N() {
+		var e = document.getElementsByClassName(s);
+		var t = new RegExp("\\b" + s + "\\b");
+		for (var n = 0; n < e.length; ) {
+			e[n].className = e[n].className.replace(t, "")
+		}
+	}
+ 
+	var e = 30;
+	var t = 30;
+	var n = 350;
+	var r = 350;
+	var i = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3";
+	var s = "mw-harlem_shake_me";
+	var o = "im_first";
+	var u = ["im_drunk", "im_baked", "im_trippin", "im_blown"];
+	var a = "mw-strobe_light";
+	var f = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css";
+	var l = "mw_added_css";
+	var b = g();
+	var w = y();
+	var C = document.getElementsByTagName("*");
+	var k = null;
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			if (E(A)) {
+				k = A;
+				break
+			}
+		}
+	}
+	if (A === null) {
+		console.warn("Could not find a node of the right size. Please try a different page.");
+		return
+	}
+	c();
+	S();
+	var O = [];
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			O.push(A)
+		}
+	}
+})()    '>High一下</a> </li>
+
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-11-16T03:02:00.000Z"><a href="/2016/11/16/大幅提高Android开发效率之Android项目模板化（下）/">Nov 16 2016</a></time>
+      
+      
+  
+    <h1 class="title">大幅提高Android开发效率之Android项目模板化（下）</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>大家好，我是光源。</p>
+<p>在<a href="http://www.jianshu.com/p/e8ac0c284601" target="_blank" rel="external">《大幅提高Android开发效率之Android项目模板化（上）》</a>中我们了解了如何用 Android Studio Template 大幅减少写业务代码前的工作量，同时也稍微提了下用 Live Template 减少写业务代码过程中的“样板式代码”。</p>
+<p>可能有朋友会问，我们这么紧张这点效率真的必要么？</p>
+<p>这个问题我先不回答，我们先来看看一个场景：写一个单例。</p>
+<p>单例模式应该是开发过程中最常见的设计模式之一了。写单例前总得先纠结一下吧，单例模式这么多种实现方式该用哪种好呢？选定了实现方式后，老老实实写一堆代码，然后你会突然发现除了类名不一样外，其他代码都是一模一样，这时你心里会不会隐隐约约觉得这是可以优化的？</p>
+<p>我不知道你完成单例模式的实现需要多长时间，<strong>但我告诉你，我们可以用一秒来搞定，你会不会觉得老老实实写代码的自己很傻？</strong></p>
+<p>这就是 Live Template 的第一个作用，<strong>提高编码效率</strong>。</p>
+<p>再接着上面的话题，又有人吐槽另一个细节了，一般有点年头的程序员对于单例模式都有自己的一个默认实现方式，不需要花时间去纠结吧？</p>
+<p>这话不假，像我就默认使用内部静态类的方式实现单例。但是你有没有想过，项目开发是一个团队协作的过程，就算个人不纠结，但多人开发情况下，要么每个人用自己的一套实现方式造成代码风格不统一，要么同事还是得事先通气、询问用哪种好。（编码规范文档也不会事无巨细把这类问题也事先规定好的）</p>
+<p>再思考一下，很多有多方案且不属于编码规范的场景，我们又要怎么去统一呢？</p>
+<p>答案还是用 Live Template。例如，Android 开发中，我们应该使 <code>Message.obtain()</code> 来获取一个 Message 实例，而不是去 <code>new</code> 一个，那么我们完全可以定一个 <code>getMsg</code> 的 Live Template，大家只要是用 <code>getMsg</code> 的，可以严格保证统一性——这就是 Live Template 的另一个作用了，<strong>保持项目中非编码性质的代码风格统一</strong>。（编码性质的代码风格统一果断用编码规范文档来实现了）</p>
+<p>大家看到这里一定已经对 Live Template 有了一定的重视与好奇了吧，别着急，下面上正餐。<br><a id="more"></a></p>
+<h2 id="一、Live-Template-简介"><a href="#一、Live-Template-简介" class="headerlink" title="一、Live Template 简介"></a>一、Live Template 简介</h2><p>何为 Live template ？直译是“实时模板”，它的机制简单地说就是提前定义好一些通用的代码片段在编写代码时插入编辑器，使用方法类似代码补全，默认快捷方式是 Tab 键（不同平台不同版本可能有差异）。本文将根据 Android Studio 1.5+ 版本介绍 Live template 相关内容。</p>
+<p>进入 <code>Settings/Preferences -&gt; Editor -&gt; Live Templates</code>，可以看到当前已经有的的模板组。</p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/lt1.png" alt="图一"></p>
+<p>可以看到，默认情况下已经有一些模板存在。</p>
+<p>打开分组的某个具体模板，可以看到一个模板包含了缩写、描述、内容三块。</p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/lt2.png" alt="图二"></p>
+<p>在编写代码的过程中输入模板缩写，按下 Tab 键，对应的代码片段就插入到当前位置。</p>
+<p>以上就是 Live Template 的简单使用，基本与普通代码补全没啥差别，特别简单实用。</p>
+<p>当然，默认的模板虽然不少，但我们不会止步于使用默认的模板，下面说一说如何自定义模板。</p>
+<h2 id="二、自定义-template"><a href="#二、自定义-template" class="headerlink" title="二、自定义 template"></a>二、自定义 template</h2><h3 id="第一步-创建新模板"><a href="#第一步-创建新模板" class="headerlink" title="第一步 创建新模板"></a>第一步 创建新模板</h3><p>进入 <code>Settings/Preferences</code> -&gt; <code>Editor</code> -&gt; <code>Live Templates</code>，选择某个分组，点击右上角的 “+” 号，选择 Live Template。</p>
+<h3 id="第二步-选择模板适用范围"><a href="#第二步-选择模板适用范围" class="headerlink" title="第二步 选择模板适用范围"></a>第二步 选择模板适用范围</h3><p>点击下方的 “Define”,选择适用范围。如适用于 class 文件就选 java ，适用于 xml 文件就 xml。</p>
+<p>选定了范围后，在范围之外的文件则无法使用该模板。例如 Android XML 分组的“lh”模板选定了 xml，则在 class 文件中是无法使用的。</p>
+<h3 id="第三步-填写内容"><a href="#第三步-填写内容" class="headerlink" title="第三步 填写内容"></a>第三步 填写内容</h3><p>如图二所示，一个模板包括模板缩写、描述、内容三块。</p>
+<ul>
+<li><p>模板缩写一方面是模板的名称，另一方面是 Live Template 的触发标识，命名上建议尽量简洁，同时不要与普通类名、方法名等相同。</p>
+</li>
+<li><p>描述是模板的详细描述，在提示中会显示给用户。</p>
+</li>
+<li><p>内容是模板的具体定义，由普通代码和变量组成。</p>
+</li>
+</ul>
+<p>模板内容除了写死的内容外，还可以声明和使用变量。变量形式为 $<variable_name>$ 。通过点击下图中的“Edit variables”按钮打开变量定义窗口我们就可以开始创建当前模板的变量。</variable_name></p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/lt3.png" alt="图三"></p>
+<ul>
+<li>Name 变量名，对应 variable_name</li>
+<li>Expression 变量的表现</li>
+<li>Default value  默认值</li>
+<li>Skip if defined 是否跳过编辑</li>
+</ul>
+<p>编辑器已经事先定义好 Expression 的一些方法， 部分常用方法如下：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>annotated(“annotation qname”)</td>
+<td>注解</td>
+</tr>
+<tr>
+<td>arrayVariable()</td>
+<td>集合变量</td>
+</tr>
+<tr>
+<td>className(sClassName)</td>
+<td>当前类名</td>
+</tr>
+<tr>
+<td>classNameComplete()</td>
+<td>当前完整类名</td>
+</tr>
+<tr>
+<td>complete()</td>
+<td>代码补全</td>
+</tr>
+<tr>
+<td>componentTypeOf (<array variable="" or="" array="" type="">)</array></td>
+<td>集合内的元素类型</td>
+</tr>
+<tr>
+<td>date(sDate)</td>
+<td>系统当前日期</td>
+</tr>
+<tr>
+<td>expectedType()</td>
+<td>所需结果的类型，这个在类型转换中特别适用</td>
+</tr>
+<tr>
+<td>fileName(sFileName)</td>
+<td>带扩展名的文件名</td>
+</tr>
+<tr>
+<td>iterableComponentType(<arrayoriterable>)</arrayoriterable></td>
+<td>可遍历的集合或数组类型</td>
+</tr>
+<tr>
+<td>lineNumber()</td>
+<td>行号</td>
+</tr>
+<tr>
+<td>methodName()</td>
+<td>方法名</td>
+</tr>
+<tr>
+<td>methodReturnType()</td>
+<td>方法返回类型</td>
+</tr>
+<tr>
+<td>suggestIndexName()</td>
+<td>建议的索引名（i/j 等）</td>
+</tr>
+<tr>
+<td>suggestVariableName()</td>
+<td>建议的变量名</td>
+</tr>
+<tr>
+<td>time(sSystemTime)</td>
+<td>系统时间</td>
+</tr>
+<tr>
+<td>typeOfVariable(VAR)</td>
+<td>变量类型</td>
+</tr>
+<tr>
+<td>user()</td>
+<td>当前用户名</td>
+</tr>
+</tbody>
+</table>
+<p>（详见 <a href="https://www.jetbrains.com/help/idea/2016.1/live-template-variables.html#predefined_functions" target="_blank" rel="external">https://www.jetbrains.com/help/idea/2016.1/live-template-variables.html#predefined_functions</a>  ）</p>
+<h2 id="三、举个例子"><a href="#三、举个例子" class="headerlink" title="三、举个例子"></a>三、举个例子</h2><p>众所周知，单例是程序开发中最常用的模式之一，虽然有多种实现方案，但不管选择哪种都避免不了重复写一些“样板代码”，而这种场景就可以用live template 来解决了。接下来我们用创建单例模式的模板来具体说明如何自定义模板。</p>
+<ol>
+<li><p>进入 <code>Settings/Preferences</code> -&gt; <code>Editor</code> -&gt; <code>Live Templates</code>，选择某个分组，点击右上角的“+” 号，选择 <code>Live Template</code>。</p>
+</li>
+<li><p>选定适用范围为 <code>java</code>。</p>
+</li>
+<li><p>填上缩写为 singleTon，描述为单例模式。然后把以下代码拷贝到模板内容中：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private static class SingleTonHolder &#123;</span><br><span class="line">    private static final $class$ INSTANCE = new $class$();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static $class$ getInstance() &#123;</span><br><span class="line">    return SingleTonHolder.INSTANCE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private $class$() &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>这里定义了 class 变量，需要点击 edit variables 创建该变量，变量名为 class，Expression 选择 className() 。点击 OK 保存。</p>
+</li>
+<li><p>创建某个class后，输入 <code>singleTon</code> ，按下 tab 键就可以看到单例模板。</p>
+</li>
+</ol>
+<h2 id="四、Live-Template-的导出与导入"><a href="#四、Live-Template-的导出与导入" class="headerlink" title="四、Live Template 的导出与导入"></a>四、Live Template 的导出与导入</h2><p>第一种方法是，创建完模板后模板数据会以XML的形式存储在 <code>android studio config\templates</code> 目录下，window下为  <code>C:\Users\\&lt;user&gt;\\.AndroidStudiox.x\config\templates</code> （user为你的计算机用户名）, mac下为<br><code>~/Library/Preferences/AndroidStudiox.x/templates</code> ，将其中的文件拷贝出即可导出；同理可知，导入时将已定义好的xml文件放到相同目录下，即可完成导入。</p>
+<p>第二种方案是，通过 <code>File</code> -&gt; <code>Export Settings</code> 和 <code>Import Settings</code>，只选中 <code>Live Templates</code>。</p>
+<h2 id="五、项目实践"><a href="#五、项目实践" class="headerlink" title="五、项目实践"></a>五、项目实践</h2><p>对于具体的项目而言，自定义 Live Template 可以分成两部分，一部分是相对通用的模板，作为默认模板的补充，比如上文中的单例模式模板；另一部分是跟项目逻辑深度相关的模板，比如使用项目中自定义的<code>LogUtil</code>而不是普通的<code>Log</code>来打 log 。</p>
+<p>上文中已经给出自定义通用模板的例子，这里再给出项目相关模板的示例。</p>
+<p>例如，项目内部有 toast 工具类来显示一个 toast，定义一个名为“xxtoast”的模板(避免与普通toast冲突，加上前缀)，内容是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ToastUtil.makeShortToast($strRes$);</span><br></pre></td></tr></table></figure></p>
+<p>最后，将这些自定义模板导出放到 gitlab 上，其他同事只需要将这些文件 clone 到对应目录下，即可直接使用。</p>
+<h3 id="小工具"><a href="#小工具" class="headerlink" title="小工具"></a>小工具</h3><p>有一个叫做 <a href="http://exynap.com/" target="_blank" rel="external">exynap</a> 的 Anroid Studio 插件可以很方便搜索、创建、使用代码片段（与 Live Template 不共享），感兴趣的朋友可以看看。</p>
+<h2 id="六，参考资料"><a href="#六，参考资料" class="headerlink" title="六，参考资料"></a>六，参考资料</h2><p><a href="https://www.jetbrains.com/help/idea/2016.2/live-templates.html" target="_blank" rel="external">https://www.jetbrains.com/help/idea/2016.2/live-templates.html</a></p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/qrcode_for_gh_8d80345d7ff8_430.jpg" alt=""></p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Android/">Android</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/Android/">Android</a>, <a href="/tags/Live-Template/">Live Template</a>
+  </div>
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+ <nav id="pagination" >
+    
+    
+    <a href="/2016/11/08/大幅提高Android开发效率之Android项目模板化（上）/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+
+
+<section id="comment">
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="2016/11/16/大幅提高Android开发效率之Android项目模板化（下）/" data-title="大幅提高Android开发效率之Android项目模板化（下）" data-url="http://zhenghuiy.github.io/2016/11/16/大幅提高Android开发效率之Android项目模板化（下）/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start  -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"zhenghuiy"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:zhenghuiy.github.io">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Android/">Android</a><small>11</small></li>
+  
+    <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
+  
+    <li><a href="/categories/Android朝花夕拾/">Android朝花夕拾</a><small>1</small></li>
+  
+    <li><a href="/categories/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/categories/在路上/">在路上</a><small>1</small></li>
+  
+    <li><a href="/categories/工具/">工具</a><small>2</small></li>
+  
+    <li><a href="/categories/感悟/">感悟</a><small>1</small></li>
+  
+    <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
+  
+    <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
+  
+    <li><a href="/categories/计算机网络/">计算机网络</a><small>1</small></li>
+  
+    <li><a href="/categories/记事/">记事</a><small>3</small></li>
+  
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2371914483&verifier=c4ac827b&dpc=1"></iframe>
+
+  <div class="widget tag">
+<h3 class="title">Friends</h3>
+<ul class="entry">
+<li><a href="http://blog.saymagic.cn/index.html" title="saymagic">saymagic</a></li>
+</ul>
+</div>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><section>
+Theme of <a href="https://github.com/zippera/lightum">Lightum</a>, Improved from <a href="https://github.com/hexojs/hexo-theme-light">Light</a>, by <a href="/">zippera</a> 
+</section>
+<div class="clearfix"></div>
+</footer>
+  <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
+
+
+<a href="https://github.com/zhenghuiy" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png" alt="Fork me on GitHub"></a>

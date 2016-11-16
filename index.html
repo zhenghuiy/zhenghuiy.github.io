@@ -217,6 +217,65 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-11-16T03:02:00.000Z"><a href="/2016/11/16/大幅提高Android开发效率之Android项目模板化（下）/">Nov 16 2016</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/11/16/大幅提高Android开发效率之Android项目模板化（下）/">大幅提高Android开发效率之Android项目模板化（下）</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>大家好，我是光源。</p>
+<p>在<a href="http://www.jianshu.com/p/e8ac0c284601">《大幅提高Android开发效率之Android项目模板化（上）》</a>中我们了解了如何用 Android Studio Template 大幅减少写业务代码前的工作量，同时也稍微提了下用 Live Template 减少写业务代码过程中的“样板式代码”。</p>
+<p>可能有朋友会问，我们这么紧张这点效率真的必要么？</p>
+<p>这个问题我先不回答，我们先来看看一个场景：写一个单例。</p>
+<p>单例模式应该是开发过程中最常见的设计模式之一了。写单例前总得先纠结一下吧，单例模式这么多种实现方式该用哪种好呢？选定了实现方式后，老老实实写一堆代码，然后你会突然发现除了类名不一样外，其他代码都是一模一样，这时你心里会不会隐隐约约觉得这是可以优化的？</p>
+<p>我不知道你完成单例模式的实现需要多长时间，<strong>但我告诉你，我们可以用一秒来搞定，你会不会觉得老老实实写代码的自己很傻？</strong></p>
+<p>这就是 Live Template 的第一个作用，<strong>提高编码效率</strong>。</p>
+<p>再接着上面的话题，又有人吐槽另一个细节了，一般有点年头的程序员对于单例模式都有自己的一个默认实现方式，不需要花时间去纠结吧？</p>
+<p>这话不假，像我就默认使用内部静态类的方式实现单例。但是你有没有想过，项目开发是一个团队协作的过程，就算个人不纠结，但多人开发情况下，要么每个人用自己的一套实现方式造成代码风格不统一，要么同事还是得事先通气、询问用哪种好。（编码规范文档也不会事无巨细把这类问题也事先规定好的）</p>
+<p>再思考一下，很多有多方案且不属于编码规范的场景，我们又要怎么去统一呢？</p>
+<p>答案还是用 Live Template。例如，Android 开发中，我们应该使 <code>Message.obtain()</code> 来获取一个 Message 实例，而不是去 <code>new</code> 一个，那么我们完全可以定一个 <code>getMsg</code> 的 Live Template，大家只要是用 <code>getMsg</code> 的，可以严格保证统一性——这就是 Live Template 的另一个作用了，<strong>保持项目中非编码性质的代码风格统一</strong>。（编码性质的代码风格统一果断用编码规范文档来实现了）</p>
+<p>大家看到这里一定已经对 Live Template 有了一定的重视与好奇了吧，别着急，下面上正餐。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2016/11/16/大幅提高Android开发效率之Android项目模板化（下）/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-11-08T05:06:00.000Z"><a href="/2016/11/08/大幅提高Android开发效率之Android项目模板化（上）/">Nov 8 2016</a></time>
       
       
@@ -461,58 +520,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-05-20T12:25:00.000Z"><a href="/2016/05/20/Android朝花夕拾之Android权限最佳实践/">May 20 2016</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/05/20/Android朝花夕拾之Android权限最佳实践/">Android朝花夕拾之Android权限最佳实践</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>大家好，我是光源。</p>
-<p>从 Android6.0 开始Android的权限模式有了一番更改，从安装时一股脑列给用户，到运行时动态申请权限。对于 Android开发者而言，这是一个重要的变更。</p>
-<p>讨论这个问题之前，我们得先检查一下项目的 target version。如果是 23及以上，则必须得适配新权限模式；如果是 23之下，则还是统一在安装时全部申请权限——即便如此，使用Android 6.0及以上系统的用户还是可以在设置中去关闭你的某些权限。当权限被关闭时，不会导致你的应用直接崩溃，但是会导致你获取到的返回值为null 或者 0，这个是需要注意的地方。</p>
-<p>以下是 Android 官网给出的最佳实践，草草翻译，有不妥之处还请斧正。</p>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>app很容易用海量的权限请求淹没用户。如果用户发现 app 影响使用或者担忧 app 滥用用户个人信息，他们可能不再使用或者完全删除这个app。以下最佳实践能帮助你避免这种糟糕的用户体验。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2016/05/20/Android朝花夕拾之Android权限最佳实践/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -534,7 +541,7 @@
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/Android/">Android</a><small>10</small></li>
+    <li><a href="/categories/Android/">Android</a><small>11</small></li>
   
     <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
   
