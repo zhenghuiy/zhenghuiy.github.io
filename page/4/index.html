@@ -217,6 +217,57 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2015-03-11T07:34:00.000Z"><a href="/2015/03/11/完成以前博客的搬家/">Mar 11 2015</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/03/11/完成以前博客的搬家/">完成以前博客的搬家</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>花费了四五个小时，终于把以前的博客全部搬到新的博客里。将所有的图片都存成外链。</p>
+<p>一方面，觉得工作量真是大；另一方面，又觉得以前积累的博客实在是太少。</p>
+<p>幸好去年开始使用有道云笔记，有了记录笔记的习惯。如果开始写博客，估计可以整理出好多篇。</p>
+<p>hexo搭建初自动生成的”Hello,world”那篇博客我就不删除了，当做”之前”与”现在”的分割线。</p>
+<p>由此，以前博客可以删除。开始正式使用现在的博客了。</p>
+<p>最后，是我最喜欢的星空图。</p>
+<p><img src="http://zhenghuiy-blog.qiniudn.com/1.png" alt=""></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2015-03-10T03:03:29.000Z"><a href="/2015/03/10/给计算机相关专业大一学生的一点建议/">Mar 10 2015</a></time>
       
       
@@ -413,59 +464,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-08-03T07:05:35.000Z"><a href="/2014/08/03/[转]Java中单例模式的实现/">Aug 3 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/08/03/[转]Java中单例模式的实现/">[转]Java中单例模式的实现</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>近日在看Effective JAVA这本书，看到这一条的时候去网上查找下资料，发现了这篇写的不错的博客，因此觉得没有重复造轮子的必要，特此转载。</p>
-<p>原文：</p>
-<p>Inspired by Effective Java.</p>
-<p>Singleton模式是在编程实践中应用最广泛的几种设计模式之一。以前知道的，实现单例的方法有两种(下面的A、B)。刚刚在读《Effective Java的时候》学到一种新的更好的方法(E)：单元素的枚举类型。同时通过网上资料也知道了其他两种方法(C、D)。最后一种在Java中从1.5版本开始支持，其他语言在验证后说明。</p>
-<h2 id="A-饿汉式-类加载的时候就创建实例-。"><a href="#A-饿汉式-类加载的时候就创建实例-。" class="headerlink" title="A.饿汉式(类加载的时候就创建实例)。"></a>A.饿汉式(类加载的时候就创建实例)。</h2><p>代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class MaYun &#123;</span><br><span class="line"></span><br><span class="line">    public static final Mayun instance = new Mayun(); //静态的final的MaYun</span><br><span class="line">    </span><br><span class="line">    private MaYun() &#123;</span><br><span class="line">        //MaYun诞生要做的事情</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public void splitAlipay() &#123;</span><br><span class="line">    </span><br><span class="line">        System.out.println(“Alipay是我的啦！看你丫Yahoo绿眉绿眼的望着。。。”);</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Call：MaYun.instance.splitAlipay();</span><br></pre></td></tr></table></figure></p>
-<p><strong>Feature</strong>：可以通过反射机制攻击；线程安全[多个类加载器除外]。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/08/03/[转]Java中单例模式的实现/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -501,7 +499,7 @@
   
     <li><a href="/categories/工具/">工具</a><small>2</small></li>
   
-    <li><a href="/categories/感悟/">感悟</a><small>1</small></li>
+    <li><a href="/categories/感悟/">感悟</a><small>2</small></li>
   
     <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
   
