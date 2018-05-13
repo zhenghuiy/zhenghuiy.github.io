@@ -217,6 +217,59 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-08-07T07:26:33.000Z"><a href="/2014/08/07/谨慎使用静态注册的BroadcastReceiver/">Aug 7 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/08/07/谨慎使用静态注册的BroadcastReceiver/">谨慎使用静态注册的BroadcastReceiver</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>在Android中，BroadcastReceiver有两种注册方式。</p>
+<p>第一种是静态注册，在<code>Androidmanifest.xml</code>文件中以类似activity注册的方式进行注册。</p>
+<p>第二种是动态注册，在<code>onResume()</code>中注册，在<code>onPause()</code>中注销。</p>
+<p>一般而言，我们需要根据具体的使用场景来判断使用何种注册方式。</p>
+<p>静态注册的特点是接收设备全局的相应广播，尽管静态注册看起来比较方便，但实际上是十分耗费资源的。</p>
+<p>现在使用以下代码进行测试。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class WifiReceiver extends BroadcastReceiver&#123;</span><br><span class="line">public static final String FLAG = &quot;WifiReceiver&quot;;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public void onReceive(Context arg0, Intent arg1) &#123;</span><br><span class="line">if (arg1.getAction().equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) &#123;</span><br><span class="line">int state = arg1.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED);</span><br><span class="line"></span><br><span class="line">if (state == WifiManager.WIFI_STATE_DISABLED) &#123;</span><br><span class="line">Log.v(FLAG,&quot;wifi is disabled!&quot;);</span><br><span class="line">&#125; else if (state == WifiManager.WIFI_STATE_ENABLED) &#123;</span><br><span class="line">Log.v(FLAG,&quot;wifi is enabled!&quot;);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/08/07/谨慎使用静态注册的BroadcastReceiver/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-08-03T07:05:35.000Z"><a href="/2014/08/03/[转]Java中单例模式的实现/">Aug 3 2014</a></time>
       
       
@@ -451,61 +504,6 @@ Return number of packets transmitted by the given UID since device boot.
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-07-23T04:00:16.000Z"><a href="/2014/07/23/ListView的高效率使用/">Jul 23 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/07/23/ListView的高效率使用/">ListView的高效率使用</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>ListView作为android上最常用的控件之一，其原理与效率十分值得我们去探究，特别是当与Button、ImageView一起时，许多问题便纷至沓来。今天我就说说这老生常谈的话题，也是由此做一个总结。</p>
-<h2 id="一，ListView的原理"><a href="#一，ListView的原理" class="headerlink" title="一，ListView的原理"></a>一，ListView的原理</h2><p>在Android中有一个Recycler的构件，滑出屏幕的的Item就会被缓存在里面。但并不是缓存全部，只是会根据item的类型数来缓存相应的个数。举个例子，一般情况下都没有必要去重写ListView的getViewTypeCount())函数，那么type值也就为1，也就是说，Recycler中只会缓存一个item View。如下图（图片来自网络）：</p>
-<p> <img src="http://zhenghuiy-blog.qiniudn.com/recycler.jpeg" alt=""></p>
-<p>当Item1滑出屏幕的时候，Recycler构件中就缓存了item1,再往上滑，item2滑出屏幕。这时有趣的事情就发生了，Recycler构件只会缓存一个item，这时毫无争议会缓存Item2，那么item1就被复用，显示为item8（实际上当item1完全滑出界面时就会被显示作Item8了）。</p>
-<h2 id="二，需要注意的地方"><a href="#二，需要注意的地方" class="headerlink" title="二，需要注意的地方"></a>二，需要注意的地方</h2><h3 id="1，数据与显示分离"><a href="#1，数据与显示分离" class="headerlink" title="1，数据与显示分离"></a>1，数据与显示分离</h3><p>由于ListView的<code>item view</code>是复用的，这就要求我们将数据与显示分离，否则将造成显示的结果错乱。比如，当ListView的<code>Item</code>中含有单选按钮时，假如只是简单地记录按钮的点击状态，那么当滑动ListView的时候，“已点击”与“未点击”就显示混乱。再举个例子，ListView的<code>item</code>中含有图片，选择异步加载。如果做法是当下载完毕后就设置ImageView的显示内容，那么也会造成混乱。</p>
-<p>比较明智的做法是自己单独维护一个数据结构来缓存数据，上文的点击状态就时候使用<code>ArrayList</code>,异步加载的图片就适合使用<code>HashMap</code>。</p>
-<h3 id="2，数据更新"><a href="#2，数据更新" class="headerlink" title="2，数据更新"></a>2，数据更新</h3><p>ListView的数据更新只能在UI主线程中进行，否则会报：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“java.lang.IllegalStateException: The content of the adapter has changed but ListView did not receive a notification. Make sure the content of your adapter is not modified from a background thread, but only from the UI thread.”</span><br></pre></td></tr></table></figure></p>
-<p>另外还需要注意的是，不能更改原来的数据指向的对象。比如，原来的数据<code>List</code> 指向的是 <code>ArrayList1</code>。在数据更新后，为了方便，我们直接 <code>List = ArrayList2</code>。这样就使<code>List</code>指向新的<code>ArrayList</code>，也是会出错的。总而言之，唯一的做法就是在原理的ArrayList1中增加或删除数据。</p>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/07/23/ListView的高效率使用/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -534,6 +532,8 @@ Return number of packets transmitted by the given UID since device boot.
     <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
   
     <li><a href="/categories/Android朝花夕拾/">Android朝花夕拾</a><small>1</small></li>
+  
+    <li><a href="/categories/FFmpeg/">FFmpeg</a><small>1</small></li>
   
     <li><a href="/categories/Java/">Java</a><small>2</small></li>
   
