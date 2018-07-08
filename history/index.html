@@ -260,7 +260,7 @@
 </li>
 <li><p>2015.1 完成外包项目 <a href="http://app.qxzs.org.cn/install.apk" target="_blank" rel="external">气象知识</a> 安卓客户端。与一个朋友合作完成。</p>
 </li>
-<li><p>2015.3 基于hexo搭建<a href="http://zhenghuiy.github.io/">个人博客</a>，并完成之前博客的转移。</p>
+<li><p>2015.3 基于hexo搭建<a href="http://zhenghuiy.github.io/" target="_blank" rel="external">个人博客</a>，并完成之前博客的转移。</p>
 </li>
 <li><p>2015.7 以正式员工的身份入职网易（杭州），开启职业生涯。</p>
 </li>
@@ -294,43 +294,27 @@ document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static
 </article>
 
 
-
- <nav id="pagination" >
-    
-    
-    <div class="clearfix"></div>
-</nav>
-
-
-
-<section id="comment">
-
-<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="history/index.html" data-title="我的编年史" data-url="http://zhenghuiy.github.io/history/index.html"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start  -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"zhenghuiy"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- 多说公共JS代码 end -->
-
-  
-</section>
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: "zhenghuiy",//github用户名
+  repo: "zhenghuiy.github.io",//用户存储评论的github项目名称
+  oauth: {
+    client_id: '1da4e67bb2af468b7148',
+    client_secret: '54b019e8a77befdd5090d4e6fd07326f6ad01fb2',
+  },
+})
+gitment.render('container')
+</script>
 
 </div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
     <input type="search" name="q" results="0" placeholder="搜索">
-    <input type="hidden" name="q" value="site:zhenghuiy.github.io">
+    <input type="hidden" name="q" value="site:huihui.name">
   </form>
 </div>
 
@@ -368,15 +352,6 @@ var duoshuoQuery = {short_name:"zhenghuiy"};
   </ul>
 </div>
 
-
-  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=1&ptype=1&speed=0&skin=2&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2371914483&verifier=c4ac827b&dpc=1"></iframe>
-
-  <div class="widget tag">
-<h3 class="title">Friends</h3>
-<ul class="entry">
-<li><a href="http://blog.saymagic.cn/index.html" title="saymagic">saymagic</a></li>
-</ul>
-</div>
 </aside>
     <div class="clearfix"></div>
   </div>
