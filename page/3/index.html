@@ -217,6 +217,59 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-04-02T15:31:00.000Z"><a href="/2016/04/02/记一件需要反省的事——如何实现webView内部跳转/">Apr 2 2016</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/02/记一件需要反省的事——如何实现webView内部跳转/">记一件需要反省的事——如何实现webView内部跳转</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>今天在做一个“WebView内部跳转”的小需求时，发现了一件比较诡异的事：项目中没有在 <code>shouldOverrideUrlLoading</code>中主动去用<code>view.loadUrl</code>逻辑处理，为何能够实现WebView内部跳转呢？</p>
+<p>带着这个小疑惑，我去问了一个厉害的同事，他说道，只要<code>shouldOverrideUrlLoading</code>返回值为<code>false</code>，即可实现内部跳转。</p>
+<p>听到这个我有些困扰，因为记忆中一直是需要手动去load新的url才能实现，否则就跳浏览器的。然后google了下，就搜到以下两个：</p>
+<p>[<a href="http://stackoverflow.com/questions/16693507/shouldoverrideurlloading-return-method">shouldOverrideUrlLoading return method</a>]</p>
+<p>[<a href="http://www.cnblogs.com/shaobin0604/p/3313680.html">WebViewClient shouldOverrideUrlLoading 常见错误用法</a>]</p>
+<p>我的内心是崩溃的。。</p>
+<h1 id="分析原因"><a href="#分析原因" class="headerlink" title="分析原因"></a>分析原因</h1><p>我之所以会记错技术点，小原因有三：<br>1，我之前使用WebView都比较简单，没有去设置WebViewClient，所以会有链接跳转都交由系统处理的惯性思维；<br>2，在之前的项目中，接触到了系统对webView中的以http协议开头的处理，更加加深了“系统会主动去处理链接”的想法；<br>3，然后就是之前包括刚刚搜索了几次“webView 内部跳转”，都是说需要手动去调用<code>view.loadUrl</code>处理的博客。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2016/04/02/记一件需要反省的事——如何实现webView内部跳转/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-03-28T13:09:00.000Z"><a href="/2016/03/28/try-catch会影响性能么/">Mar 28 2016</a></time>
       
       
@@ -415,58 +468,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2015-05-18T06:10:57.000Z"><a href="/2015/05/18/《代码大全》之变量名的力量/">May 18 2015</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2015/05/18/《代码大全》之变量名的力量/">《代码大全》之变量名的力量</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="一，选择好变量名的注意事项"><a href="#一，选择好变量名的注意事项" class="headerlink" title="一，选择好变量名的注意事项"></a>一，选择好变量名的注意事项</h1><p>一个好的变量名是可读的、易记的和恰如其分的。可以通过应用多条原则来实现这些目标。</p>
-<h3 id="1，最重要的命名注意事项"><a href="#1，最重要的命名注意事项" class="headerlink" title="1，最重要的命名注意事项"></a>1，最重要的命名注意事项</h3><p>为变量命名时最重要的考虑事项是，<strong>该名字要完全、准确地描述出该变量所代表的事物</strong>。获得好名字的一种使用技巧是<strong>用文字表达变量所代表的是什么</strong>。</p>
-<h3 id="2，以问题为导向"><a href="#2，以问题为导向" class="headerlink" title="2，以问题为导向"></a>2，以问题为导向</h3><p>一个好名字通常表达的是“什么”，而不是“如何”。</p>
-<h3 id="3，最适当的名字长度"><a href="#3，最适当的名字长度" class="headerlink" title="3，最适当的名字长度"></a>3，最适当的名字长度</h3><p>平均名字长度在 8 到 20 个字符的程序容易调试。当然这并不意味着你应该尽量把变量名控制到这个范围。它强调的是，<strong>如果你查看自己写的代码时发现了很多更短的名字，那么你需要认真检查，确保这些名字含义足够清晰</strong>。</p>
-<h3 id="4，变量名对作用域的影响"><a href="#4，变量名对作用域的影响" class="headerlink" title="4，变量名对作用域的影响"></a>4，变量名对作用域的影响</h3><p>较长的名字适用于很少用到的变量或者全局变量，而较短的名字则适用于局部变量或者循环变量。</p>
-<p>对位于全局命名空间中的名字加以限定词。</p>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2015/05/18/《代码大全》之变量名的力量/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -499,6 +500,8 @@
     <li><a href="/categories/FFmpeg/">FFmpeg</a><small>1</small></li>
   
     <li><a href="/categories/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/categories/Kotlin/">Kotlin</a><small>1</small></li>
   
     <li><a href="/categories/在路上/">在路上</a><small>1</small></li>
   

@@ -217,6 +217,65 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-10-23T14:59:00.000Z"><a href="/2016/10/23/写给Android开发者的混淆使用手册/">Oct 23 2016</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/10/23/写给Android开发者的混淆使用手册/">写给Android开发者的混淆使用手册</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>大家好，我是光源。</p>
+<p>本文首发于我的个人公众账号，同时会在个人博客上同步。假如有任何建议还请移步博客点评，同时如果博客本身有修改或勘误，也会在博客更新。</p>
+<h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>毫无疑问，混淆是打包过程中最重要的流程之一，在没有特殊原因的情况下，所有 app 都应该开启混淆。</p>
+<p>首先，这里说的的混淆其实是包括了代码压缩、代码混淆以及资源压缩等的优化过程。依靠 ProGuard，混淆流程将主项目以及依赖库中未被使用的类、类成员、方法、属性移除，这有助于规避64K方法数的瓶颈；同时，将类、类成员、方法重命名为无意义的简短名称，增加了逆向工程的难度。而依靠 Gradle 的 Android 插件，我们将移除未被使用的资源，可以有效减小 apk 安装包大小。</p>
+<p>本文由两部分构成，第一部分给出混淆的最佳实践，力求让零基础的新手都可以直接使用混淆；第二部分会介绍一下混淆的整体、自定义混淆规则的语法与实践、自定义资源保持的规则等。</p>
+<h2 id="一、Android混淆最佳实践"><a href="#一、Android混淆最佳实践" class="headerlink" title="一、Android混淆最佳实践"></a>一、Android混淆最佳实践</h2><h3 id="1-混淆配置"><a href="#1-混淆配置" class="headerlink" title="1. 混淆配置"></a>1. 混淆配置</h3><p>一般情况下，app module 的 <code>build.gradle</code> 文件默认会有如下结构：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>因为开启混淆会使编译时间变长，所以<code>debug</code>模式下不应该开启。我们需要做的是：</p>
+<ol>
+<li>将<code>release</code>下<code>minifyEnabled</code>的值改为<code>true</code>，打开混淆；</li>
+<li>加上<code>shrinkResources true</code>，打开资源压缩。</li>
+</ol>
+<p>修改后文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled true</span><br><span class="line">            shrinkResources true</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-自定义混淆规则"><a href="#2-自定义混淆规则" class="headerlink" title="2. 自定义混淆规则"></a>2. 自定义混淆规则</h3><p>在 <code>app module</code> 下默认生成了项目的自定义混淆规则文件 <code>proguard-rules.pro</code>，多方调研后，一份适用于大部分项目的混淆规则最佳实践如下：<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2016/10/23/写给Android开发者的混淆使用手册/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-08-19T04:18:00.000Z"><a href="/2016/08/19/转-QUIC和TCP/">Aug 19 2016</a></time>
       
       
@@ -443,59 +502,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-02T15:31:00.000Z"><a href="/2016/04/02/记一件需要反省的事——如何实现webView内部跳转/">Apr 2 2016</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/02/记一件需要反省的事——如何实现webView内部跳转/">记一件需要反省的事——如何实现webView内部跳转</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>今天在做一个“WebView内部跳转”的小需求时，发现了一件比较诡异的事：项目中没有在 <code>shouldOverrideUrlLoading</code>中主动去用<code>view.loadUrl</code>逻辑处理，为何能够实现WebView内部跳转呢？</p>
-<p>带着这个小疑惑，我去问了一个厉害的同事，他说道，只要<code>shouldOverrideUrlLoading</code>返回值为<code>false</code>，即可实现内部跳转。</p>
-<p>听到这个我有些困扰，因为记忆中一直是需要手动去load新的url才能实现，否则就跳浏览器的。然后google了下，就搜到以下两个：</p>
-<p>[<a href="http://stackoverflow.com/questions/16693507/shouldoverrideurlloading-return-method">shouldOverrideUrlLoading return method</a>]</p>
-<p>[<a href="http://www.cnblogs.com/shaobin0604/p/3313680.html">WebViewClient shouldOverrideUrlLoading 常见错误用法</a>]</p>
-<p>我的内心是崩溃的。。</p>
-<h1 id="分析原因"><a href="#分析原因" class="headerlink" title="分析原因"></a>分析原因</h1><p>我之所以会记错技术点，小原因有三：<br>1，我之前使用WebView都比较简单，没有去设置WebViewClient，所以会有链接跳转都交由系统处理的惯性思维；<br>2，在之前的项目中，接触到了系统对webView中的以http协议开头的处理，更加加深了“系统会主动去处理链接”的想法；<br>3，然后就是之前包括刚刚搜索了几次“webView 内部跳转”，都是说需要手动去调用<code>view.loadUrl</code>处理的博客。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2016/04/02/记一件需要反省的事——如何实现webView内部跳转/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -528,6 +534,8 @@
     <li><a href="/categories/FFmpeg/">FFmpeg</a><small>1</small></li>
   
     <li><a href="/categories/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/categories/Kotlin/">Kotlin</a><small>1</small></li>
   
     <li><a href="/categories/在路上/">在路上</a><small>1</small></li>
   
