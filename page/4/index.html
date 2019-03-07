@@ -217,6 +217,67 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2015-05-24T09:34:00.000Z"><a href="/2015/05/24/《代码大全》之表驱动法/">May 24 2015</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/05/24/《代码大全》之表驱动法/">《代码大全》之表驱动法</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>表驱动法是一种编程模式——从表里查找信息而不是使用逻辑语句（if 和 case）。事实上，凡是能通过逻辑语句来选择的事务，都可以通过查表来选择。<strong>对简单的情况而言，使用逻辑语句更为容易和直白。但随着逻辑链的越来越复杂，查表法也就愈发显得更具吸引力。</strong></p>
+<h2 id="表驱动法使用总则"><a href="#表驱动法使用总则" class="headerlink" title="表驱动法使用总则"></a>表驱动法使用总则</h2><p>例子一：<br>    使用复杂的逻辑对字符分类</p>
+<pre><code>if(((&apos;a&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;z&apos;)) || 
+((&apos;A&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;Z‘）））{
+    charType = CharacterType.Letter;
+}else if ((inputChar == &apos; &apos;) || (inputChar == &apos;,&apos;) || (inputChar == &apos;.&apos;) || (inputChar == &apos;!&apos;) || (inputChar == &apos;(&apos;) || (inputChar == &apos;)&apos;) || (inputChar == &apos;:&apos;) || (inputChar == &apos;;&apos;) || (inputChar == &apos;?&apos;) || (inputChar == &apos;-&apos;)) {
+    charType = CharacterType.Punctuation;
+} else if ((&apos;0&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;9&apos;)){
+    charType = CharacterType.Digit;
+}
+</code></pre><p>使用一个查询表，就可以把每个字符的类型保存在一个用字符编码访问的数组里，那么上述代码可以替换为：</p>
+<pre><code>charType = charTypeTable[ inputChar ];
+</code></pre><p>使用表驱动法，必须要解决两个问题。</p>
+<p>1，怎样从表中查询条目。 比如你希望把数据按月进行分类，那么创建一个月份表是非常直截了当的，你可以用一个下标从 1 到 12 的数组实现它。而另一些数据可能很难直接用于查表。</p>
+<p>2，你应该在表里存些什么。有<br>时候，表查询出来的结果是数据，有时候，表查询出来的结果是动作，或者有时候，查出来的是子程序的引用。无论何种情况，表都会变得更为复杂。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2015/05/24/《代码大全》之表驱动法/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2015-05-18T06:10:57.000Z"><a href="/2015/05/18/《代码大全》之变量名的力量/">May 18 2015</a></time>
       
       
@@ -408,59 +469,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2015-03-05T07:35:40.000Z"><a href="/2015/03/05/开始博客新纪元/">Mar 5 2015</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2015/03/05/开始博客新纪元/">开始博客新纪元</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="不断被“和谐”的博客园"><a href="#不断被“和谐”的博客园" class="headerlink" title="不断被“和谐”的博客园"></a>不断被“和谐”的博客园</h2><p>一直想弄个小空间，写点自己的东西，做做技术分享。开始有这个念头的时候大概是大一，从教我们C语言的文老师口中知道了博客园的存在。打开之后顿时被里面纯粹的博客氛围，以及靠谱的质量吸引。于是在博客园开了博客，满怀热情地写了几篇稚嫩的博客后，迎来了博客园第一次“和谐”。</p>
-<p>“和谐”的原因是被怀疑在做广告。我仔细查看了下，无非就是使用了几个外部网站的链接。因此就按照申诉流程发email去申诉，申诉的过程倒是蛮顺利，马上解了封。但重头戏在后面。自从有了这样一次“黑历史”后，只要我一发含有外站链接的博客，马上就被“和谐”。尽管申诉解封的流程蛮顺利，但是试过几次之后真是累觉不爱。</p>
-<p>我严重怀疑，在第一次被人工和谐之后，我就被列上了黑名单，然后每次我发布博文到首页，就自动判断我处于黑名单上，然后就是被和谐。因为除了第一次，引用的是其他网站的某些博客的连接外，后面我都用的是诸如Android官网之类的链接啊（那时候Android官网还可以无障碍访问，现在。。唉）。这点来说，有很大可能后面两次和谐是机器处理的。</p>
-<p>于是，上博客园就变成只看不写了。——现在已经把刷博客园的习惯改成刷知乎了。</p>
-<h2 id="且走且行的WordPress"><a href="#且走且行的WordPress" class="headerlink" title="且走且行的WordPress"></a>且走且行的WordPress</h2><p>大二的时候接触了php,玩过一个学期的discuz,做了个很垃圾的某网站后台外包——外包来源是某个土老板，不断改需求逼走了之前的合作对象，作为接任者，真的无力吐槽前任程序员的“无框架，无模块概念”的行为，总之代码就是一滩烂泥，当然当时还不懂这些，只能根据前任的习惯修改代码。于是在完成了土老板给的需求后马上理性地（实际上是不能忍了）结束合作，连另一半钱都不要了。唔，这是题外话。总之，就是了解了PHP，顺便知道了wp的存在。</p>
-<p>那个时候SAE和BAE刚刚兴起，果断占坑，在SAE上搭建了一个博客。大二真是我的混乱时代，各种东西玩的飞起，php,discuz,Android,阿里云主机，尝试推广自己的论坛，域名注册等等。这些就是我几乎没有写博客的借口了。</p>
-<p>直到大三暑假，也就是去年，在网易实习的时候，终于知道做点总结了。于是慢慢写起博客来。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2015/03/05/开始博客新纪元/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -510,7 +518,7 @@
   
     <li><a href="/categories/记事/">记事</a><small>3</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>3</small></li>
   
   </ul>
 </div>

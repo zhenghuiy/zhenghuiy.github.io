@@ -217,6 +217,55 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-04-05T11:38:00.000Z"><a href="/2016/04/05/Android-性能典范：拯救计划/">Apr 5 2016</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/04/05/Android-性能典范：拯救计划/">Android 性能典范：拯救计划</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>今天逛稀土时偶然看到<a href="http://gold.xitu.io/#/user/567a559d60b25aa3dcb2a1ce">hanks</a>分享的一篇英文文章，粗略浏览便已觉得不错，因此翻译成中文，与君分享。</p>
+<p>原文地址：<a href="https://medium.com/@laanayabdrzak/android-performance-patterns-rescue-tips-8c1e4c7cb1f0#.xzvcgcall">Android Performance Patterns: Rescue tips</a></p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>现在的app到处都充斥着华丽的动画、复杂的转化还有自定义View，然而用户体验必须尽可能直观且类似。以下这些范例将会帮助你做出一个流畅的、快速响应的、甚至可能减少电量损耗的app，这些范例由一些可以提升整体应用表现的微优化组成。<br>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2016/04/05/Android-性能典范：拯救计划/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-04-02T15:31:00.000Z"><a href="/2016/04/02/记一件需要反省的事——如何实现webView内部跳转/">Apr 2 2016</a></time>
       
       
@@ -407,67 +456,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2015-05-24T09:34:00.000Z"><a href="/2015/05/24/《代码大全》之表驱动法/">May 24 2015</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2015/05/24/《代码大全》之表驱动法/">《代码大全》之表驱动法</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>表驱动法是一种编程模式——从表里查找信息而不是使用逻辑语句（if 和 case）。事实上，凡是能通过逻辑语句来选择的事务，都可以通过查表来选择。<strong>对简单的情况而言，使用逻辑语句更为容易和直白。但随着逻辑链的越来越复杂，查表法也就愈发显得更具吸引力。</strong></p>
-<h2 id="表驱动法使用总则"><a href="#表驱动法使用总则" class="headerlink" title="表驱动法使用总则"></a>表驱动法使用总则</h2><p>例子一：<br>    使用复杂的逻辑对字符分类</p>
-<pre><code>if(((&apos;a&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;z&apos;)) || 
-((&apos;A&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;Z‘）））{
-    charType = CharacterType.Letter;
-}else if ((inputChar == &apos; &apos;) || (inputChar == &apos;,&apos;) || (inputChar == &apos;.&apos;) || (inputChar == &apos;!&apos;) || (inputChar == &apos;(&apos;) || (inputChar == &apos;)&apos;) || (inputChar == &apos;:&apos;) || (inputChar == &apos;;&apos;) || (inputChar == &apos;?&apos;) || (inputChar == &apos;-&apos;)) {
-    charType = CharacterType.Punctuation;
-} else if ((&apos;0&apos; &lt;= inputChar) &amp;&amp; (inputChar &lt;= &apos;9&apos;)){
-    charType = CharacterType.Digit;
-}
-</code></pre><p>使用一个查询表，就可以把每个字符的类型保存在一个用字符编码访问的数组里，那么上述代码可以替换为：</p>
-<pre><code>charType = charTypeTable[ inputChar ];
-</code></pre><p>使用表驱动法，必须要解决两个问题。</p>
-<p>1，怎样从表中查询条目。 比如你希望把数据按月进行分类，那么创建一个月份表是非常直截了当的，你可以用一个下标从 1 到 12 的数组实现它。而另一些数据可能很难直接用于查表。</p>
-<p>2，你应该在表里存些什么。有<br>时候，表查询出来的结果是数据，有时候，表查询出来的结果是动作，或者有时候，查出来的是子程序的引用。无论何种情况，表都会变得更为复杂。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2015/05/24/《代码大全》之表驱动法/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -517,7 +505,7 @@
   
     <li><a href="/categories/记事/">记事</a><small>3</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>3</small></li>
   
   </ul>
 </div>

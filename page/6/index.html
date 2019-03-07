@@ -217,6 +217,66 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-07-25T06:33:00.000Z"><a href="/2014/07/25/[翻译]大牛告诉你一天时间能学些什么/">Jul 25 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/07/25/[翻译]大牛告诉你一天时间能学些什么/">[翻译]大牛告诉你一天时间能学些什么</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>为了学好一门编程语言，我们日复一日地看书、练习并参与实际的项目。就像马拉松，你坚持得越久，就收获得越多。在这样一个长期而乏味的时期内,你总是能有一些简短的时间——比如一天，去学点什么。学习到的这些技术将会给你带来巨大的满足感。</p>
+<p>一个目前在谷歌工作的大牛，Jacob Jensen，给出了以下清单，清单上列出了一些你能在一天之内学会的技术。</p>
+<ul>
+<li><p>阅读你最喜欢的语言的手册。在过去，因为不知道python中有Counter计数器，我为此花费了许多时间。同时还得忍受因为使用字典充当计数器而不断出现的bug。有很多诸如此类的教训。</p>
+</li>
+<li><p>申请一个stackOverFlow帐号并学会使用这个网站。如果你是一个母语为英语的程序员，却不知道stactOverFlow是一个很好的资源，那你就真的错了。</p>
+</li>
+<li><p>独立实现一个简单的机器学习算法。并有一个完整的系统。就是说你读取一个简单的csv格式输入，把它划分成训练集和测试集，运行一个使用了可调整或者探索的超参数的简单算法，并且获得一份简单的相关统计输出。</p>
+</li>
+<li><p>学习怎样在Excel中画一个线形图。</p>
+</li>
+<li><p>学习怎样不使用Excel去画一个线性图。</p>
+</li>
+</ul>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2014/07/25/[翻译]大牛告诉你一天时间能学些什么/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-07-23T04:16:15.000Z"><a href="/2014/07/23/代码实现Android流量统计/">Jul 23 2014</a></time>
       
       
@@ -457,66 +517,6 @@ Return number of packets transmitted by the given UID since device boot.
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-06-16T02:44:31.000Z"><a href="/2014/06/16/Android中保持Service的存活/">Jun 16 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/06/16/Android中保持Service的存活/">Android中保持Service的存活</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>如何让Service keep alive是一个很常见的问题。</p>
-<p>在APP开发过程中，需要Service持续提供服务的应用场景太多了，比如闹钟需要作出及时提醒，那么比如得有一个Service不断去比较当前时间和设置时间；QQ要能流畅的聊天，必然也需要及时接收消息等。</p>
-<p>但是Android并没有保证Service有这样功能，毕竟一个系统面对的是用户，必然以对用户友好为先。</p>
-<p>关于如何让Service keep alive，我在上篇博客给出的解决方案是：方案一，让服务器端发一个推送，检查Service是否还存活；方案二，将Service独立出来，运行在另一个进程中。</p>
-<p>这两个方案有些地方需要说明和改进，然后还会有其他方案补充进来。</p>
-<h3 id="方案一：利用推送来确保Service存活。"><a href="#方案一：利用推送来确保Service存活。" class="headerlink" title="方案一：利用推送来确保Service存活。"></a>方案一：利用推送来确保Service存活。</h3><p>方案一的做法有点“偷懒”。因为相当于把这个难题转移给推送服务提供者来处理，或者说，只需要依靠推送，就不需要自己去考虑存活问题。</p>
-<p>推送一直是移动客户端开发的热门话题（实际上也是传统软件开发的热门话题）。</p>
-<p>一般情况下，C/S结构（B/S是特殊的C/S结构）中的业务流程是这样的：客户端主动向服务器端发出请求，服务器端响应请求，建立二者之间的连接。通过建立的链接，双方可以发送/接收数据。最后客户端和服务器端断开连接。也就是说，客户端是主动方，是请求连接的发起者；服务器端保持对某个端口的监听（0-1023是系统端口号，比如80端口被指派给HTTP），而被动地等待客户端的连接请求。</p>
-<p>那么推送指的是，服务器端在没有收到请求的情况下主动向客户端发送信息，比如服务器端收到一封邮件后主动发往邮件的客户端。</p>
-<p>推送是如何实现的呢？首先，服务器端的功能还是不变，监听某个端口等待请求。然后我们可以看到，服务器端能主动发送信息的唯一时间段就是在建立了服务器端到客户端的连接之后、二者断开连接之前。因此，推送的实现就是基于保持服务器端和客户端的连接一直存在，方式可以是持续连接或者轮询。</p>
-<p>回到Service这个问题上来，推送服务的提供者必然会保证推送技术的稳定性，依靠推送，可以唤醒我们的APP，那么保证Service的存活也就不在话下。</p>
-<h3 id="方案二：将Service运行在另一个进程中。"><a href="#方案二：将Service运行在另一个进程中。" class="headerlink" title="方案二：将Service运行在另一个进程中。"></a>方案二：将Service运行在另一个进程中。</h3><p>将Service放在另一个进程中，可以避免APP所在的进程因资源紧张或者被用户手动结束的时候，Service也被结束。</p>
-<p>这个做法的另一个优点是，可以让Service独立出来，为同一个公司的不同APP提供相同的服务。比如当大部分APP都需要同一个信息的时候，为每个APP都写一个Service显然不好，这时完全可以写一个独立进程中的Service，为所有APP提供信息。</p>
-<p>当然，这个方案有个缺点是，当某些手机助手无脑式结束掉全部的非系统进程时，Service无法存活。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/06/16/Android中保持Service的存活/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -566,7 +566,7 @@ Return number of packets transmitted by the given UID since device boot.
   
     <li><a href="/categories/记事/">记事</a><small>3</small></li>
   
-    <li><a href="/categories/读书笔记/">读书笔记</a><small>2</small></li>
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>3</small></li>
   
   </ul>
 </div>

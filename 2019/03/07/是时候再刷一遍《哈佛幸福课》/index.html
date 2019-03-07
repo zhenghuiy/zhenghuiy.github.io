@@ -5,19 +5,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Android中Serializable和Parcelable的对比 | Zhenghui&#39;s World</title>
+  <title>是时候再刷一遍《哈佛幸福课》 | Zhenghui&#39;s World</title>
   <meta name="author" content="Zhenghui Yan">
   
-  <meta name="description" content="前言对于Android开发者来说，序列化总是一个不能避免的问题。前有“使用enum实现单例模式可以自动序列化”的观点，后有“在Intent传输过程中使用Parcelable进行序列化可以减少性能损耗”的思考。
-由此，我们很有必要找到应对各种场景的最佳实践。
-本文中我们谈谈Serializable 和 Parcelable。
-结论二话不说先说结论（就是这么直接干脆）：序列化的数据仅需在内存中传输的，使用Parcelable；反之，如果需要持久化或者网络传输等等的，请使用Serializable。
-论述Serializable相信大家不会陌生，从Java中就有这个接口存在。Serializable接口是一种标识接口，它的迷人之处在于，你只要让需要序列化的类实现该接口，Java便会对该类进行高效的序列化。">
+  <meta name="description" content="大家好，我是光源。
+不知道何时起「幸福」和「快乐」这些美好的词汇逐渐离我们远去，生活的周遭充斥着各种各样负面的信息：房价高负担好重、某某公司又裁员了、每天工作好久好累、养孩子压力大每天都好焦虑…… 当我们打开脉脉、打开微博、打开论坛，各种焦虑简直要把我们吞没。
+人无远虑必有近忧，为当下和未来担忧固然">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Android中Serializable和Parcelable的对比"/>
+  <meta property="og:title" content="是时候再刷一遍《哈佛幸福课》"/>
   <meta property="og:site_name" content="Zhenghui&#39;s World"/>
 
   
@@ -222,29 +220,38 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-03-09T14:36:00.000Z"><a href="/2016/03/09/Android中Serializable和Parcelable的对比/">Mar 9 2016</a></time>
+        <time datetime="2019-03-07T01:48:00.000Z"><a href="/2019/03/07/是时候再刷一遍《哈佛幸福课》/">Mar 7 2019</a></time>
       
       
   
-    <h1 class="title">Android中Serializable和Parcelable的对比</h1>
+    <h1 class="title">是时候再刷一遍《哈佛幸福课》</h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于Android开发者来说，序列化总是一个不能避免的问题。前有“使用<code>enum</code>实现单例模式可以自动序列化”的观点，后有“在Intent传输过程中使用<code>Parcelable</code>进行序列化可以减少性能损耗”的思考。</p>
-<p>由此，我们很有必要找到应对各种场景的最佳实践。</p>
-<p>本文中我们谈谈<code>Serializable</code> 和 <code>Parcelable</code>。</p>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>二话不说先说结论（就是这么直接干脆）：序列化的数据仅需在内存中传输的，使用<code>Parcelable</code>；反之，如果需要持久化或者网络传输等等的，请使用<code>Serializable</code>。</p>
-<h2 id="论述"><a href="#论述" class="headerlink" title="论述"></a>论述</h2><p><code>Serializable</code>相信大家不会陌生，从Java中就有这个接口存在。<code>Serializable</code>接口是一种标识接口，它的迷人之处在于，你只要让需要序列化的类实现该接口，Java便会对该类进行高效的序列化。<br><a id="more"></a><br>是不是觉得很方便很简洁很爽？然而它的缺点也在于此，由Java进行序列化工作便需要进行各种反射，势必带来性能问题。特别是对于Android这种大量使用Intent进行通信的系统来说，大量使用<code>Serializable</code>容易引起垃圾回收。</p>
-<p>所以Google工程师们就创建出了<code>Parcelable</code>。因为<code>Parcelable</code>的序列化工程都是已知的（由实现接口的人去写），所以不需要反射，性能自然就上来了。</p>
-<p>相应得，这种机制就要求实现接口的人去写大量的模版代码。正所谓有得必有失嘛。</p>
-<p>但是作为讲究性能与代码可读性平衡的开发者，我认为这些代码是可以接受的。</p>
-<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><p>1，intent传递数据时，使用<code>Parcelable</code>序列化数据；<br>2，数据持久化时使用<code>Serializable</code>序列化数据。</p>
-<p>以上两点是频度最高的两个应用场景，请记在脑中，最好形成反射。触发了前面的条件就biubiubiu，无脑用上去就行。——看看我为你们节省了多少脑细胞啊。</p>
-<h2 id="特别注意"><a href="#特别注意" class="headerlink" title="特别注意"></a>特别注意</h2><p><strong>千万不要用<code>Parcelable</code>去进行内存以外的序列化。</strong><br>你如果为了偷懒，无脑使用<code>Serializable</code>在所有场景，问题都不大，顶多是一点性能问题。但是，<code>Parcelable</code>的实现不是一种通用的接口，很有可能你在这个SDK版本中实现序列化的数据，在另一个版本中就直接乱码了。这点需要特别注意。</p>
-<h2 id="小思考"><a href="#小思考" class="headerlink" title="小思考"></a>小思考</h2><p>既然<code>Parcelable</code>有版本问题，那<code>Serializable</code>有么？我觉得有可能也有，因为该接口的实现也是由JDK版本决定的嘛。但是既然目前都没人提出，个人感觉应该是这个类的实现在常用的7、8版本中都没有变更过。所以可以放心安全的用。这个问题以后再验证了。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0204/2410.html" target="_blank" rel="external">Android系统中Parcelable和Serializable的区别</a></p>
+        <p>大家好，我是光源。</p>
+<p>不知道何时起「幸福」和「快乐」这些美好的词汇逐渐离我们远去，生活的周遭充斥着各种各样负面的信息：房价高负担好重、某某公司又裁员了、每天工作好久好累、养孩子压力大每天都好焦虑…… 当我们打开脉脉、打开微博、打开论坛，各种焦虑简直要把我们吞没。</p>
+<p>人无远虑必有近忧，为当下和未来担忧固然是没错，但生活不能这样下去，在阳光灿烂的日子里还是希望能露出笑容。</p>
+<p>就在我思索如何去改变时，突然想起好几年前看过的一个公开课《哈佛大学公开课：幸福课》，尽管细节已经忘记，但是看视频时的那种内心平静感却记忆下来。我想，是时候再刷一遍了。</p>
+<p>这门公开课是讲什么的？</p>
+<p>顾名思义，它主要围绕着「幸福」这个词展开。</p>
+<p><strong>我们来到这个世上，到底追求什么才是最重要的？</strong>塔尔博士（教授这门课的讲师）认为幸福感是衡量人生的唯一标准，是所有目标的最终目标。</p>
+<p>「幸福」并不玄乎，它属于积极心理学的范畴，可以用科学的方式去研究。公开课中塔尔博士像一个老朋友一样将自己的经历和观点娓娓道来，引用的资料都有权威的研究和论文作为依据。</p>
+<p>那么它是用来给我们加油打气的鸡汤么？当然不是。鸡汤之所以被称之为鸡汤，是因为鸡汤只有鼓舞士气的作用而无具体实操的指导，只能给我们在心理上做一次短暂的按摩其实没有卵用。</p>
+<p><strong>而幸福课是可以实操的。</strong>它告诉我们睡眠和爱情的重要性、如何去解决负面情绪、如何面对压力、如何让爱情天长地久等等 —— <strong>我觉得是在教我们如何好好地生活</strong>。</p>
+<p>我特别喜欢这门课的场景布置，很像 TED 的演讲会场，黑暗的背景下一个不刺眼的舞台，讲师像冥想老师一样给你安静的力量，你会不知不觉放松下来听他讲述。</p>
+<p>有几点让我特别有共鸣（以至于让我在几年后的现在还记得）。</p>
+<p><strong>第一是运动对情绪的重要性</strong>。当身边有朋友情绪不好或身体不好时我总会建议他们去运动下，特别是互联网行业，有时候运动对坐了一天椅子的身体也是一种释放。对于我个人而言，运动更是一种良药，不管生理上还有心理上都给我很多力量。当然我的感悟不够有依据，公开课中讲师是分享了相当多的资料并给出如何运动的建议。</p>
+<p><strong>第二是冥想</strong>。几年前看完公开课后我曾经一度迷上冥想，各种找冥想的书看。而大家熟知的乔布斯也是冥想的爱好者。虽然我始终不得要领最后放弃，但冥想的益处我是想当认可的。</p>
+<p><strong>第三是触摸、爱情和睡眠的重要性</strong>。脱离「触摸皮肤」这个限定，简单的拥抱、握手都是有益的，都能给我们力量。而睡眠则不必多说，身体和精神并不是分离的两个东西，身体不好会导致精神萎靡，精神差则身体也会出现各种病痛。</p>
+<p><strong>第四是完美主义</strong>。「完美主义」这点感触太深了。曾经很多次我尝试自己去做一个应用，结果在设计交互和视觉时就各种万般纠结最后甚至开始怀疑 idea 本身是否值得去做 —— 每每如此我总是叹息，「该死的完美主义」！</p>
+<p>还有其他东西已然忘却。</p>
+<p>写到这里，我忽然有一个念头，那就是虽然我不记得幸福课的一些细节，但它对我却影响至今。比如对运动、睡眠、爱情的看法（惭愧的是明知晚睡不好却没能坚持早睡早起）。</p>
+<p>毕业后的几年，明显感觉压力大了焦虑多了，幸好我还有这剂良药。</p>
+<p>这也是我推荐给大家的目的吧。</p>
+<p>准备再刷一遍哈佛幸福课，为了防止忘记细节，这次可能会边看边记录一些笔记。<strong>《哈佛大学公开课：幸福课》在网易公开课里可以看到，每一集都非常长，假如有朋友看不下去视频的，可以后面直接看我的笔记。</strong></p>
+<p>非常欢迎有同好可以交流下。</p>
 
       
     </div>
@@ -253,15 +260,10 @@
         
   
   <div class="categories">
-    <a href="/categories/Android性能/">Android性能</a>
+    <a href="/categories/读书笔记/">读书笔记</a>
   </div>
 
         
-  
-  <div class="tags">
-    <a href="/tags/Android/">Android</a>
-  </div>
-
 <!-- Baidu Button BEGIN -->
 <div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
 <a class="bds_qzone"></a>
@@ -289,7 +291,7 @@ document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: 'Wed Mar 09 2016 22:36:00 GMT+0800',
+  id: 'Thu Mar 07 2019 09:48:00 GMT+0800',
   owner: "zhenghuiy",//github用户名
   repo: "zhenghuiy.github.io",//用户存储评论的github项目名称
   oauth: {
