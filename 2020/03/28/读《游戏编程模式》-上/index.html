@@ -1,0 +1,514 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>读《游戏编程模式》(上) | Zhenghui&#39;s World</title>
+  <meta name="author" content="Zhenghui Yan">
+  
+  <meta name="description" content="大家好，我是光源。 
+偶然在微信读书里瞥到这个书名不禁有一些好奇，尝试看了几页发现还蛮有趣的。 
+作为非游戏从业人员，对于游戏开发本身就有一些好奇，又是一本讲编程模式的书 —— 不会太钻技术细节，一些思想还可以触类旁通沿用到非游戏程序设计中。 
+书籍开篇是介绍了作者自身对于游戏开发的经历和思考，非常赞同作者的一个观点是讲设计模式的书有很多，讲游戏开发引擎设计、渲染等技术方向的书也不少，唯独讲怎么好好做（游戏的）程序设计的书特别少。 
+我的共鸣在于之前看过的设计模式相关书籍都执着于设计模式本身，致力于将设计模式的细节讲得形象具体，而相关的使用场景、例子只是一点附赠品 —— 这样的叙述方式没错，但写出来的书很容易变成《代码大全》之类的工具书，缺乏了一些联系实际的感染力。 
+本书的可贵之处在于不仅联系实际、用实际问题引入对应的设计模式将设计模式本身说得明明白白，同时作者也是一个非常资深的专家级别开发者，介绍了设计模式的概念后，会去探索和扩展使用了设计模式之后的程序设计问题。 
+比如我们熟悉的观察者模式，作者先从「解耦」的角度阐述我们为什么需要观察者模式，然后又从实际应用的角度提出「维护观察者列表时如何处理线程安全问题」和「大量的内容动态分配要如何规避」。 
+又比如单例模式，对于单例模式作者从章节开头就表明，我们学习单例模式最需要学习的是「如何避免滥用单例模式」—— 稍有经验的开发者应该理解这个才是正确的态度。 
+还有状态模式。虽然以前也有在实际开发中用有限自动机去处理复杂业务，但在本书中，作者会一步一步拆解有限自动机的构建和思考过程，同时提出用于解决「多状态场景」的并发状态机、解决「状态复用」的层次状态机和解决「状态回溯」的下推状态机 —— 对于未接触过游戏编程的程序员来说，这些经验还是非常宝贵的。 
+从实际问题出发引出设计模式的，又基于实际问题提出专业从业者如何优化和解决，这些经验可以直接复用到日常开发中，对于初级到资深开发都非常有启发和参考价值。下面是读后感和读书笔记。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="读《游戏编程模式》(上)"/>
+  <meta property="og:site_name" content="Zhenghui&#39;s World"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon" type="image/x-ico">
+  <link rel="alternate" href="/atom.xml" title="Zhenghui&#39;s World" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//libs.baidu.com/jquery/1.8.0/jquery.min.js"></script>
+</head>
+
+
+<body>
+  <header id="header" class="inner">
+<div class="alignleft">
+  <h1><a href="/">Zhenghui&#39;s World</a></h1>
+  <h2><a href="/">Write the code, change the world</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+	<li> <a href="/atom.xml">RSS</a> </li>
+<li> <a title="把这个链接拖到你的Chrome收藏夹工具栏中" href='javascript:(function() {
+	function c() {
+		var e = document.createElement("link");
+		e.setAttribute("type", "text/css");
+		e.setAttribute("rel", "stylesheet");
+		e.setAttribute("href", f);
+		e.setAttribute("class", l);
+		document.body.appendChild(e)
+	}
+ 
+	function h() {
+		var e = document.getElementsByClassName(l);
+		for (var t = 0; t < e.length; t++) {
+			document.body.removeChild(e[t])
+		}
+	}
+ 
+	function p() {
+		var e = document.createElement("div");
+		e.setAttribute("class", a);
+		document.body.appendChild(e);
+		setTimeout(function() {
+			document.body.removeChild(e)
+		}, 100)
+	}
+ 
+	function d(e) {
+		return {
+			height : e.offsetHeight,
+			width : e.offsetWidth
+		}
+	}
+ 
+	function v(i) {
+		var s = d(i);
+		return s.height > e && s.height < n && s.width > t && s.width < r
+	}
+ 
+	function m(e) {
+		var t = e;
+		var n = 0;
+		while (!!t) {
+			n += t.offsetTop;
+			t = t.offsetParent
+		}
+		return n
+	}
+ 
+	function g() {
+		var e = document.documentElement;
+		if (!!window.innerWidth) {
+			return window.innerHeight
+		} else if (e && !isNaN(e.clientHeight)) {
+			return e.clientHeight
+		}
+		return 0
+	}
+ 
+	function y() {
+		if (window.pageYOffset) {
+			return window.pageYOffset
+		}
+		return Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+	}
+ 
+	function E(e) {
+		var t = m(e);
+		return t >= w && t <= b + w
+	}
+ 
+	function S() {
+		var e = document.createElement("audio");
+		e.setAttribute("class", l);
+		e.src = i;
+		e.loop = false;
+		e.addEventListener("canplay", function() {
+			setTimeout(function() {
+				x(k)
+			}, 500);
+			setTimeout(function() {
+				N();
+				p();
+				for (var e = 0; e < O.length; e++) {
+					T(O[e])
+				}
+			}, 15500)
+		}, true);
+		e.addEventListener("ended", function() {
+			N();
+			h()
+		}, true);
+		e.innerHTML = " <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>";
+		document.body.appendChild(e);
+		e.play()
+	}
+ 
+	function x(e) {
+		e.className += " " + s + " " + o
+	}
+ 
+	function T(e) {
+		e.className += " " + s + " " + u[Math.floor(Math.random() * u.length)]
+	}
+ 
+	function N() {
+		var e = document.getElementsByClassName(s);
+		var t = new RegExp("\\b" + s + "\\b");
+		for (var n = 0; n < e.length; ) {
+			e[n].className = e[n].className.replace(t, "")
+		}
+	}
+ 
+	var e = 30;
+	var t = 30;
+	var n = 350;
+	var r = 350;
+	var i = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3";
+	var s = "mw-harlem_shake_me";
+	var o = "im_first";
+	var u = ["im_drunk", "im_baked", "im_trippin", "im_blown"];
+	var a = "mw-strobe_light";
+	var f = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css";
+	var l = "mw_added_css";
+	var b = g();
+	var w = y();
+	var C = document.getElementsByTagName("*");
+	var k = null;
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			if (E(A)) {
+				k = A;
+				break
+			}
+		}
+	}
+	if (A === null) {
+		console.warn("Could not find a node of the right size. Please try a different page.");
+		return
+	}
+	c();
+	S();
+	var O = [];
+	for (var L = 0; L < C.length; L++) {
+		var A = C[L];
+		if (v(A)) {
+			O.push(A)
+		}
+	}
+})()    '>High一下</a> </li>
+
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2020-03-28T04:26:00.000Z"><a href="/2020/03/28/读《游戏编程模式》-上/">Mar 28 2020</a></time>
+      
+      
+  
+    <h1 class="title">读《游戏编程模式》(上)</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>大家好，我是光源。 </p>
+<p>偶然在微信读书里瞥到这个书名不禁有一些好奇，尝试看了几页发现还蛮有趣的。 </p>
+<p>作为非游戏从业人员，对于游戏开发本身就有一些好奇，又是一本讲编程模式的书 —— 不会太钻技术细节，一些思想还可以触类旁通沿用到非游戏程序设计中。 </p>
+<p>书籍开篇是介绍了作者自身对于游戏开发的经历和思考，非常赞同作者的一个观点是讲设计模式的书有很多，讲游戏开发引擎设计、渲染等技术方向的书也不少，唯独讲怎么好好做（游戏的）程序设计的书特别少。 </p>
+<p>我的共鸣在于之前看过的设计模式相关书籍都执着于设计模式本身，致力于将设计模式的细节讲得形象具体，而相关的使用场景、例子只是一点附赠品 —— 这样的叙述方式没错，但写出来的书很容易变成《代码大全》之类的工具书，缺乏了一些联系实际的感染力。 </p>
+<p><strong>本书的可贵之处在于不仅联系实际、用实际问题引入对应的设计模式将设计模式本身说得明明白白，同时作者也是一个非常资深的专家级别开发者，介绍了设计模式的概念后，会去探索和扩展使用了设计模式之后的程序设计问题。</strong> </p>
+<p>比如我们熟悉的观察者模式，作者先从「解耦」的角度阐述我们为什么需要观察者模式，然后又从实际应用的角度提出「维护观察者列表时如何处理线程安全问题」和「大量的内容动态分配要如何规避」。 </p>
+<p>又比如单例模式，对于单例模式作者从章节开头就表明，我们学习单例模式最需要学习的是「如何避免滥用单例模式」—— 稍有经验的开发者应该理解这个才是正确的态度。 </p>
+<p>还有状态模式。虽然以前也有在实际开发中用有限自动机去处理复杂业务，但在本书中，作者会一步一步拆解有限自动机的构建和思考过程，同时提出用于解决「多状态场景」的并发状态机、解决「状态复用」的层次状态机和解决「状态回溯」的下推状态机 —— 对于未接触过游戏编程的程序员来说，这些经验还是非常宝贵的。 </p>
+<p>从实际问题出发引出设计模式的，又基于实际问题提出专业从业者如何优化和解决，这些经验可以直接复用到日常开发中，对于<strong>初级到资深开发都非常有启发和参考价值</strong>。下面是读后感和读书笔记。 </p>
+<a id="more"></a>
+<h2 id="架构、性能和游戏"><a href="#架构、性能和游戏" class="headerlink" title="架构、性能和游戏"></a>架构、性能和游戏</h2><p>什么是好的软件架构？作者认为好的软件架构首先要具备面对变更的灵活性，更具体点就是 </p>
+<blockquote>
+<p>只管写你的代码，架构会为你收拾一切。 </p>
+</blockquote>
+<p>这个观点倒是跟我最近要做的事不谋而合，我最近在设计一个 xx 管理框架，核心目标是任一使用到它的业务开发可以完全专注自己的业务，不需要管底层、或同层其他业务的任何干扰。 </p>
+<p>如何做到这种程度？有一个很重要的点就是「解耦」。当我们阅读代码时，我们会有一个将代码「载入」大脑的过程，模块间越解耦，代码阅读时就越专注于当前模块，你的负担也就越小。如果两个模块耦合，你就必须要同时了解这两块代码。 </p>
+<p>这听起来很棒？将一切解耦，每次变更就只涉及某一个方法或一个类，你就可以迅速编写代码 —— 这就是人们为模块化、抽象、设计模式兴奋的原因。<strong>但天下没有免费的午餐，解耦往往需要抽象，需要引入一定的复杂度，当过度解耦时你就会发现接口和抽象无处不在，你将花费大量的时间去找有实际功能的代码</strong>。理论上解耦意味着在你进行扩展时仅需理解少量代码，然而抽象却增加了理解代码的难度。因此，<strong>好的架构一直是在动态平衡中诞生的</strong>。 </p>
+<p>再谈谈性能，<strong>性能优化一定是在某个假设下进行的</strong>。比如空间富余但时间不够就用「空间换时间」，比如设定敌人不会超过 256 个那就可以把 ID 打包成单字节，比如某个模块内只会在一个具体类型上调用方法那就可以用静态调度或内联，等等。<strong>这不意味着灵活性很差，我们需要的不是完美的代码，而是满足当下和未来近远期需求的代码，它可以让我们快速开发</strong>。 </p>
+<p>下一个点是，<strong>编码风格讲求天时地利</strong>。在充满大量实验和探索的早期，编写一些你知道迟早要扔掉的代码是很稀松平常的。如果只是想验证一些想法是否能否工作，那么对其精心设计架构意味着在想法真正显示到屏幕并得到反馈前需要花费更多时间。<strong>原型是一个完全正确的编程实践</strong> —— 要确保这种一次性代码能够被顺利丢掉。 </p>
+<p>开发中有三个因素需要考虑： </p>
+<ol>
+<li><p>我们想获得一个良好的架构 </p>
+</li>
+<li><p>我们希望获得快速运行时性能 </p>
+</li>
+<li><p>我们希望快速完成今天的功能 </p>
+</li>
+</ol>
+<p>这些目标至少部分是冲突的。好的架构从长远来看改进了生产力，但维护一个良好的架构就意味着每一个变化都需要更多的努力来保持代码的干净；最快编写的代码实现却很少是运行最快的，相反，优化需要消耗工程实践。 </p>
+<p><strong>这里没有终极的答案，只有权衡</strong>。如果有一种方法来缓解限制，那就是简单性。尝试编写最干净、最直接的函数来解决问题。 </p>
+<h2 id="再探设计模式"><a href="#再探设计模式" class="headerlink" title="再探设计模式"></a>再探设计模式</h2><h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><blockquote>
+<p>将一个请求封装成一个对象，从而允许你使用不同的请求、队列或日志将客户端参数化，同时支持请求操作的撤销与恢复。 </p>
+</blockquote>
+<p>命令模式就是一个对象化的方法调用，命令就是面向对象化的回调。通过命令模式，我们可以将「直接执行方法」变成「处理命令」，相当于增加了间接调用层。 </p>
+<p>通过这种方式，我们就解除了函数直接调用的紧耦合，可以支持很多动态处理。比如游戏开发中可以支持用户自定义键位映射，原本 x 是跳跃的可以改成攻击；我们也可以动态调整命令的生成逻辑，支持各种 AI。 </p>
+<p>听起来有点像 callback？相对于 callback， 命令模式的优点在于支持请求排队、命令的撤销和恢复。</p>
+<p>比如游戏中想支持动作的撤销，只要让命令支持 undo，即可实现部分或整体的回溯。想要支持多次撤销也不难，维护一个命令列表和一个对当前命令的引用即可。 </p>
+<p>一个典型的 command 类形如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> MoveCommand extends Command &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MoveCommand</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        ……</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ……</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 假如要支持撤销</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unDo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ……</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h3><blockquote>
+<p>使用共享以高效地支持大量的细粒度对象。 </p>
+</blockquote>
+<p>开发过程中可能会碰到一种场景，需要使用大量的对象。比如渲染满屏幕的森林，这数以千计的树木每棵树木都包含着成千上万的多边形，想要将包含整片森林的对象数据在一帧内传给 GPU 是几乎不可能的。</p>
+<p>通过分析我们发现，这些实例除了位置等少量参数外，大部分字段都是相同的，那我们是否可以复用这些相同的字段呢？我们将相同的大多数相同的字段指向同一个实例可以减少冗余的字段内存。（渲染过程中，OpenGL 也可以支持将共享数据只发送一次到 GPU。） </p>
+<p>享元模式通过将对象数据分割成两种类型来解决问题，第一种是那些不属于单一实例对象并且能够被所有对象共享的数据，称为内部状态；其他数据就是外部状态。 </p>
+<p>享元模式不仅具有面向对象的优点，而且不会因数量巨大而产生开销。如果你发现自己正在创建一个枚举，并且做了大量的 switch，那么可以考虑用这个模式来代替。 举个例子，现在有一百万个地图块、一万个地形，那这一百万个地图块显然是复用这一万个地形 —— 这个享元模式和枚举都可以做到，但枚举每个实例都是单例生命周期跟进程一致，而享元模式则可以在需要的时候创建、在不需要的时候释放。</p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><blockquote>
+<p>在对象间定义一种一对多的依赖关系，以便当某些对象的状态改变时，与它存在依赖关系的所有对象都能收到通知并自动进行更新。</p>
+</blockquote>
+<p>现在我们要做一个成就系统，当玩家击杀多少怪物、得到多少金币…… 就会有相应的成就解锁。这部分代码该写在哪里呢？写在击杀逻辑里？写在金币统计系统里？还是写在碰撞检测逻辑里？ 显然都不合适。此时就轮到观察者大显身手，它使得代码能够发出一个个消息，并通知对消息感兴趣的对象，而不用关心具体是谁接受了通知。</p>
+<p>那么就成就系统而言，在击杀怪物、得到金币等发生时，相关的模块可以对外抛出事件，成就系统模块接收到这些后可以做相应的处理。</p>
+<p>在观察者模式里，有「观察者」和「被观察者」两个角色，被观察者往往维护着一个观察者的集合，可以这样防止它们隐式得耦合在一起。</p>
+<p>看起来很简单？对的，这个模式的结构非常简单，但想要在实际开发环境中使用，我们还得解决几个问题：</p>
+<h5 id="1）同步执行的问题"><a href="#1）同步执行的问题" class="headerlink" title="1）同步执行的问题"></a>1）同步执行的问题</h5><p>观察者模式是同步的，被观察者对象可以直接调用观察者们，这意味着任何一个观察者都有可能阻塞被观察者对象。同时当观察者列表达到一定规模时，循环遍历一次也变成一个耗时的操作。（PS: 在一个高度线程化的引擎中，最好使用事件队列来处理异步通信问题）</p>
+<h5 id="2）太多的内存分配"><a href="#2）太多的内存分配" class="headerlink" title="2）太多的内存分配"></a>2）太多的内存分配</h5><p>在具体项目中，观察者列表总是一个动态分配的集合，当添加或删除观察者的时候会动态扩展或收缩，这种内存的分配在对性能敏感的环境里会令人头疼。</p>
+<p>我们可以使用链式结构来替代集合，在被观察者维护一个指向观察者头部的指针，每个观察者是链表的一个节点，内部指向下一个观察者。当要添加观察者时将新的观察者作为表头或表尾即可。</p>
+<p>再进一步，我们可以建立链表节点池，即预先分配一个内存对象池来避免动态内存分配。</p>
+<h5 id="3）删除观察者的问题"><a href="#3）删除观察者的问题" class="headerlink" title="3）删除观察者的问题"></a>3）删除观察者的问题</h5><p>尽管在 Java 等语言里存在 GC，不可显示 delete 对象，但正确处理观察者的引用仍然是重要的事。由于被观察者持有观察者的引用，会导致一些失效观察者仍留在内存中导致内存泄漏，我们需要及时删除观察者。</p>
+<p>另外，需要注意「删除」操作和「遍历」操作的冲突，列表无法一边遍历一边被编辑。</p>
+<h3 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h3><blockquote>
+<p>使用特定原型实例来创建特定种类的对象，并且通过拷贝原型来创建新的对象。</p>
+</blockquote>
+<p>设想我们在开发一款游戏，我们可以通过怪物生成器来生成怪物，且每种怪物都对应不同的怪物生成器。</p>
+<p>那么当我们生成 n 种怪物时就需要 n 个怪物类及 n 个怪物生成器类。这显然不是一种好的方案。</p>
+<p>而原型模式提供了一个解决方案，核心思想是一个对象可以生成与自身相似的其他对象。如果你有一个幽灵，则可以制造其他幽灵。</p>
+<p>父类声明一个 <code>clone</code> 方法，子类都会提供特定的实现，这样我们将子类实例传入作为模板，仅需一个父类生成器类即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Monster ghostProtoType = <span class="keyword">new</span> Ghost(<span class="number">15</span>, <span class="number">3</span>);</span><br><span class="line">Spawner ghostSpawner = <span class="keyword">new</span> Spawner(ghostProtoType); <span class="comment">//传入具体的幽灵实例做为目标</span></span><br></pre></td></tr></table></figure>
+<p>通过这种方式生成的另一个好处是可以拷贝模板的具体状态，比如「行动迟缓的幽灵」、「敏捷的幽灵」可以拷贝过来。</p>
+<h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><blockquote>
+<p>确保一个类只有一个实例，并为其提供一个全局访问入口。</p>
+</blockquote>
+<p>单例本身已经不需要赘述，这篇主要讲的是如何避免滥用它。</p>
+<p>在短期内单例是有益的，但一旦我们将一些不必要的单例进行了硬编码，便会带来一些麻烦。</p>
+<h5 id="1）-它是一个全局变量"><a href="#1）-它是一个全局变量" class="headerlink" title="1） 它是一个全局变量"></a>1） 它是一个全局变量</h5><p>全局变量会令代码晦涩难懂。假设我们正在跟踪其他人写的函数中的 bug，如果函数没有涉及到全局变量（称为纯函数）则我们只需要理解函数体本身就好，否则就得跟踪全局变量的整个流程。同时，全局变量也促进了耦合。比如，当一个新人想要播放一段音效的时候，恰巧有一个全局可见的  AudioPlayer，那么设计的架构很可能被破坏。然后，全局变量对于并发也不友好，一段全局共享的内存在多线程环境下可能会导致死锁、条件竞争等。</p>
+<h5 id="2）它容易成为一个画蛇添足的解决方案"><a href="#2）它容易成为一个画蛇添足的解决方案" class="headerlink" title="2）它容易成为一个画蛇添足的解决方案"></a>2）它容易成为一个画蛇添足的解决方案</h5><p>比如，当我们把 Log 工具类设置成单例后，我们就没办法创建多个日志器了。而且当一个日志器单例被多个模块依赖后，你要修改里面的实现的话不得不通知所有人。</p>
+<h5 id="3）延迟初始化剥离了控制"><a href="#3）延迟初始化剥离了控制" class="headerlink" title="3）延迟初始化剥离了控制"></a>3）延迟初始化剥离了控制</h5><p>当我们使用单例时可能正好是应用程序负荷最高的时候，此时初始化可能会导致卡顿和掉帧。</p>
+<p>那要怎么避免滥用呢？</p>
+<h5 id="1）重新思考具体场景是否需要单例"><a href="#1）重新思考具体场景是否需要单例" class="headerlink" title="1）重新思考具体场景是否需要单例"></a>1）重新思考具体场景是否需要单例</h5><p>项目中总是很容易出现 xxManager 类，但有时候这些单例管理类并不必要。比如子弹管理类会提供 <code>isOnScreen</code>、<code>move</code> 等方法，但熟悉 OOP 的同学应该了解，这些是可以被纳入子弹类里面的。</p>
+<h5 id="2）将类限制为单一实例"><a href="#2）将类限制为单一实例" class="headerlink" title="2）将类限制为单一实例"></a>2）将类限制为单一实例</h5><p>单例模式意味着全局访问，我们可以将普通的类的构造函数做一定限制（比如实例化第二次时就报错），保证它只能被实例化一次，这样它既是「单例」也无法被全局访问。</p>
+<h5 id="3）为实例提供便捷的访问方式"><a href="#3）为实例提供便捷的访问方式" class="headerlink" title="3）为实例提供便捷的访问方式"></a>3）为实例提供便捷的访问方式</h5><p>我们使用单例的主要原因是因为它足够便利，它让我随时随地可以获得所需的对象。我们可以考虑一下访问对象的其他途径。</p>
+<ol>
+<li>传递进去。将这个对象传递给需要它的函数，有人称之为「依赖注入」，比如各种 context。</li>
+<li>在基类获取它。比如在基类中提供一个 <code>log()</code> 函数。</li>
+<li>通过其他全局对象访问它。既然我们做不到将所有全局变量都移除，那么可以尝试将全局对象类包装到现有的类里面来减少它们的数量。</li>
+<li>另外也可以用服务器定位模式来访问。</li>
+</ol>
+<h3 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h3><blockquote>
+<p>允许一个对象在其内部状态改变时改变自身的行为。对象看起来好像是在修改自身类。</p>
+</blockquote>
+<p>记得小时候玩魂斗罗 4 代的时候有一个小 trick：当你跳跃起来的时候按一下暂停，然后再按下继续，紧接着按下第二次跳跃，这时候玩家就可以在第一跳的基础上再往上跳 —— 利用游戏漏洞实现了梯云纵。可见每种状态下能执行的操作是不一样的，假如这块逻辑错乱就容易有 bug 产生。</p>
+<p>在游戏开发中玩家会有不同的状态，行走、跳跃、站立、蹲下，而每个状态又都有一些特殊的限制，比如跳跃的时候不能前后移动，那么常规的做法是用一些类似 <code>isJumping</code> 的变量来判断。这种处理方式随着复杂度上升布尔标志位会越来越多…… </p>
+<p>怎么优化呢？我们做一定的抽象后发现这里其实是有限的状态 + 一些行为，有经验的开发同学这时候应该想到计算机科学里的自动机理论了，这里用到的是 FSM 有限状态机。</p>
+<blockquote>
+<p>有限自动机可以分为状态、输入和转换：</p>
+<ol>
+<li>有一组状态，并且可以在状态之间进行切换</li>
+<li>状态机同一时刻只能处于一种状态</li>
+<li>状态机会接收一组输入或者事件</li>
+<li>每一个状态有一组转换，每个转换都关联着一个输入并指向另一个状态</li>
+</ol>
+</blockquote>
+<p>利用 FSM 我们将上面的场景比较好得实现出来，简单的处理方式是用枚举。一般的场景用枚举就够了，但碰到一些需要辅助变量的场景就需要将枚举变成面向对象的实现，也就是状态模式。</p>
+<p>一个典型的状态形如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> State <span class="title">handleInput</span><span class="params">(Owner onwer, Input input)</span></span>; <span class="comment">//处理输入</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">enter</span><span class="params">(Owner onwer)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">exit</span><span class="params">(Owner onwer)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为每个状态定一个类，主对象将状态委托给这些具体状态。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Heroine</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> State mState;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleInput</span><span class="params">(Input input)</span> </span>&#123;</span><br><span class="line">        mState = mState.handleInput(<span class="keyword">this</span>, input);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那如何给 mState 赋值呢？假如状态本身没有任何成员变量，那可以考虑复用状态实例，用静态变量或 enum 来实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Heroine</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> StandingState standing;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> MovingState moving;</span><br><span class="line">    ……</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StandingState</span> <span class="keyword">extends</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> State <span class="title">handleInput</span><span class="params">(Owner onwer, Input input)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (input == PRESS_B) &#123;</span><br><span class="line">            onwer.state = owner.moving;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假如 state 里有成员变量，则需要动态实例化状态。</p>
+<h5 id="并发状态机、层次状态机与下推状态机"><a href="#并发状态机、层次状态机与下推状态机" class="headerlink" title="并发状态机、层次状态机与下推状态机"></a>并发状态机、层次状态机与下推状态机</h5><p>现在我们有了对人物状态的控制，再思考一下，假如把「武器」也考虑进去呢？武器有 m 种状态的话，假如塞进上面的 FSM 中则会扩展成 n <em> m 个状态，这无疑极大增加了复杂度，也失去了状态模式的灵活性。这种多状态的问题，可以用<em>*并发状态机</em></em> 来解决：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Heroine</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> State mHeroState;</span><br><span class="line">    <span class="keyword">private</span> State mEquipmentState;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleInput</span><span class="params">(Input input)</span> </span>&#123;</span><br><span class="line">		mState = mHeroState.handleInput(<span class="keyword">this</span>, input);</span><br><span class="line">        mEquipment = mEquipmentState.handleInput(<span class="keyword">this</span>, input);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么假如这两种状态相互影响呢？这种分离的并发模式显然无法解决问题，这时可以用<strong>层次状态机</strong>。一个状态有一个父状态，当有事件进来时如果子状态不处理它则沿着继承链传给它的父状态来处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OnGroundState</span> <span class="keyword">extends</span> <span class="title">State</span> </span>&#123; </span><br><span class="line">	<span class="function"><span class="keyword">public</span> State <span class="title">handleInput</span><span class="params">(Owner owner, Input input)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// do something</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="comment">//先声明一个父状态</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DuckingState</span> <span class="keyword">extends</span> <span class="title">OnGroundState</span> </span>&#123; </span><br><span class="line">	<span class="function"><span class="keyword">public</span> State <span class="title">handleInput</span><span class="params">(Owner owner, Input input)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (input == PRESS_DOWN) &#123;</span><br><span class="line">            <span class="comment">// do something</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.handleInput(owner, input);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="comment">//每个子状态继承它</span></span><br></pre></td></tr></table></figure>
+<p>状态处理看起来比较完备了，但有一个问题，我们无法实现状态保存。比如当玩家开枪结束后要回到哪个状态呢？跳跃开枪是回到跳跃状态、行走中开枪是回到行走状态 —— 也就是需要回到上一个状态。这里我们使用一个状态栈来保存状态记录，也就是<strong>下推状态机</strong>的数据结构。</p>
+<p>就日常开发来说，状态模式是一个比较有用的模式，比如播放器的状态、多个状态扭转的 view 等都可以用它来实现。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/读书笔记/">读书笔记</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/游戏编程模式/">游戏编程模式</a>, <a href="/tags/设计模式/">设计模式</a>, <a href="/tags/游戏/">游戏</a>, <a href="/tags/编程模式/">编程模式</a>
+  </div>
+
+<!-- Baidu Button BEGIN -->
+<div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+<a class="bds_qzone"></a>
+<a class="bds_tsina"></a>
+<a class="bds_tqq"></a>
+<a class="bds_renren"></a>
+<a class="bds_t163"></a>
+<span class="bds_more"></span>
+<a class="shareCount"></a>
+</div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=3326447" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<div id="container"></div>
+<link rel="stylesheet" href="https://blog-1254117687.cos.ap-shanghai.myqcloud.com/gitment.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'Sat Mar 28 2020 12:26:00 GMT+0800',
+  owner: "zhenghuiy",//github用户名
+  repo: "zhenghuiy.github.io",//用户存储评论的github项目名称
+  oauth: {
+    client_id: '1da4e67bb2af468b7148',
+    client_secret: '54b019e8a77befdd5090d4e6fd07326f6ad01fb2',
+  },
+})
+gitment.render('container')
+</script>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:huihui.name">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/Android/">Android</a><small>11</small></li>
+  
+    <li><a href="/categories/Android性能/">Android性能</a><small>2</small></li>
+  
+    <li><a href="/categories/Android朝花夕拾/">Android朝花夕拾</a><small>1</small></li>
+  
+    <li><a href="/categories/FFmpeg/">FFmpeg</a><small>1</small></li>
+  
+    <li><a href="/categories/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/categories/Kotlin/">Kotlin</a><small>1</small></li>
+  
+    <li><a href="/categories/在路上/">在路上</a><small>1</small></li>
+  
+    <li><a href="/categories/工具/">工具</a><small>2</small></li>
+  
+    <li><a href="/categories/感悟/">感悟</a><small>3</small></li>
+  
+    <li><a href="/categories/杂谈/">杂谈</a><small>2</small></li>
+  
+    <li><a href="/categories/笔试面试/">笔试面试</a><small>1</small></li>
+  
+    <li><a href="/categories/计算机网络/">计算机网络</a><small>1</small></li>
+  
+    <li><a href="/categories/记事/">记事</a><small>3</small></li>
+  
+    <li><a href="/categories/读书笔记/">读书笔记</a><small>4</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><section>
+Theme of <a href="https://github.com/zippera/lightum">Lightum</a>, Improved from <a href="https://github.com/hexojs/hexo-theme-light">Light</a>, by <a href="/">zippera</a> 
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+</section>
+<div class="clearfix"></div>
+</footer>
+  <script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
+
+
+<a href="https://github.com/zhenghuiy" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="/imgs/forkme_left_white_ffffff.png" alt="Fork me on GitHub"></a>
