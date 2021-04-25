@@ -217,6 +217,69 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2018-05-13T12:46:00.000Z"><a href="/2018/05/13/最新靠谱可用的-Mac-环境下-FFmpeg-环境搭建/">May 13 2018</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2018/05/13/最新靠谱可用的-Mac-环境下-FFmpeg-环境搭建/">最新靠谱可用的 Mac 环境下 FFmpeg 环境搭建</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>大家好，我是光源。</p>
+<p>最近在尝试搭建 FFmpeg 开发环境时遇到一个蛋疼的事，Google 了 N 篇文章竟然没有一篇是可以跑起来的！</p>
+<p>少部分教程是给出了自我矛盾的配置（是的，按照贴出来的代码和配置，他自己都跑不起来），大部分教程是看着挺全但忽略了某几个关键的点导致跑不起来，更蛋疼的是碰到报错后错误相关的文章也很少，当然还有一些是年代久远过时了。</p>
+<p>于是在成功跑起来后，我将整个搭建过程整理出来，希望可以帮到后面的人。</p>
+<p>本文基于 Mac OS X + Android Studio 3.2 + FFmpeg 3.3 + CMake。</p>
+<p>文章会分为两部分，第一部分是总结一下碰到的几个坑，这样只是因为报错而无法继续的朋友可以先看看是否可以解决问题；第二部分是搭建过程的完整描述（我特意用另一台电脑测试过，可以完美跑起来）。</p>
+<h2 id="一、FFmpeg-搭建的常见问题"><a href="#一、FFmpeg-搭建的常见问题" class="headerlink" title="一、FFmpeg 搭建的常见问题"></a>一、FFmpeg 搭建的常见问题</h2><h3 id="1-NDK-的问题"><a href="#1-NDK-的问题" class="headerlink" title="1. NDK 的问题"></a>1. NDK 的问题</h3><p>在编译之前，教程都会让我们修改命令中 NDK 的地址为自己本地的地址，我们当然自然而然地改成了 Android Studio 自带的 ndk-bundle。</p>
+<p>然后编译的时候就发现会出现<code>errno.h: No such file or directory</code>字样的error。</p>
+<p><strong>这是因为 Android Studio 自带的 NDK 缺少相关的 .h 文件，从网上额外下载 NDK 然后编译时使用就可以解决问题。</strong>（基于 FFmpeg 3.3）</p>
+<h3 id="2-编译命令的问题"><a href="#2-编译命令的问题" class="headerlink" title="2. 编译命令的问题"></a>2. 编译命令的问题</h3><p>报错信息形如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg_build.sh: line 14: ./configure: No such file or directory</span><br><span class="line"></span><br><span class="line">ffmpeg_build.sh: line 20: --extra-cflags=-Os -fpic -marm: command not found</span><br></pre></td></tr></table></figure>
+<p>之类的，请检查一下 Android 编辑脚本的 “/” 后是否有空格。</p>
+<p>由于不同系统存在差异，最好找对应系统下他人验证可行的编译命令。</p>
+<h3 id="3-编译相关的版本"><a href="#3-编译相关的版本" class="headerlink" title="3. 编译相关的版本"></a>3. 编译相关的版本</h3><p>编译过程有 NDK 版本、Android 版本、FFmpeg 版本、Android Studio 版本等，不同版本存在差异，最好是完全使用教程描述时的版本。</p>
+<p>比如编译命令中包含的 Android 版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export SYSROOT=$NDK/platforms/android-21/arch-arm/</span><br></pre></td></tr></table></figure>
+<p>这里的 <code>android-21</code> 改成 26 就不行，因为搜索了这两个文件夹只有 21 中有需要的 .h 文件。</p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2018/05/13/最新靠谱可用的-Mac-环境下-FFmpeg-环境搭建/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-12-29T05:58:00.000Z"><a href="/2016/12/29/如何做好技术调研/">Dec 29 2016</a></time>
       
       
@@ -489,58 +552,6 @@
 
 
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-08-19T04:18:00.000Z"><a href="/2016/08/19/转-QUIC和TCP/">Aug 19 2016</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/08/19/转-QUIC和TCP/">[转]QUIC和TCP</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这几天在研究部门内部的自定义协议，因此去了解Google的QUIC协议的特性，下面这篇文章将QUIC协议和TCP协议做了比较，个人比较喜欢作者的阐述，特地转到博客中来。</p>
-<p>原文作者：henrystark henrystark@126.com<br>原文地址：<a href="http://blog.chinaunix.net/uid-28387257-id-4335291.html">http://blog.chinaunix.net/uid-28387257-id-4335291.html</a></p>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="0-写作目的"><a href="#0-写作目的" class="headerlink" title="0.写作目的"></a>0.写作目的</h3><p>QUIC由Google提出，基于UDP，用于加快网络速率。常用来和基于TCP的SPDY比较。Google在传输层、应用层或其他方面做出的提升网络质量的贡献令人佩服。本篇blog将论述QUIC的起源、优缺点，以及TCP存在的问题。</p>
-<h3 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h3><p>Why QUIC is necessary? 每个接触QUIC的programmer总会这样问。答案也很简单：SPDY、TCP不够好！不过这样说太肤浅了，下面我来分析本质原因【引 1】。基于一条TCP连接的SPDY复用连接会面临这样的情况：当有丢包发生时，所有连接都将阻塞，这是由TCP的拥塞控制特性决定的【引 2 3】。丢包必须恢复，而恢复过程中，或早或晚，滑动窗口总有停等的时刻，耗费一个RTT。在广域网上，一个RTT相当于50-100ms。相比较而言，当x条并行HTTP连接中，有一条丢包，只会阻塞一条。</p>
-<p>QUIC是和HTTP同一层的应用层协议，其核心是将丢包控制工作转移到应用层【注 1】。由于QUIC基于UDP，可以不理会丢包，快速投递，再用丢包恢复方法保证可靠性。除此之外，基于一条TCP连接的SPDY和多条并行HTTP连接相比，没有优势可言。多条连接中，每个连接都有一个拥塞窗口，不受彼此丢包影响。Google希望通过QUIC更好地处理多条连接下的拥塞状况。</p>
-<h3 id="2-TCP的症结"><a href="#2-TCP的症结" class="headerlink" title="2.TCP的症结"></a>2.TCP的症结</h3><p>以上所述其实反映了TCP基于窗口的拥塞控制策略的问题。TCP的核心在于“丢包必须恢复”，正是这种丢包恢复导致传输速率降低。而除此之外，TCP拥塞控制也存在粒度不精细等问题。举例而言，往年有一道很好的面试题：早期网络中，为什么蚂蚁等下载器比网页下载快？答案是下载器使用多线程，多连接下载，而网页下载往往使用单连接。也许回答到这种程度，大部分人已经满意了。但往下问，还有更深刻的内涵：为什么多连接比单连接快？ISP给用户分配的带宽不是固定吗？<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2016/08/19/转-QUIC和TCP/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -591,6 +602,8 @@
     <li><a href="/categories/记事/">记事</a><small>3</small></li>
   
     <li><a href="/categories/读书笔记/">读书笔记</a><small>4</small></li>
+  
+    <li><a href="/categories/这就是生活/">这就是生活</a><small>1</small></li>
   
   </ul>
 </div>
